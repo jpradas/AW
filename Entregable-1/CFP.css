@@ -1,0 +1,22 @@
+/* Introduce aquí las reglas de estilo */
+html {
+     font-family: 'Roboto Condensed', sans-serif;
+}
+h1 {
+    color:navy;
+}
+h4{
+    color:blue;
+}
+.titulo {
+    background-color: powderblue; 
+    border-style:none;
+    padding: 5px;
+    border-radius: 10px;
+}
+h2{
+    color:darkblue;
+}
+.resaltado{
+    color: #641e16;
+}
