@@ -27,3 +27,18 @@ h2{
 .tabla1 td{
 	padding-right: 40px;
 }
+.tabla2 td{
+	flex-direction: row;
+	justify-content: flex-end;
+}
+.tablaProg{
+	border-collapse: collapse;
+}
+.tablaProg th{
+	color: white;
+	background-color: brown; 
+	border: 2px solid black;
+}
+.hora{
+	background-color: lightyellow; 
+}
