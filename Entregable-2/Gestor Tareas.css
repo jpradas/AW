@@ -1,0 +1,23 @@
+html {
+     font-family: 'Roboto Condensed', sans-serif;
+}
+.logo{
+	width: 500px;
+	height: 175px;
+}
+.cabecera{
+	padding: 0 20px;
+}
+.botonAdd{
+	background-color: darkgreen;
+	color: white;
+}
+.botonAmarillo{
+	background-color: orange;
+}
+.input{
+	background-color: lightgreen;
+	padding: 10px;
+	border-radius: 10px;
+	border-style:none;
+}
