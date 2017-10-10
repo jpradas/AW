@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <style>
 			#grad {
-				height: 200px;
+				height: 150px;
 			    background: -webkit-linear-gradient(green, darkgreen); /* For Safari 5.1 to 6.0 */
 			    background: -o-linear-gradient(green, darkgreen); /* For Opera 11.1 to 12.0 */
 			    background: -moz-linear-gradient(green, darkgreen); /* For Firefox 3.6 to 15 */
@@ -19,16 +19,23 @@
 		<div id="grad">
 			<img class="logo" src="Logo.png" alt="Logo">
         
-			<img src="NoPerfil.png" alt="No hay foto de perfil">
-			<img src="tick.gif">
-            <button class="botonAmarillo">
-                <strong>Desconectar</strong>
-            </button>
+            <div class="derecha">
+                
+                <img src="NoPerfil.png" alt="No hay foto de perfil">
+
+               <div class="user">
+                   <p>user@mail.com</p>
+                    <button class="Desconectar">
+                        <strong>Desconectar</strong>
+                    </button>   
+                </div> 
+            </div>
+			
 			
 		</div>
 		<div class="input" align="center">
 			
-			<input type="text" name="nombre_campo">
+			<input type="text_field" name="nombre_campo">
 			
 			<button class="botonAdd">
 			   <strong>Añadir</strong> 
@@ -36,11 +43,11 @@
 
 		</div>
 		<div>
-			<button class="botonAmarillo">
+			<button class="Tareas_completadas">
                 <strong>Eliminar tareas completadas</strong>
 			</button>
 		</div>
 
-
+			<img src="tick.gif">
 	</body>
 </html>

@@ -3,7 +3,8 @@ html {
 }
 .logo{
 	width: 500px;
-	height: 175px;
+	height: 150px;
+    margin-right: auto;
 }
 .cabecera{
 	padding: 0 20px;
@@ -16,8 +17,9 @@ html {
     border:none;
     padding: 5px 20px;
 }
-.botonAmarillo{
-	background-color:goldenrod;
+.Desconectar{
+	display: inline;
+    background-color:goldenrod;
     border-radius: 15px;
     border:none;
     font-size: 25px;
@@ -28,4 +30,40 @@ html {
 	padding: 10px;
 	border-radius: 10px;
 	border-style:none;
+}
+
+.Tareas_completadas{
+	display: block;
+    background-color:goldenrod;
+    border-radius: 15px;
+    border:none;
+    font-size: 25px;
+    padding: 10px 15px;
+}
+
+.derecha{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    float:right;
+    margin-right: 10px;
+}
+
+.user p{
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 25px;
+}
+
+.derecha img{
+    width: 110px;
+    height: 110px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.user{
+    display: block;
+    padding-bottom: 20px;
 }
