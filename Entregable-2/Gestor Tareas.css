@@ -11,9 +11,17 @@ html {
 .botonAdd{
 	background-color: darkgreen;
 	color: white;
+    border-radius: 10px;
+    font-size: 25px;
+    border:none;
+    padding: 5px 20px;
 }
 .botonAmarillo{
-	background-color: orange;
+	background-color:goldenrod;
+    border-radius: 15px;
+    border:none;
+    font-size: 25px;
+    padding: 10px 15px;
 }
 .input{
 	background-color: lightgreen;
