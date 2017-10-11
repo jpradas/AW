@@ -33,24 +33,36 @@ html {
     margin-top: 5px;
     margin-left: auto;
     margin-right: auto;
-    border-width: thin;
+    border-width: medium;
 	border-style:solid;
+    border-color: darkgreen;
     display:flex;
 }
 
-.input_tarea1{
-	background-color: blanchedalmond;
-    font-size: 20px;
-	padding: 5px;
-    width: 50%;
-    height: 30px;
-    margin-top: 5px;
+.tarea1{
+    width: 51%;
     margin-left: auto;
     margin-right: auto;
-    border-width: thin;
-	border-style:solid;
-    display:flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: blanchedalmond;
+    margin-top: 20px;
+    border: solid;
+    border-width: medium;
+    border-color: #A37801;
+}
+
+.tarea2{
+    width: 51%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: blanchedalmond;
+    margin-top: 2px;
+    border: solid;
+    border-width: medium;
+    border-color: #A37801;
 }
 
 .input_field{
@@ -99,13 +111,43 @@ html {
     padding-bottom: 20px;
 }
 
-.marcar_finalizado{
+.marcar_finalizado1{
     color: white;
     border:none;
-    background-color: black;
-    border-radius: 10px;
-    height: 30px
+    background-color:#3B240B;
+    border-radius: 5px;
+    height: 30px;
+    grid-column-start: 2;
+    grid-column-end: end;
+    align-self: center;
+    justify-self: end;
+    margin-right: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+.marcar_finalizado2{
+    color: white;
+    border:none;
+    background-color:#3B240B;
+    border-radius: 5px;
+    height: 30px;
+    grid-column-start: 2;
+    grid-column-end: end;
+    align-self: center;
+    justify-self: end;
+    margin-right: 5px;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 .tarea{
-    padding: auto;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.ticky{
+    margin-right: 5px;
+}
+
+.etiqueta{
+    float:left;
 }
