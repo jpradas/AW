@@ -12,10 +12,11 @@ html {
 .botonAdd{
 	background-color: darkgreen;
 	color: white;
-    border-radius: 10px;
-    font-size: 25px;
+    border-radius: 5px;
+    font-size: 15px;
     border:none;
     padding: 5px 20px;
+    margin-left: 5px;
 }
 .Desconectar{
 	display: inline;
@@ -27,9 +28,35 @@ html {
 }
 .input{
 	background-color: lightgreen;
-	padding: 10px;
-	border-radius: 10px;
-	border-style:none;
+	padding: 5px;
+    width: 50%;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: thin;
+	border-style:solid;
+    display:flex;
+}
+
+.input_tarea1{
+	background-color: blanchedalmond;
+    font-size: 20px;
+	padding: 5px;
+    width: 50%;
+    height: 30px;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: thin;
+	border-style:solid;
+    display:flex;
+    justify-content: space-between;
+}
+
+.input_field{
+    width: 70%;
+    height: 20px;
+    flex-grow: 2;
 }
 
 .Tareas_completadas{
@@ -37,6 +64,10 @@ html {
     background-color:goldenrod;
     border-radius: 15px;
     border:none;
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
     font-size: 25px;
     padding: 10px 15px;
 }
@@ -66,4 +97,15 @@ html {
 .user{
     display: block;
     padding-bottom: 20px;
+}
+
+.marcar_finalizado{
+    color: white;
+    border:none;
+    background-color: black;
+    border-radius: 10px;
+    height: 30px
+}
+.tarea{
+    padding: auto;
 }
