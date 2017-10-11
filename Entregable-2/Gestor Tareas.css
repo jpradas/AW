@@ -65,6 +65,34 @@ html {
     border-color: #A37801;
 }
 
+.tarea3{
+    width: 51%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: blanchedalmond;
+    margin-top: 2px;
+    border: solid;
+    border-width: medium;
+    border-color: #A37801;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.tarea4{
+    width: 51%;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: blanchedalmond;
+    margin-top: 2px;
+    border: solid;
+    border-width: medium;
+    border-color: #A37801;
+}
+
 .input_field{
     width: 70%;
     height: 20px;
@@ -140,8 +168,12 @@ html {
     margin-bottom: 2px;
 }
 .tarea{
-    margin-top: 5px;
+    margin-top: 7px;
     margin-left: 5px;
+}
+.tarea_especial{
+    margin-left: 5px;
+    color: lightgray;
 }
 
 .ticky{
