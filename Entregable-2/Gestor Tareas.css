@@ -179,4 +179,10 @@ html {
 .ticky{
     margin-right: 5px;
 }
+.etiqueta{
+    border:none;
+    color:white;
+    background-color: goldenrod;
+    border-radius: 10px;
+}
 
