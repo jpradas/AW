@@ -1,14 +1,13 @@
 html {
      font-family: 'Roboto Condensed', sans-serif;
 }
+
 .logo{
 	width: 500px;
 	height: 150px;
     margin-right: auto;
 }
-.cabecera{
-	padding: 0 20px;
-}
+
 .botonAdd{
 	background-color: darkgreen;
 	color: white;
@@ -102,6 +101,7 @@ html {
     height: 110px;
     margin-right: 10px;
     margin-top: 10px;
+    border: solid;
 }
 .user{
     display: block;
@@ -123,9 +123,8 @@ html {
     margin-bottom: 2px;
     background-image:url(tick.gif);
     background-repeat: no-repeat;
-    background-origin: padding-box; 
-    background-position: left center;
-    padding-left: 20px;
+    background-position: 5% 50%;
+    padding-left: 30px;
 }
 
 .tarea{
@@ -137,19 +136,11 @@ html {
     color: lightgray;
 }
 
-.ticky{
-    margin-right: 5px;
-}
 .etiqueta{
     text-align: center;
     border:none;
     color:white;
     background-color: goldenrod;
-    border-radius: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: auto;
-    padding-right: auto;
-
+    border-radius: 15px;
+    padding: 3px;
 }
-

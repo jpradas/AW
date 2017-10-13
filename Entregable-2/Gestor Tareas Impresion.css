@@ -1,17 +1,12 @@
 html {
      font-family: 'Roboto Condensed', sans-serif;
 }
-.logo{
-	width: 500px;
-	height: 150px;
-    margin-right: auto;
-}
-.derecha {
+.derecha, .input, .Tareas_completadas, .marcar_finalizado {
   display:none;
 }
 .lista{
 	list-style-type:disc;
 }
-.marcar_finalizado{
-	display:none;
+.tareaFinalizada, .etiqueta{
+	color: gray;
 }
