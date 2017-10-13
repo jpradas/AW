@@ -39,58 +39,27 @@ html {
     display:flex;
 }
 
-.tarea1{
+.tareaNormal{
     width: 51%;
     margin-left: auto;
     margin-right: auto;
     display: grid;
     grid-template-columns: 50% 50%;
     background-color: blanchedalmond;
+    margin-top: 2px;
+    border: solid;
+    border-width: medium;
+    border-color: #A37801;
+
+}
+
+.tareaSuperior{
     margin-top: 20px;
-    border: solid;
-    border-width: medium;
-    border-color: #A37801;
 }
 
-.tarea2{
-    width: 51%;
-    margin-left: auto;
-    margin-right: auto;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    background-color: blanchedalmond;
-    margin-top: 2px;
-    border: solid;
-    border-width: medium;
-    border-color: #A37801;
-}
-
-.tarea3{
-    width: 51%;
-    margin-left: auto;
-    margin-right: auto;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    background-color: blanchedalmond;
-    margin-top: 2px;
-    border: solid;
-    border-width: medium;
-    border-color: #A37801;
+.tareaFinalizada{
     padding-top: 8px;
     padding-bottom: 8px;
-}
-
-.tarea4{
-    width: 51%;
-    margin-left: auto;
-    margin-right: auto;
-    display: grid;
-    grid-template-columns: 50% 50%;
-    background-color: blanchedalmond;
-    margin-top: 2px;
-    border: solid;
-    border-width: medium;
-    border-color: #A37801;
 }
 
 .input_field{
@@ -139,7 +108,7 @@ html {
     padding-bottom: 20px;
 }
 
-.marcar_finalizado1{
+.marcar_finalizado{
     color: white;
     border:none;
     background-color:#3B240B;
@@ -152,21 +121,13 @@ html {
     margin-right: 5px;
     margin-top: 2px;
     margin-bottom: 2px;
+    background-image:url(tick.gif);
+    background-repeat: no-repeat;
+    background-origin: padding-box; 
+    background-position: left center;
+    padding-left: 20px;
 }
-.marcar_finalizado2{
-    color: white;
-    border:none;
-    background-color:#3B240B;
-    border-radius: 5px;
-    height: 30px;
-    grid-column-start: 2;
-    grid-column-end: end;
-    align-self: center;
-    justify-self: end;
-    margin-right: 5px;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
+
 .tarea{
     margin-top: 7px;
     margin-left: 5px;
@@ -180,9 +141,15 @@ html {
     margin-right: 5px;
 }
 .etiqueta{
+    text-align: center;
     border:none;
     color:white;
     background-color: goldenrod;
     border-radius: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: auto;
+    padding-right: auto;
+
 }
 

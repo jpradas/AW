@@ -3,7 +3,7 @@
 	<head>
 		<title>Gestor de Tareas</title>
 		<link rel="stylesheet" type="text/css" href="Gestor Tareas.css" media="screen"/>
-		<link rel="stylesheet" type="text/css" href="Gestor Tareas Impresion.css" media="print"/>
+		<!--<link rel="stylesheet" type="text/css" href="Gestion Tareas Impresion.css" media="screen"/>-->
         <meta charset="utf-8">
         <style>
 			#grad {
@@ -17,6 +17,7 @@
 	</head>
 	<body>
 		<div id="grad">
+
 			<img class="logo" src="Logo.png" alt="Logo">
         
             <div class="derecha">
@@ -28,55 +29,57 @@
                     <button class="Desconectar">
                         <strong>Desconectar</strong>
                     </button>   
-                </div> 
+                </div>
             </div>
 			
 			
 		</div>
 		
-		
-        <div class="tarea1">
+		<ul class="lista">
+	        <li class="tareaNormal tareaSuperior">
 
-             <span class="tarea"><strong>Preparar práctica PADP</strong>
-             <button class="etiqueta">pdap</button>
-             <button class="etiqueta">practica</button>
-             </span>
+	             <span class="tarea"><strong>Preparar práctica PADP</strong>
+	             <span class="etiqueta">pdap</span>
+	             <span class="etiqueta">practica</span>
+	             </span>
 
-            <button class="marcar_finalizado1"><strong><img class="ticky" src="tick.gif">Marcar Finalizado</strong></button>
-           
-		  </div>
-       <div class="tarea3">
+	            <button class="marcar_finalizado"><strong>Marcar Finalizado</strong></button>
+	           
+			  </li>
+	       <li class="tareaNormal tareaFinalizada">
 
-             <span class="tarea_especial"><strong><strike>Mirar fechas congreso</strike></strong></span>
+	             <span class="tarea_especial"><strong><strike>Mirar fechas congreso</strike></strong></span>
 
-		  </div>
-        <div class="tarea2">
+			  </li>
+	        <li class="tareaNormal">
 
-            <span class="tarea"><strong>Ir al supermercado</strong>
-            <button class="etiqueta">personal</button>
-            </span>
-            <button class="marcar_finalizado2"><strong><img class="ticky" src="tick.gif">Marcar Finalizado</strong></button>
+	            <span class="tarea"><strong>Ir al supermercado</strong>
+	            <span class="etiqueta">personal</span>
+	            </span>
+	            <button class="marcar_finalizado"><strong>Marcar Finalizado</strong></button>
 
-         </div>
-         
-        <div class="tarea4">
+	         </li>
+	         
+	        <li class="tareaNormal">
 
-            <span class="tarea"><strong>Mudanza</strong>
-            <button class="etiqueta">personal</button>
-            </span>
-            <button class="marcar_finalizado2"><strong><img class="ticky" src="tick.gif">Marcar Finalizado</strong></button>
+	            <span class="tarea"><strong>Mudanza</strong>
 
-         </div>
+	            <span class="etiqueta">personal</span>
+	            </span>
+	            <button class="marcar_finalizado"><strong>Marcar Finalizado</strong></button>
+
+	         </li>
         
-		<div class="input">
-			
-			<input class="input_field" type="text_field" name="nombre_campo">
-			
-			<button class="botonAdd">
-			   <strong>Añadir</strong> 
-			</button>
+			<li class="input">
+				
+				<input class="input_field" type="text_field" name="nombre_campo">
+				
+				<button class="botonAdd">
+				   <strong>Añadir</strong> 
+				</button>
 
-		</div>
+			</li>
+		</ul>
 		<div>
 		
 			<button class="Tareas_completadas">

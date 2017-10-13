@@ -1,0 +1,17 @@
+html {
+     font-family: 'Roboto Condensed', sans-serif;
+}
+.logo{
+	width: 500px;
+	height: 150px;
+    margin-right: auto;
+}
+.derecha {
+  display:none;
+}
+.lista{
+	list-style-type:disc;
+}
+.marcar_finalizado{
+	display:none;
+}
