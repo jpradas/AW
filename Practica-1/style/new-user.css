@@ -1,0 +1,56 @@
+@font-face{
+    font-family: "GloriaHallelujah";
+    src: url(../fonts/GloriaHallelujah.ttf) format("truetype");
+}
+
+html{
+    font-family: "GloriaHallelujah";
+    background-image: url(../img/Fondo.jpg);
+}
+
+.enlaces{
+    margin-left: -30px;
+    position: fixed;
+    top: 11%;
+    left: 30%;
+}
+
+.enlaces li{
+    list-style: none;
+    display: inline;
+    font-size: 25px;
+    font-weight: bold;
+    padding-left: 50px;
+}
+
+li a{
+    color: white;
+    text-decoration: none;
+}
+
+#logo{
+    width:550px;
+    height: 110px;
+    position: absolute;
+    left:50%;
+    margin-left: -225px;
+    top: 1%;
+}
+
+#superior{
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    left: 48%;
+    top: 20%;
+}
+
+.formulario-login{
+    background-color: #8904B1;
+    width: 50%;
+    height: 400px;
+    position: absolute;
+    left: 28%;
+    top: 29%;
+    border-radius: 20px;
+}
