@@ -10,18 +10,44 @@
           <div>
                 <img src="img/Logo.png" alt="FaceBluff - Logo" id="logo">
           </div> 
-          <nav>
-           <ul class="enlaces">
+          <nav class="enlaces">
+           <ul class="lista">
                <li><a href="./index.html">Entrar</a></li>
                <li><a href="./new-user.html">Nuevo Usuario</a></li>
            </ul>
        </nav>
    </header>
-     <div class="contenido">
-        <span id="superior">Nuevo usuario</span>
-        <div class="formulario-login">
-        
+     <section class="contenido">
+        <div class="superior">
+            <span>Nuevo Usuario</span>
         </div>
-   </div>
+        <div class="formulario-newuser">
+        <form action="" method="post">
+           <ul class="formulario">
+                <li class="f_email">
+                    <span>Email</span>
+                    <input class="input_e" type="text" name="email">
+                </li>
+                <li class="f_pass">
+                    <span>Contraseña</span>
+                    <input class="input_p" type="password" name="email">
+                </li>
+                <li class="f_nombre">
+                    <span>Nombre completo</span>
+                    <input class="input_n" type="text" name="nombre_completo">
+                </li>
+                <li class="f_sexo">
+                    <span>Sexo</span>
+                    <input class= "input_s" type="radio" name="masculino" value="masculino"> Masculino
+                    <input type="radio" name="femenino" value="femenino"> Femenino
+                    <input type="radio" name="otro" value="otro"> Otro
+                </li>
+                <li class="conectar">
+                    <input id="boton" type="submit" value="Crear usuario"> 
+                </li>
+            </ul>
+        </form>
+        </div>
+   </section>
 </body>
 </html>

@@ -8,78 +8,94 @@ html{
     background-image: url(../img/Fondo.jpg);
 }
 
-.enlaces{
-    margin-left: -30px;
-    position: fixed;
-    top: 11%;
-    left: 30%;
+#logo{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 600px;
+    height: 120px;
 }
 
-.enlaces li{
+.enlaces{
+    margin-left:auto;
+    margin-right:auto;
+    width: 900px;
+    height: 40px;
+    margin-top: -20px;
+}
+
+.lista li{
+    display:inline;
     list-style: none;
-    display: inline;
-    font-size: 25px;
-    font-weight: bold;
-    padding-left: 50px;
 }
 
 li a{
-    color: white;
-    text-decoration: none;
-}
-
-#logo{
-    width:550px;
-    height: 110px;
-    position: absolute;
-    left:50%;
-    margin-left: -225px;
-    top: 1%;
-}
-
-#superior{
     font-size: 30px;
     font-weight: bold;
-    position: absolute;
-    left: 50%;
-    top: 20%;
+    color:white;
+    text-decoration: none;
+    margin-left: 30px
+}
+
+.superior{
+    display:flex;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 40px;
+    width: 600px;
+    height: 40px;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .login{
     background-color: #8904B1;
-    width: 50%;
-    height: 200px;
-    position: absolute;
-    left: 28%;
-    top: 29%;
+    border:none;
     border-radius: 20px;
+    width: 50%;
+    height: 230px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
 }
 
 .formulario{
+    list-style: none;
+    color: white;
     font-family: 'Roboto Condensed', sans-serif;
-    position: relative;
-    left: 5%;
-    top: 15%;
-    display: grid;
-    grid-template-columns: auto 90%;
-    grid-template-rows: 33px 33px;
-    color:white;
 }
 
-.input_e{
-    width: 90%;
-    margin-right: auto;
+.f_email{
+    display:flex; 
+    padding-top: 50px;
+    padding-right: 25px;
+}
+
+.f_pass{
+    display:flex; 
+    padding-top: 10px;
+    padding-right: 25px;
 }
 
 .input_p{
-    width: 90%;
-    margin-right: auto;
+    width: 80%;
+    height: 15px;
+    flex-grow: 2;
+    margin-left: 38px;
+}
+
+.input_e{
+    width: 80%;
+    height: 15px;
+    flex-grow: 2;
+    margin-left: 80px;
 }
 
 .conectar{
-    position: relative;
-    left: 42%;
-    top: 21%;
+    display:flex;
+    justify-content: center;
+    margin-top: 25px;
 }
 
 #boton{

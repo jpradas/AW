@@ -10,40 +10,36 @@
           <div>
                 <img src="img/Logo.png" alt="FaceBluff - Logo" id="logo">
           </div> 
-          <nav>
-           <ul class="enlaces">
+          <nav class="enlaces">
+           <ul class="lista">
                <li><a href="./index.html">Entrar</a></li>
                <li><a href="./new-user.html">Nuevo Usuario</a></li>
            </ul>
        </nav>
    </header>
-   <div class="contenido">
-        <span id="superior">Entrar</span>
-        <div class="login">
-           <div class="formulario">
-               
-                   
-                    <span id="1">Email</span>
-                    <form action="" method="post">
-                      <input class="input_e" type="text" name="email">
-                    </form>
-              
-            
-                    <span id="2">Contraseña</span>
-                    <form action="" method="post">
-                        <input class="input_p" type="password" name="password">
-                    </form>
-              
-            </div>
-            <div class="conectar">
-                <input type="submit" value="Conectar" id="boton">    
-            </div>
-            
+   <section class="contenido">
+        <div class="superior">
+            <span>Entrar</span>
         </div>
-   </div>
+        <div class="login">
+               <form action="" method="post">
+                   <ul class="formulario">
+                       <li class="f_email">
+                            <span>Email</span>
+                            <input class="input_e" type="text" name="email">
+                       </li>
+                       <li class="f_pass">
+                            <span>Contraseña</span>
+                            <input class="input_p" type="password" name="email">
+                       </li>
+                       <li class="conectar">
+                           <input id="boton" type="submit" value="Conectar"> 
+                       </li>
+                   </ul>
+                   
+               </form>
+        </div>
+   </section>
     
 </body>
 </html>
-
-                
-                
