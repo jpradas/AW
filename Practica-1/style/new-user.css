@@ -67,49 +67,62 @@ li a{
 }
 
 .f_email{
-    display:flex; 
+    display:flex;
     padding-top: 50px;
     padding-right: 25px;
 }
 
 .f_pass{
-    display:flex; 
+    display:flex;
     padding-top: 10px;
     padding-right: 25px;
 }
 
 .f_nombre{
-    display:flex; 
+    display:flex;
     padding-top: 10px;
+    padding-right: 25px;
+}
+
+.f_fnacimiento{
+    display:flex;
+    padding-top: 15px;
     padding-right: 25px;
 }
 
 .input_e{
     width: 80%;
-    height: 15px;
+    height: 20px;
     flex-grow: 2;
-    margin-left: 104px;
+    margin-left: 118px;
 }
 
 .input_p{
     width: 80%;
-    height: 15px;
+    height: 20px;
     flex-grow: 2;
-    margin-left: 61px;
+    margin-left: 76px;
 }
 
 .input_n{
     width: 70%;
-    height: 15px;
+    height: 20px;
     flex-grow: 2;
-    margin-left: 18px;
+    margin-left: 32px;
 }
 .f_sexo{
      padding-top: 10px;
 }
 .input_s{
-    margin-left: 110px;
+    margin-left: 120px;
 }
+
+.input_fn{
+    width: 20%;
+    height: 20px;
+    margin-left: 11px;
+}
+
 .conectar{
     display:flex;
     justify-content: center;
