@@ -54,7 +54,7 @@ li a{
     border:none;
     border-radius: 20px;
     width: 50%;
-    height: 430px;
+    height: 370px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 40px;
@@ -121,6 +121,14 @@ li a{
     width: 20%;
     height: 20px;
     margin-left: 11px;
+}
+
+.input_img{
+    margin-left: 40px;
+}
+
+.f_imagen{
+  margin-top: 10px;
 }
 
 .conectar{
