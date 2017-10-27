@@ -20,8 +20,12 @@ let listaTareas = [
  * Devuelve las tareas de la lista de entrada que no hayan sido finalizadas.
  */
 function getToDoTasks(tasks) {
-  /* Implementar */
+  let tareas = tasks.filter(t => t.done !== true);
+  let texto = tareas.map(t => t.text);
+  return texto;
 }
+
+console.log(getToDoTasks(listaTareas));
 
 /**
  * Devuelve las tareas que contengan el tag especificado
