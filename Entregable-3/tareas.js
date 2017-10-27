@@ -25,8 +25,6 @@ function getToDoTasks(tasks) {
   return texto;
 }
 
-console.log(getToDoTasks(listaTareas));
-
 /**
  * Devuelve las tareas que contengan el tag especificado
  */
