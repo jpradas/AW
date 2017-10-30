@@ -45,16 +45,10 @@ function findByTag(tasks, tag) {
  * Devuelve las tareas que contengan alguno de los tags especificados
  */
 function findByTags(tasks, tags) {
-  //let ta = tags.some(t=>t.indexOf(t));
-  //let tareas = tasks.some(t=> t.tags.indexOf(tags) !== -1)
-  return tasks.filter(p => p.tags.some(t => t.indexOf(tags) > -1));
-  //return tasks.filter(p => p.keys(tags).some(t => tasks.tags.indexOf(t) !== -1));
+  return tasks.filter(p => p.tags.some(function(t){
+     return tags.indexOf(t) > -1;
+  }));
 }
-
-//console.log(findByTags(prueba, ["a1","a3"]));
-//console.log(findByTags(listaTareas, ["personal", "pdap"]));
-//console.log(findByTags(listaTareas, []));
-
 
 /**
  * Devuelve el número de tareas finalizadas
@@ -81,7 +75,7 @@ function createTask(text) {
   return [result, nuevo];
 }
 
-console.log(createTask("Esto es una cadena @de @texto"));
+//console.log(createTask("Esto es una cadena @de @texto"));
 
 /*
   NO MODIFICAR A PARTIR DE AQUI
