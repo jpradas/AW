@@ -67,15 +67,25 @@ function countDone(tasks) {
  * Construye una tarea a partir de un texto con tags de la forma "@tag"
  */
 function createTask(text) {
-  let patron = /@/gi;
-  let result = patron.exec(text);
-  //let result = text.match(patron);
-  //Funciona
-  let nuevo = text.replace(patron, "");
-  return [result, nuevo];
-}
 
-//console.log(createTask("Esto es una cadena @de @texto"));
+  let patron = /@([\w+.-]+)/gi;
+  let result = text.match(patron);
+  if (result !== null){
+    for (let i=0;  i < result.length ; i++){
+      result[i] = result[i].replace(/@/,"");
+      result[i].trim();
+    }
+  }
+  else {
+    result = [];
+  }
+
+  let nuevo = text.replace(patron, "");
+  nuevo = nuevo.trim();
+
+    return {text:nuevo, tags:result};
+  
+}
 
 /*
   NO MODIFICAR A PARTIR DE AQUI
