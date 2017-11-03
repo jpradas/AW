@@ -1,0 +1,4 @@
+#!/bin/bash
+git config --global user.name "Espartaco99"
+git config --global user.email "jperucha@ucm.es"
+echo Hecho
