@@ -2,7 +2,7 @@ CREATE DATABASE facebluff;
 USE facebluff;
 
 CREATE TABLE control_usuarios(
-	email VARCHAR(30) PRIMARY KEY NOT NULL, 
+	email VARCHAR(30) PRIMARY KEY NOT NULL AUTO_INCREMENT, 
     contraseña VARCHAR(30) NOT NULL,
     nombre_completo VARCHAR(50),
     sexo CHAR,
