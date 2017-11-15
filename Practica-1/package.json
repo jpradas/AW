@@ -1,19 +1,16 @@
 {
-  "name": "practica1",
+  "name": "practica-1",
   "version": "1.0.0",
-  "description": "practica",
+  "description": "Practica 1 de la asignatura AW",
   "main": "index.js",
-  "dependencies": {
-    "mysql": "^2.15.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "github.com/jpradas/AW"
-  },
-  "author": "",
-  "license": "ISC"
+  "author": "Josue Pradas",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "mysql": "^2.15.0"
+  }
 }
