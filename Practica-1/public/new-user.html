@@ -8,12 +8,12 @@
 <body>
    <header>
           <div>
-                <img src="img/Logo.png" alt="FaceBluff - Logo" id="logo">
+                <img src="../../img/Logo.png" alt="FaceBluff - Logo" id="logo">
           </div>
           <nav class="enlaces">
            <ul class="lista">
                <li><a href="./index.html">Entrar</a></li>
-               <li><a href="./new-user.html">Nuevo Usuario</a></li>
+               <li><a href="#">Nuevo Usuario</a></li>
            </ul>
        </nav>
    </header>
@@ -22,15 +22,16 @@
             <span>Nuevo Usuario</span>
         </div>
         <div class="formulario-newuser">
-        <form action="" method="post">
-           <ul class="formulario">
+        <form action="profile.html" method="post">
+            <input type="hidden" name="tipo" value="newuser">
+            <ul class="formulario">
                 <li class="f_email">
                     <span>Email</span>
                     <input class="input_e" type="text" name="email">
                 </li>
                 <li class="f_pass">
                     <span>Contraseña</span>
-                    <input class="input_p" type="password" name="email">
+                    <input class="input_p" type="password" name="password">
                 </li>
                 <li class="f_nombre">
                     <span>Nombre completo</span>
@@ -38,9 +39,9 @@
                 </li>
                 <li class="f_sexo">
                     <span>Sexo</span>
-                    <input class= "input_s" type="radio" name="masculino" value="masculino"> Masculino
-                    <input type="radio" name="femenino" value="femenino"> Femenino
-                    <input type="radio" name="otro" value="otro"> Otro
+                    <input class= "input_s" type="radio" name="sexo" value="Hombre"> Masculino
+                    <input type="radio" name="sexo" value="Mujer"> Femenino
+                    <input type="radio" name="sexo" value="Otro"> Otro
                 </li>
                 <li class="f_fnacimiento">
                     <span>Fecha de nacimiento</span>

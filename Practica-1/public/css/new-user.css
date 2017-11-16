@@ -1,6 +1,6 @@
 @font-face{
     font-family: "GloriaHallelujah";
-    src: url(./GloriaHallelujah.ttf) format("truetype");
+    src: url(../fonts/GloriaHallelujah.ttf) format("truetype");
 }
 
 html{

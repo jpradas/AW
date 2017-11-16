@@ -12,7 +12,7 @@
           </div> 
           <nav class="enlaces">
            <ul class="lista">
-               <li><a href="./index.html">Entrar</a></li>
+               <li><a href="#">Entrar</a></li>
                <li><a href="./new-user.html">Nuevo Usuario</a></li>
            </ul>
        </nav>
@@ -22,15 +22,16 @@
             <span>Entrar</span>
         </div>
         <div class="login">
-               <form action="" method="post">
-                   <ul class="formulario">
+               <form action="profile.html" method="POST">
+                <input type="hidden" name="tipo" value="login">   
+                <ul class="formulario">
                        <li class="f_email">
                             <span>Email</span>
                             <input class="input_e" type="text" name="email">
                        </li>
                        <li class="f_pass">
                             <span>Contraseña</span>
-                            <input class="input_p" type="password" name="email">
+                            <input class="input_p" type="password" name="password">
                        </li>
                        <li class="conectar">
                            <input id="boton" type="submit" value="Conectar"> 

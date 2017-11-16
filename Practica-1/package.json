@@ -2,15 +2,18 @@
   "name": "practica-1",
   "version": "1.0.0",
   "description": "Practica 1 de la asignatura AW",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Josue Pradas",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "mysql": "^2.15.0"
   }
 }
