@@ -32,41 +32,30 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(middlewareSession);
 
-app.post("/profile.html", (request, response, next) =>{
+function middlewareIdentificacion(request, response, next){
+	if(request.session.email !== undefined){
+		next();
+	}else{
+		next("/index.html");
+	}
+}
+
+app.post("/profile.html", middlewareIdentificacion, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados	
 	let daou = new daoUsers.DAOusers(pool);
-	if(request.body.tipo === "login" || request.body.tipo === undefined){
 		daou.isUserCorrect(request.body.email, request.body.password, (err, result) =>{
 			if(err){
 				next(err);
 			}else if(result){
 				response.status(200);
+				request.session.email = result[0].email;
 				response.render("profile", { usuario: result[0] });
 			}else{
 				console.log("usuario o contraseña incorrecta");
-				response.status(404);
+				response.redirect("/new-user.html");
 			}
-			response.end();
 		}) 
-	}else if(request.body.tipo === "newuser"){
-		daou.isUserCorrect(request.body.email, request.body.password, (err, result) =>{
-			if(err){
-				next(err);
-			}else if(result){
-				//response.status(200);
-				//response.render("profile", { usuario: result[0] });
-			}else{
-				daou.insertNewUser(request.body, (err, result) =>{
-					if(err){
-						next(err);
-					}
-					response.status(200);
-					response.render("profile", { usuario: result[0] });
-					response.end();
-				})
-			}
-		})
-	}
 });
 
 //manejador de error

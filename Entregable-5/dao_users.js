@@ -39,15 +39,15 @@ class DAOUsers {
                 "SELECT * FROM tareas.user WHERE email=? AND password=?",
                 [email, password],
                 (err, rows)=>{
+					connection.release();
                     if(err){
-                        connection.release();
+						callback(err);
                         return;
                     }
-                    connection.release();
                     if(rows.length === 0){
-                        callback(null, undefined);
+                        callback(null, false);
                     }else{
-                        callback(null, rows);
+                        callback(null, true);
                     }
                 }
             ); 
