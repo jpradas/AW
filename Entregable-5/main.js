@@ -19,7 +19,7 @@ const pool = mysql.createPool({
 
 let daoUser = new daoUsers.DAOUsers(pool);
 let daoTask = new daoTasks.DAOTasks(pool);
-daoUser.isUserCorrect("usuario@ucm.es", "nopass", (err, result) => {
+daoUser.isUserCorrect("usuario@ucm.es", "mipass", (err, result) => {
     if (err) {
         console.error(err);
     } else if (result) {

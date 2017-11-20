@@ -36,19 +36,39 @@ class DAOTasks {
         this.pool.getConnection((err, connection) => {
             if (err) { callback(err); return; }
             connection.query(
-                "SELECT * FROM tareas.task WHERE user=?",
+                "SELECT * FROM task LEFT JOIN tag ON task.id = taskId WHERE task.user = ?; ",
                 [email],
                 (err, rows) => {
                     connection.release();
                     if(err){
                         callback(err);
                     }else{
-                        callback(null, rows);
+                        let tasks = [];
+                        let last=0;
+                        let prev=-1;
+                        rows.forEach(row => {
+                            let tarea = {
+                                id: row.id,
+                                text: row.text,
+                                done: row.done,
+                                tags: []
+                            };
+                            if(last !== row.id){ 
+                                last = row.id;
+                                tarea.tags.push(row.tag);
+                                tasks.push(tarea);
+                                prev++;
+                            }else{
+                                if(tasks[prev].tags.lastIndexOf(row.tag) === -1){
+                                    tasks[prev].tags.push(row.tag);
+                                }
+                            }
+                        });
+                        callback(null, tasks);
                     }
                 }
             );
         });
-        /* Implementar */
     }
 
     /**
