@@ -15,7 +15,7 @@
                <li><a href="#">Perfil</a></li>
                <li><a href="">Amigos</a></li>
                <li><a href="">Preguntas</a></li>
-               <li><a href="./index.html">Desconectar</a></li>
+               <li><a href="/logout.html">Desconectar</a></li>
                <li><img id="lilav"src=<%= usuario.imagen %>></li>
                <li id="ptos"><%= usuario.puntos %> pts</li>
            </ul>
@@ -28,10 +28,10 @@
         <div class="info-perfil">
             <img id="leftav" src=<%= usuario.imagen %>>
             <ul class="datos">
-                <li><%= usuario.nombre_completo %></li>
-                <li><%= usuario.edad %> años</li>
-                <li><%= usuario.sexo %></li>
-                <li><%= usuario.puntos %> puntos</li>
+                <li>Nombre: <%= usuario.nombre_completo %></li>
+                <li>Edad: <%= usuario.edad %> aÃ±os</li>
+                <li>Sexo: <%= usuario.sexo %></li>
+                <li>Puntos: <%= usuario.puntos %> puntos</li>
             </ul>
         </div>
    </section>

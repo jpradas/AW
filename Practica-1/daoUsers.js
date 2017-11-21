@@ -36,22 +36,40 @@ class DAOusers{
                 "SELECT * FROM facebluff.users WHERE email=? AND contraseña=?",
                 [email, password],
                 (err, rows)=>{
+                    connection.release();
                     if(err){
-                        connection.release();
                         callback(err);
                     }
-                    connection.release();
                     if(rows.length === 0){
-                        callback(null, undefined);
+                        callback(null, false);
                     }else{
-                        callback(null, rows);
+                        callback(null, true);
                     }
                 }
             ); 
         })
     }
 
-    insertNewUser(user, callback){
+    getUser(user, callback){
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "SELECT * FROM facebluff.users WHERE email=?",
+                [user],
+                (err, rows)=>{
+                    connection.release();
+                    if(err){
+                        callback(err);return;
+                    }
+                    callback(null, rows[0]);
+                }
+            ); 
+        })
+    }
+
+    setUser(user, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
@@ -73,7 +91,7 @@ class DAOusers{
                             if(err){
                                 callback(err);return;
                             }else{
-                                callback(null, rows);
+                                callback(null, true);
                             }
                         }
                     ); 

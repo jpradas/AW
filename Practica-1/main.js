@@ -27,6 +27,8 @@ const app = express();
 
 const ficherosEstaticos = path.join(__dirname, "public");
 
+const daou = new daoUsers.DAOusers(pool);
+
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -34,29 +36,81 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(middlewareSession);
 
-function middlewareIdentificacion(request, response, next){
-	if(request.session.email !== undefined){
-		next();
-	}else{
-		next("/index.html");
-	}
+
+function userExists(request, response, next){
+	daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
+		if(err){
+			next(err);
+		}
+		if(result){
+			next();
+		}else{//mostrar alerta de usuario no encontrado
+			response.redirect("index.html");
+		}
+	});
 }
 
-app.post("/profile.html", middlewareIdentificacion, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados	
-	let daou = new daoUsers.DAOusers(pool);
-		daou.isUserCorrect(request.body.email, request.body.password, (err, result) =>{
-			if(err){
-				next(err);
-			}else if(result){
-				response.status(200);
-				request.session.email = result[0].email;
-				response.render("profile", { usuario: result[0] });
-			}else{
-				console.log("usuario o contraseña incorrecta");
-				response.redirect("/new-user.html");
-			}
-		}) 
+function initSession(request, response, next){
+		request.session.email = request.body.email;
+		request.session.password = request.body.password;
+		next();
+}
+
+app.post("/login.html", userExists, initSession, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados
+	response.redirect("profile.html");
 });
+
+function insertUser(request, response, next){
+  daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
+		if(err){
+			next(err);return;
+		}
+		if(result){//mostrar alerta de usuario existente
+			response.redirect("index.html");
+		}else{
+			daou.setUser(request.body, (err, result)=>{
+        if(err){
+          next(err);return;
+        }
+        if(result){
+          next();
+        }else{
+          next(err);return;
+        }
+      })
+		}
+	});
+}
+
+app.post("/form.html", insertUser, initSession, (request, response, next) =>{
+  response.redirect("profile.html");
+});
+
+app.get("/profile.html", (request, response, next) =>{
+	if(request.session.email === undefined){
+    response.status(403);
+    response.redirect("/index.html");
+  }else{
+    servUser(request, response);
+  }
+})
+
+
+app.get("/logout.html", (request, response, next)=>{
+	request.session.email = undefined;
+  request.session.password = undefined;
+	response.redirect("/index.html");
+})
+
+function servUser(request, response){
+  daou.getUser(request.session.email, (err, user) =>{
+		if(err){
+			next(err);
+		}
+		response.status(200);
+		response.render("profile", { usuario: user });
+	})
+}
 
 //manejador de error
 app.use((error, request, response, next) =>{
@@ -71,4 +125,3 @@ app.use((error, request, response, next) =>{
 app.listen(3000, ()=>{
 	console.log("Escuchando del puerto 3000");
 })
-
