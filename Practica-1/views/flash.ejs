@@ -1,4 +1,3 @@
-<% let msg = getAndClearFlash();
-    if(msg) { %>
-        <div class="flash"><%= msg ></div>
+<% if(message) { %>
+        <div class="flash"><%= message %></div>
 <%  } %>

@@ -28,15 +28,28 @@
         <div class="info-perfil">
             <img id="leftav" src=<%= usuario.imagen %>>
             <ul class="datos">
-                <li>Nombre: <%= usuario.nombre_completo %></li>
-                <li>Edad: <%= usuario.edad %> años</li>
-                <li>Sexo: <%= usuario.sexo %></li>
-                <li>Puntos: <%= usuario.puntos %> puntos</li>
+                <li>
+                  <span>Nombre</span>
+                  <input class="input_nombre" type="text" name="nombre" value=<%= usuario.nombre_completo %>>
+                </li>
+                <li>
+                  <span>Edad</span>
+                  <input class="input_edad" type="number" name="edad" value=<%= usuario.edad %>>
+                </li>
+                <li>
+                  <span>Sexo</span>
+                  <input class="input_sexo" type="text" name="sexo" value=<%= usuario.sexo %>>
+                </li>
+                <li class="f_imagen">
+                    <span>Imagen de perfil</span>
+                    <input class="input_img" type="file" name="imagen_perfil" value="Seleccionar archivo">
+                </li>
             </ul>
         </div>
         <div class="button-modificar">
-          <form action="/modify_profile" method="get">
-            <input id="boton" type="submit" value="Modificar perfil">
+          <form action="/client_change" method="get">
+            <input id="boton_aceptar" type="submit" value="Aceptar">
+            <input id="boton_cancelar" type="submit" value="Cancelar">
           </form>
         </div>
    </section>

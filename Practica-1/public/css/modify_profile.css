@@ -87,7 +87,7 @@ li a{
     margin-left: 20px;
 }
 
-#boton{
+#boton_aceptar{
     font-family: "GloriaHallelujah";
     background-color: #CC2EFA;
     font-weight: bold;
@@ -95,6 +95,17 @@ li a{
     font-size: 30px;
     padding-left: 25px;
     padding-right: 25px;
+    border-style: none;
+    border-radius: 20px;
+}
+#boton_cancelar{
+    font-family: "GloriaHallelujah";
+    background-color: #CC2EFA;
+    font-weight: bold;
+    color:white;
+    font-size: 30px;
+    padding-right: 25px;
+    padding-left: 25px;
     border-style: none;
     border-radius: 20px;
 }
