@@ -96,7 +96,7 @@ app.post("/form.html", insertUser, initSession, (request, response, next) =>{
 app.get("/profile.html", (request, response, next) =>{
 	if(request.session.email === undefined){
     response.status(403);
-    response.redirect("/index.html");
+    response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }else{
     servUser(request, response);
   }
@@ -106,7 +106,7 @@ app.get("/profile.html", (request, response, next) =>{
 app.get("/logout.html", (request, response, next)=>{
 	request.session.email = undefined;
   request.session.password = undefined;
-	response.redirect("/index.html");
+	response.render("login", {message: ""});
 })
 
 function servUser(request, response){

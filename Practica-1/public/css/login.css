@@ -98,6 +98,26 @@ li a{
     margin-top: 25px;
 }
 
+.flash{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  height: 40px;
+  background-color:  #ec7063;
+  border-color:  #922b21;
+  border-style: dotted;
+  border-radius: 10px;
+}
+
+.flash span{
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
 #boton{
     font-family: "GloriaHallelujah";
     background-color: #CC2EFA;
