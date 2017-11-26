@@ -7,11 +7,18 @@ CREATE DATABASE facebluff;
 USE facebluff;
 
 CREATE TABLE users(
-	email VARCHAR(30) PRIMARY KEY NOT NULL, 
-    contraseña VARCHAR(30) NOT NULL,
-    nombre_completo VARCHAR(50),
-    sexo CHAR,
-    edad INT,
-    imagen VARCHAR(50),
+	email VARCHAR(30) PRIMARY KEY NOT NULL,
+  contraseña VARCHAR(30) NOT NULL,
+  nombre_completo VARCHAR(50),
+  sexo CHAR,
+  edad INT,
+  imagen VARCHAR(50),
 	puntos INT
+);
+
+CREATE TABLE amigos(
+	email VARCHAR(30),
+	amigo VARCHAR(30),
+	FOREIGN KEY (email) references users(email),
+	FOREIGN KEY (amigo) references users(email)
 );
