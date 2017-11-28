@@ -19,6 +19,8 @@ CREATE TABLE users(
 CREATE TABLE amigos(
 	email VARCHAR(30),
 	amigo VARCHAR(30),
+	img VARCHAR(50),
+	nombre VARCHAR(50),
 	FOREIGN KEY (email) references users(email),
 	FOREIGN KEY (amigo) references users(email)
 );

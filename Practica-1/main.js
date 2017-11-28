@@ -10,6 +10,7 @@ const session = require("express-session");
 const flash = require("express-flash")
 const config = require("./config");
 const daoUsers = require("./daoUsers");
+const daoAmigos = require("./daoAmigos");
 
 const pool = mysql.createPool({
     host: config.host,
@@ -29,6 +30,7 @@ const app = express();
 const ficherosEstaticos = path.join(__dirname, "public");
 
 const daou = new daoUsers.DAOusers(pool);
+const daoa = new daoAmigos.DAOamigos(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
@@ -73,7 +75,8 @@ function insertUser(request, response, next){
 			next(err);return;
 		}
 		if(result){//mostrar alerta de usuario existente
-			response.redirect("index.html");
+      setFlash(request, "Usuario existente en base de datos");
+      response.render("login", {message: request.session.flashMsg});
 		}else{
 			daou.setUser(request.body, (err, result)=>{
         if(err){
@@ -102,6 +105,21 @@ app.get("/profile.html", (request, response, next) =>{
   }
 })
 
+app.get("/amigos.html", (request, response, next) =>{
+  daoa.getAmigos(request.session.email, (err, rows) =>{
+    if(err){
+      next(err);
+    }
+    daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
+      if(err){
+        next(err);
+      }
+      response.status(200);
+      response.render("list_amigos" , {amigos: rows, usuario: user});
+    });
+  });
+})
+
 
 app.get("/logout.html", (request, response, next)=>{
 	request.session.email = undefined;
@@ -128,10 +146,6 @@ app.get("/modify_profile", (request, response, next) =>{
     response.status(200);
     response.render("modify_profile", { usuario: user });
   });
-
-  /*console.log("hola");
-  response.status(200);
-  response.end();*/
 })
 
 app.get("/", (request, response, next)=>{

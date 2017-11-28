@@ -1,0 +1,8 @@
+<%if(amigos){
+  amigos.forEach(amigo =>{ %>
+    <li>
+      <img class="img-perfil" src="<%= amigo.img %>" alt="avatar">
+      <span><%= amigo.nombre %></span>
+    </li>
+  <% })
+} %>

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Perfil - FaceBluff</title>
-    <link rel="stylesheet" type="text/css" href="./css/profile.css">
+    <title>Amigos - FaceBluff</title>
+    <link rel="stylesheet" type="text/css" href="./css/list_amigos.css">
 </head>
 <body>
    <header>
@@ -12,7 +12,7 @@
           </div>
           <nav class="enlaces">
            <ul class="lista">
-               <li><a href="#">Perfil</a></li>
+               <li><a href="/profile.html">Perfil</a></li>
                <li><a href="/amigos.html">Amigos</a></li>
                <li><a href="">Preguntas</a></li>
                <li><a href="/logout.html">Desconectar</a></li>
@@ -23,20 +23,19 @@
    </header>
    <section class="contenido">
         <div class="superior">
-            <span>Tu perfil</span>
+            <span>Amigos</span>
         </div>
-        <div class="info-perfil">
-            <img id="leftav" src=<%= usuario.imagen %>>
-            <ul class="datos">
-                <li>Nombre: <%= usuario.nombre_completo %></li>
-                <li>Edad: <%= usuario.edad %> años</li>
-                <li>Sexo: <%= usuario.sexo %></li>
-                <li>Puntos: <%= usuario.puntos %> puntos</li>
-            </ul>
+        <div class="friends">
+          <ul class="lista-amigos">
+            <%- include("amigos") %>
+          </ul>
         </div>
-        <div class="button-modificar">
-          <form action="/modify_profile" method="get">
-            <input id="boton" type="submit" value="Modificar perfil">
+        <div class="buscar">
+          <span>Buscar</span>
+        </div>
+        <div class="buscador">
+          <form action="buscar-amigos.html">
+            <input class="input-buscador" type="text" name="busca-email">
           </form>
         </div>
    </section>
