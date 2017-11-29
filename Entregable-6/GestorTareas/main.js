@@ -21,8 +21,8 @@ let pool = mysql.createPool({
 let daoT = new daoTasks.DAOTasks(pool);
 
 
-const ficherosEstaticos = path.join(__dirname, "public");
-app.use(express.static(ficherosEstaticos));
+//const ficherosEstaticos = path.join(__dirname, "public");
+//app.use(express.static(ficherosEstaticos));
 
 
 app.listen(config.port, function (err) {
