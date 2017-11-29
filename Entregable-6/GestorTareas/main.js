@@ -35,7 +35,7 @@ app.listen(config.port, function (err) {
 });
 
 
-app.use((request, response) => {
+app.use((request, response, next) => {
     console.log(`Recibida petición ${request.method} ` +
     `en ${request.url} de ${request.ip}`);
     next();
