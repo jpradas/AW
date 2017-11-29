@@ -11,19 +11,36 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-let pool = mysql.createPool({
+const pool = mysql.createPool({
     database: config.mysqlConfig.database,
     host: config.mysqlConfig.host,
     user: config.mysqlConfig.user,
     password: config.mysqlConfig.password
 });
 
-let daoT = new daoTasks.DAOTasks(pool);
+const daoT = new daoTasks.DAOTasks(pool);
 
 
-//const ficherosEstaticos = path.join(__dirname, "public");
-//app.use(express.static(ficherosEstaticos));
+const ficherosEstaticos = path.join(__dirname, "public");
+app.use(express.static(ficherosEstaticos));
 
+app.use((request, response, next) => {
+    console.log(`Recibida petición ${request.method} ` +
+    `en ${request.url} de ${request.ip}`);
+    next();
+});
+
+app.get("/", (request,response) =>{
+  daoT.getAllTasks("usuario@ucm.es", (err, taskList)=>{
+    if(err){
+      next(err);return;
+    }
+    console.log(taskList);
+    response.status(200);
+    response.render("tasks", { tasks: taskList });
+    //resp
+  });
+});
 
 app.listen(config.port, function (err) {
     if (err) {
@@ -34,17 +51,6 @@ app.listen(config.port, function (err) {
     }
 });
 
-
-app.use((request, response, next) => {
-    console.log(`Recibida petición ${request.method} ` +
-    `en ${request.url} de ${request.ip}`);
-    next();
-});
-
-app.get("/", (request,response) =>{
-    response.redirect("/tasks.html");
-});
-
 app.get("/tasks.html", (request,response) =>{
 
     daoT.getAllTasks("usuario@ucm.es", (err, taskList)=>{
@@ -53,7 +59,7 @@ app.get("/tasks.html", (request,response) =>{
   		}
       console.log(taskList);
       response.status(200);
-      response.render("tasks",{tasks:taskList});
+      response.render("tasks", { tasks: taskList });
       //response.end();
   	});
     //response.end();
@@ -62,4 +68,4 @@ app.get("/tasks.html", (request,response) =>{
 app.get("/deleteCompleted", (request, response) => {
   response.status(404);
   response.end();
-})
+});
