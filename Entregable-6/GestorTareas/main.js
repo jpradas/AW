@@ -20,6 +20,7 @@ let pool = mysql.createPool({
 
 let daoT = new daoTasks.DAOTasks(pool);
 
+
 const ficherosEstaticos = path.join(__dirname, "public");
 app.use(express.static(ficherosEstaticos));
 
@@ -34,16 +35,31 @@ app.listen(config.port, function (err) {
 });
 
 
-app.use((request, response, next) => {
+app.use((request, response) => {
     console.log(`Recibida petición ${request.method} ` +
     `en ${request.url} de ${request.ip}`);
-    next()
+    next();
 });
 
-app.get("/", (request,response,next) =>{
+app.get("/", (request,response) =>{
     response.redirect("/tasks.html");
 });
 
-app.get("/tasks.html", (request,response,next) =>{
-    response.end();
+app.get("/tasks.html", (request,response) =>{
+
+    daoT.getAllTasks("usuario@ucm.es", (err, taskList)=>{
+  		if(err){
+  			next(err);return;
+  		}
+      console.log(taskList);
+      response.status(200);
+      response.render("tasks",{tasks:taskList});
+      //response.end();
+  	});
+    //response.end();
 });
+
+app.get("/deleteCompleted", (request, response) => {
+  response.status(404);
+  response.end();
+})

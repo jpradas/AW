@@ -1,1 +1,187 @@
-var _0xbe83=['UPDATE\x20task\x20SET\x20done\x20=\x201\x20WHERE\x20id\x20=\x20?','DELETE\x20FROM\x20task\x20WHERE\x20user\x20=\x20?\x20AND\x20done\x20=\x201','pool','getAllTasks','SELECT\x20id,\x20text,\x20done,\x20tag\x20FROM\x20task\x20','LEFT\x20JOIN\x20tag\x20ON\x20task.id\x20=\x20tag.taskId\x20','WHERE\x20user\x20=\x20?\x20','ORDER\x20BY\x20id','release','text','done','tags','tag','insertTask','getConnection','query','INSERT\x20INTO\x20task(user,\x20text,\x20done)\x20VALUES\x20(?,\x20?,\x20?)','length','fill','(?,\x20?)','join','insertId','push','INSERT\x20INTO\x20tag(taskId,\x20tag)\x20VALUES\x20'];(function(_0x50e3ab,_0x6b8e2){var _0x21244d=function(_0x19e45c){while(--_0x19e45c){_0x50e3ab['push'](_0x50e3ab['shift']());}};_0x21244d(++_0x6b8e2);}(_0xbe83,0xc2));var _0x3be8=function(_0x2ee82e,_0x21bd90){_0x2ee82e=_0x2ee82e-0x0;var _0x31fa47=_0xbe83[_0x2ee82e];return _0x31fa47;};'use strict';class DAOTasks{constructor(_0x470292){this[_0x3be8('0x0')]=_0x470292;}[_0x3be8('0x1')](_0x1c85b5,_0x32272d){this['pool']['getConnection']((_0x34fb50,_0x23083c)=>{if(_0x34fb50){_0x32272d(_0x34fb50);return;}_0x23083c['query'](_0x3be8('0x2')+_0x3be8('0x3')+_0x3be8('0x4')+_0x3be8('0x5'),[_0x1c85b5],(_0x44385c,_0x4ae4c7)=>{if(_0x44385c){_0x32272d(_0x44385c);return;}_0x23083c[_0x3be8('0x6')]();let _0x1073fa=null;let _0xaaa78c=[];for(let _0x352bab of _0x4ae4c7){if(_0x1073fa===null||_0x352bab['id']!==_0x1073fa['id']){_0x1073fa={'id':_0x352bab['id'],'text':_0x352bab[_0x3be8('0x7')],'done':Boolean(_0x352bab[_0x3be8('0x8')]),'tags':[]};_0xaaa78c['push'](_0x1073fa);}if(_0x352bab['tag']!==null){_0x1073fa[_0x3be8('0x9')]['push'](_0x352bab[_0x3be8('0xa')]);}}_0x32272d(null,_0xaaa78c);});});}[_0x3be8('0xb')](_0x48d902,_0x42588d,_0x35ab57){this['pool'][_0x3be8('0xc')]((_0xcc36c7,_0x311892)=>{if(_0xcc36c7){_0x35ab57(_0xcc36c7);return;}_0x311892[_0x3be8('0xd')](_0x3be8('0xe'),[_0x48d902,_0x42588d[_0x3be8('0x7')],_0x42588d[_0x3be8('0x8')]],(_0x4ff9af,_0x369c06)=>{if(_0x4ff9af){_0x35ab57(_0x4ff9af);return;}if(_0x42588d['tags']['length']>0x0){const _0x4a115e=new Array(_0x42588d[_0x3be8('0x9')][_0x3be8('0xf')]);_0x4a115e[_0x3be8('0x10')](_0x3be8('0x11'));const _0x1e6580=_0x4a115e[_0x3be8('0x12')](',\x20');const _0x55e22a=[];for(let _0x5c2191 of _0x42588d['tags']){_0x55e22a['push'](_0x369c06[_0x3be8('0x13')]);_0x55e22a[_0x3be8('0x14')](_0x5c2191);}const _0x1a5701=_0x3be8('0x15')+_0x1e6580;_0x311892[_0x3be8('0xd')](_0x1a5701,_0x55e22a,_0x32cd63=>{_0x311892[_0x3be8('0x6')]();_0x35ab57(_0x32cd63);});}else{_0x311892[_0x3be8('0x6')]();_0x35ab57(null);}});});}['markTaskDone'](_0x113f59,_0x1b4838){this[_0x3be8('0x0')][_0x3be8('0xc')]((_0x2a3768,_0x4ec011)=>{if(_0x2a3768){_0x1b4838(_0x2a3768);return;}_0x4ec011[_0x3be8('0xd')](_0x3be8('0x16'),[_0x113f59],_0x46f0b8=>{_0x4ec011['release']();_0x1b4838(_0x46f0b8);});});}['deleteCompleted'](_0x2ccfdf,_0x108aea){this[_0x3be8('0x0')][_0x3be8('0xc')]((_0x1efe0a,_0x5cd053)=>{if(_0x1efe0a){_0x108aea(_0x1efe0a);return;}_0x5cd053[_0x3be8('0xd')](_0x3be8('0x17'),[_0x2ccfdf],_0x903b75=>{_0x5cd053[_0x3be8('0x6')]();_0x108aea(_0x903b75);});});}}module['exports']={'DAOTasks':DAOTasks};
+/**
+* Proporciona operaciones para la gestión de tareas
+* en la base de datos.
+*/
+class DAOTasks {
+    /**
+    * Inicializa el DAO de tareas.
+    *
+    * @param {Pool} pool Pool de conexiones MySQL. Todas las operaciones
+    * sobre la BD se realizarán sobre este pool.
+    */
+    constructor(pool) {
+        this.pool = pool;
+    }
+    /**
+    * Devuelve todas las tareas de un determinado usuario.
+    *
+    * Este método devolverá (de manera asíncrona) un array
+    * con las tareas de dicho usuario. Cada tarea debe tener cuatro
+    * atributos: id, text, done y tags. El primero es numérico, el segundo
+    * una cadena, el tercero un booleano, y el cuarto un array de cadenas.
+    *
+    * La función callback ha de tener dos parámetros: un objeto
+    * de tipo Error (si se produce, o null en caso contrario), y
+    * la lista de tareas (o undefined, en caso de error).
+    *
+    * @param {string} email Identificador del usuario.
+    * @param {function} callback Función callback.
+    */
+    getAllTasks(email, callback) {
+        this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+            //falta sacar tags
+            "SELECT * FROM tareas.task WHERE user = ?",
+            [email],
+            (err, rows)=>{
+                connection.release();
+                if(err){
+                    callback(err);
+                }
+                if(rows.length === 0){
+                    callback(null, rows);
+                }else{
+                    callback(null, rows);
+                }
+            }
+          );
+        });
+    }
+
+    /**
+    * Inserta una tarea asociada a un usuario.
+    *
+    * Se supone que la tarea a insertar es un objeto con, al menos,
+    * dos atributos: text y tags. El primero de ellos es un string con
+    * el texto de la tarea, y el segundo de ellos es un array de cadenas.
+    *
+    * Tras la inserción se llamará a la función callback, pasándole el objeto
+    * Error, si se produjo alguno durante la inserción, o null en caso contrario.
+    *
+    * @param {string} email Identificador del usuario
+    * @param {object} task Tarea a insertar
+    * @param {function} callback Función callback que será llamada tras la inserción
+    */
+    insertTask(email, task, callback) {
+      let id = 37;
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+            "INSERT INTO tareas.task VALUES (?,?,?,0)",
+            [id, email, task.text],
+            (err, result) =>{
+              if(err){
+                  connection.release();
+                  callback(err);return;
+              }
+              else{
+                  callback(null);
+              }
+          });
+          connection.query(
+            "INSERT INTO tareas.tag VALUES (?,?)",
+            [id, task.tag],
+            (err, result) =>{
+
+              if(err){
+                  connection.release();
+                  callback(err);return;
+              }
+              else{
+                  callback(null);
+              }
+          });
+          connection.release();
+      });
+
+    }
+    /**
+    * Marca la tarea indicada como realizada, estableciendo
+    * la columna 'done' a 'true'.
+    *
+    * Tras la actualización se llamará a la función callback, pasándole el objeto
+    * Error, si se produjo alguno durante la actualización, o null en caso contrario.
+    *
+    * @param {object} idTask Identificador de la tarea a modificar
+    * @param {function} callback Función callback que será llamada tras la actualización
+    */
+    markTaskDone(idTask, callback) {
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+            "UPDATE tareas.task AS t SET done = 1 WHERE t.id = ?",
+            [idTask],
+            (err, result) =>{
+              connection.release();
+              if(err){
+                  callback(err);return;
+              }
+              else{
+                  callback(null);
+              }
+          });
+        });
+    }
+    /**
+    * Elimina todas las tareas asociadas a un usuario dado que tengan
+    * el valor 'true' en la columna 'done'.
+    *
+    * Tras el borrado se llamará a la función callback, pasándole el objeto
+    * Error, si se produjo alguno durante la actualización, o null en caso contrario.
+    *
+    * @param {string} email Identificador del usuario
+    * @param {function} callback Función llamada tras el borrado
+    */
+    deleteCompleted(email, callback) {
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+            "SELECT id FROM tareas.task AS t WHERE t.user = ?",
+            [email],
+            (err, result) =>{
+              if(err){
+                  callback(err);return;
+              }
+              else{
+                connection.query(
+                  "DELETE FROM tareas.tag AS t WHERE t.id = ?",
+                  [result],
+                  (err, result) =>{
+                    if(err){
+                        callback(err);return;
+                    }
+                    else{
+                        callback(null);
+                    }
+                });
+              }
+          });
+          connection.query(
+            "DELETE FROM tareas.task AS t WHERE t.user = ?",
+            [email],
+            (err, result) =>{
+              if(err){
+                  callback(err);return;
+              }
+              else{
+                  callback(null);
+              }
+          });
+
+          connection.release();
+      });
+    }
+}
+
+module.exports = {
+  DAOTasks: DAOTasks
+}
