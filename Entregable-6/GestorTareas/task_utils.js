@@ -1,3 +1,5 @@
+"use strict";
+
 /**
 * A partir de un texto seguido de una serie de etiquetas de la forma
 * @tag1, @tag2, etc., extrae las etiquetas, creando un objeto tarea
@@ -28,10 +30,6 @@ function createTask(text) {
 
   return {text:nuevo, tags:result};
 }
-
-
-
-
 
 module.exports = {
     createTask: createTask

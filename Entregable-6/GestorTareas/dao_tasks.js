@@ -1,6 +1,5 @@
 "use strict";
 
-
 /**
  * Proporciona operaciones para la gestión de tareas
  * en la base de datos.
@@ -64,7 +63,6 @@ class DAOTasks {
                                 }
                             }
                         });
-                        console.log(tasks);
                         callback(null, tasks);
                     }
                 }
@@ -87,32 +85,41 @@ class DAOTasks {
      * @param {function} callback Función callback que será llamada tras la inserción
      */
     insertTask(email, task, callback) {
+      if (task.text !== ''){
         this.pool.getConnection((err, connection) => {
             if (err) { callback(err); return; }
             connection.query(
-                "INSERT INTO tareas.task VALUES (NULL, ?, ?, ?)",
-                [email, task.text, task.done],
+                "INSERT INTO tareas.task VALUES (NULL, ?, ?, 0)",
+                [email, task.text],
                 (err, rows) => {
                     if(err){
                         connection.release();
                         callback(err);
                     }else{
+                      task.tags.forEach(tag => {
                         connection.query(
-                            "INSERT INTO tareas.tag VALUES (?,?), (?,?)",
-                            [rows.insertId, task.tags[0], rows.insertId, task.tags[1]],
+                            "INSERT INTO tareas.tag VALUES (?,?)",
+                            [rows.insertId, tag],
                             (err)=>{
-                                connection.release();
                                 if(err){
+                                    connection.release();
                                     callback(err);
                                 }else{
                                     callback(null);
                                 }
                             }
                         );
+                      });
+                      connection.release();
+                      callback(null);
                     }
                 }
             );
         });
+      }
+      else {
+        callback(null);
+      }
     }
 
     /**

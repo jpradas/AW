@@ -1,3 +1,5 @@
+"use strict";
+
 const express = require("express");
 const mysql = require("mysql");
 const path = require("path");
@@ -7,6 +9,9 @@ const daoTasks = require("./dao_tasks");
 const taskUtils = require("./task_utils");
 
 const app = express();
+
+const ficherosEstaticos = path.join(__dirname, "public");
+app.use(express.static(ficherosEstaticos));
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -20,10 +25,6 @@ const pool = mysql.createPool({
 
 const daoT = new daoTasks.DAOTasks(pool);
 
-
-const ficherosEstaticos = path.join(__dirname, "public");
-app.use(express.static(ficherosEstaticos));
-
 app.use((request, response, next) => {
     console.log(`Recibida petición ${request.method} ` +
     `en ${request.url} de ${request.ip}`);
@@ -31,15 +32,8 @@ app.use((request, response, next) => {
 });
 
 app.get("/", (request,response) =>{
-  daoT.getAllTasks("usuario@ucm.es", (err, taskList)=>{
-    if(err){
-      next(err);return;
-    }
-    console.log(taskList);
     response.status(200);
-    response.render("tasks", { tasks: taskList });
-    //resp
-  });
+    response.redirect("/tasks.html");
 });
 
 app.listen(config.port, function (err) {
@@ -57,15 +51,53 @@ app.get("/tasks.html", (request,response) =>{
   		if(err){
   			next(err);return;
   		}
-      console.log(taskList);
+      //console.log(taskList);
       response.status(200);
       response.render("tasks", { tasks: taskList });
-      //response.end();
   	});
-    //response.end();
+
+});
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.post("/addTask", (request, response) => {
+  let task = taskUtils.createTask(request.body.taskText);
+
+  daoT.insertTask("usuario@ucm.es", task, (err, result) => {
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else{
+      response.status(200);
+      response.redirect("/tasks.html");
+    }
+  });
+});
+
+app.post("/finish", (request, response) => {
+  let id = request.body.id;
+  daoT.markTaskDone(id, (err, result) => {
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else{
+      response.status(200);
+      response.redirect("/tasks.html");
+    }
+  });
 });
 
 app.get("/deleteCompleted", (request, response) => {
-  response.status(404);
-  response.end();
+  daoT.deleteCompleted("usuario@ucm.es", (err, result) => {
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else{
+      response.status(200);
+      response.redirect("/tasks.html");
+    }
+  });
 });
