@@ -45,6 +45,10 @@ function setFlash(request, msg){
   request.session.flashMsg = msg;
 }
 
+function clearFlash(request){
+  request.session.flashMsg = undefined;
+}
+
 function userExists(request, response, next){
 	daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
 		if(err){
@@ -74,15 +78,16 @@ app.get("/login.html", (request, response, next)=>{
   let mensaje = {message: ""};
   if(request.session.flashMsg !== undefined){
     mensaje = {message: request.session.flashMsg};
+    clearFlash(request);
   }
   response.render("login", mensaje);
 })
 
 
 function datosCorrectos(request, response, next){
-  if(request.body.email === undefined || request.body.password === undefined){
+  if(request.body.email === "" || request.body.password === ""){
     setFlash(request, "Es obligatorio rellenar el email y la contraseña");
-    response.redirect("new-user.html"); //hay que hacer new-user dinamica para que imprima un mensaje
+    response.redirect("new_user.html"); //hay que hacer new-user dinamica para que imprima un mensaje
   }else{
     next();
   }
@@ -116,18 +121,31 @@ app.post("/new_user.html", datosCorrectos, insertUser, initSession, (request, re
   response.redirect("profile.html");
 });
 
-app.get("/profile.html", (request, response, next) =>{
-	if(request.session.email === undefined){
+app.get("/new_user.html", (request, response, next)=>{
+  let mensaje = {message: ""};
+  if(request.session.flashMsg !== undefined){
+    mensaje = {message: request.session.flashMsg};
+    clearFlash(request);
+  }
+  response.render("new_user", mensaje);
+});
+
+function auth(request, response, next){
+  if(request.session.email === undefined){
     response.status(403);
     setFlash(request, "Debes iniciar sesion para acceder a tu perfil");
     response.redirect("login.html");
     //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }else{
-    servUser(request, response);
+    next();
   }
+}
+
+app.get("/profile.html", auth, (request, response, next) =>{
+  servUser(request, response);
 })
 
-app.get("/amigos.html", (request, response, next) =>{
+app.get("/amigos.html", auth, (request, response, next) =>{
   daoa.getAmigos(request.session.email, (err, rows) =>{
     if(err){
       next(err);

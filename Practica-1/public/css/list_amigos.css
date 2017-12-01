@@ -63,7 +63,6 @@ li a{
 
 .friends{
   margin-top: 50px;
-  display: block;
   width: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -101,10 +100,15 @@ li a{
 }
 
 .buscador{
-  display: flex;
+  margin-top: 50px;
   width: 50%;
   margin-left: auto;
   margin-right: auto;
-  justify-content: center;
-  background-color: #8904B1;
 }
+
+.busca li{
+    background-color: #8904B1;
+    list-style: none;
+    
+}
+
