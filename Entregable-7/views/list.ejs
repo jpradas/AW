@@ -1,0 +1,20 @@
+<% if(tasks){
+  tasks.forEach(task =>{ %>
+    <li>
+      <span>
+    <% if(task.done === 1){ %>
+      <span class="finalizada"><%= task.text %></span>
+     <% }else{ %>
+      <span class="enunciado"><%= task.text %></span>
+      <% task.tags.forEach( tag =>{ %>
+        <span class="tag"><%= tag %></span>
+      <% }) %>
+      </span>
+      <form method="POST" action="finish">
+        <input class="finalizada" value="Marcar finalizada" type="submit">
+        <input type="hidden" name="id" value="<%= task.id %>">
+      </form>
+    <%} %>
+    </li>
+  <%});
+}%>
