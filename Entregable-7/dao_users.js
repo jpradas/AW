@@ -36,7 +36,7 @@ class DAOUsers {
             callback(err);
           }
           else {
-            connection.query("SELECT password FROM user WHERE user.email = ?", 
+            connection.query("SELECT password FROM user WHERE user.email = ?",
               [email], (err, result) =>{
                 connection.release();
               if (err){
@@ -69,10 +69,32 @@ class DAOUsers {
     * @param {function} callback Función que recibirá el objeto error y el resultado
     */
     getUserImageName(email, callback) {
-
+        this.pool.getConnection((err, connection) => {
+          if (err){
+            callback(err);
+          }
+          else{
+            connection.query("SELECT img FROM user where email = ?",[email],(err, result) => {
+              connection.release();
+              if (err){
+                callback(err);
+              }
+              else{
+                if (result.length > 0){
+                  console.log("entre");
+                  callback(null,result[0].img);
+                }
+                else{
+                  callback(null, null);
+                }
+              }
+            });
+          }
+        });
     }
-
 }
+
+
 module.exports = {
 DAOUsers: DAOUsers
 }

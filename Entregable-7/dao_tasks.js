@@ -104,8 +104,6 @@ class DAOTasks {
                                 if(err){
                                     connection.release();
                                     callback(err);
-                                }else{
-                                    callback(null);
                                 }
                             }
                         );
