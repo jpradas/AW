@@ -106,14 +106,14 @@ li a{
   margin-right: auto;
   margin-top: 20px;
   height: 40px;
-  background-color:  #ec7063;
-  border-color:  #922b21;
-  border-style: dotted;
+  background-color:  #FFD878;
+  border-color:  #FFB708;
+  border-style: ridge;
   border-radius: 10px;
 }
 
 .flash span{
-  color: white;
+  color: #FFAA00;
   font-size: 20px;
   font-weight: bold;
 }
