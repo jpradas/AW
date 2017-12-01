@@ -7,12 +7,32 @@ const bodyParser = require("body-parser");
 const config = require("./config");
 const daoTasks = require("./dao_tasks");
 const taskUtils = require("./task_utils");
+const expSesion = require("express-session");
+const mysqlSession = require("express-mysql-session");
+const daoUser = require("./dao_users");
+
+const MySQLStore = mysqlSession(expSesion);
+const sessionStore = new MySQLStore({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "tareas"
+}); 
+
+const middlewareSession = expSesion({
+  saveUninitialized: false,
+  secret: "foobar34",
+  resave: false,
+  store: sessionStore
+});
+
+
 
 const app = express();
 
 const ficherosEstaticos = path.join(__dirname, "public");
 app.use(express.static(ficherosEstaticos));
-
+app.use(middlewareSession); 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -24,6 +44,7 @@ const pool = mysql.createPool({
 });
 
 const daoT = new daoTasks.DAOTasks(pool);
+const daoU = new daoUser.DAOUsers(pool);
 
 app.use((request, response, next) => {
     console.log(`Recibida petición ${request.method} ` +
@@ -33,7 +54,7 @@ app.use((request, response, next) => {
 
 app.get("/", (request,response) =>{
     response.status(200);
-    response.redirect("/tasks.html");
+    response.redirect("/login.html");
 });
 
 app.listen(config.port, function (err) {
@@ -101,3 +122,27 @@ app.get("/deleteCompleted", (request, response) => {
     }
   });
 });
+
+app.get("/login.html", (request, response) => {
+  response.status(200);
+  response.render("login", {errorMsg: null});
+});
+
+app.post("/login", (request, response) =>{
+  daoU.isUserCorrect(request.body.mail, request.body.pass, (err, result) =>{
+    if (err || !result){
+      let error = "Dirección de correo y/o contraseña no válidos";
+      response.render("login", {errorMsg: error});
+    }
+    else {
+      request.session.currentUser = request.body.mail;
+      response.status(200);
+      response.redirect("/tasks.html");
+    }
+  })
+})
+
+app.get("/logout", (request, response) => {
+  request.session.destroy();
+  response.redirect("/login.html");
+})

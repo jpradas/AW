@@ -36,11 +36,22 @@ class DAOUsers {
             callback(err);
           }
           else {
-            connection.query(
-              
-            )
+            connection.query("SELECT password FROM user WHERE user.email = ?", 
+              [email], (err, result) =>{
+                connection.release();
+              if (err){
+                callback(err);
+              }
+              else {
+                if (result.length > 0 && result[0].password === password){
+                  callback(null, true);
+                }
+                else{
+                  callback(null, false);
+                }
+              }
+            });
           }
-
       });
 
     }
