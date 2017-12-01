@@ -54,7 +54,8 @@ function userExists(request, response, next){
 			next();
 		}else{//mostrar alerta de usuario no encontrado
       setFlash(request, "Usuario inexistente en base de datos");
-      response.render("login", {message: request.session.flashMsg});
+      response.redirect("login.html");
+      //response.render("login", {message: request.session.flashMsg});
 		}
 	});
 }
@@ -69,6 +70,24 @@ app.post("/login.html", userExists, initSession, (request, response, next) =>{ /
 	response.redirect("profile.html");
 });
 
+app.get("/login.html", (request, response, next)=>{
+  let mensaje = {message: ""};
+  if(request.session.flashMsg !== undefined){
+    mensaje = {message: request.session.flashMsg};
+  }
+  response.render("login", mensaje);
+})
+
+
+function datosCorrectos(request, response, next){
+  if(request.body.email === undefined || request.body.password === undefined){
+    setFlash(request, "Es obligatorio rellenar el email y la contraseña");
+    response.redirect("new-user.html"); //hay que hacer new-user dinamica para que imprima un mensaje
+  }else{
+    next();
+  }
+}
+
 function insertUser(request, response, next){
   daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
 		if(err){
@@ -76,7 +95,8 @@ function insertUser(request, response, next){
 		}
 		if(result){//mostrar alerta de usuario existente
       setFlash(request, "Usuario existente en base de datos");
-      response.render("login", {message: request.session.flashMsg});
+      response.redirect("login.html");
+      //response.render("login", {message: request.session.flashMsg});
 		}else{
 			daou.setUser(request.body, (err, result)=>{
         if(err){
@@ -92,14 +112,16 @@ function insertUser(request, response, next){
 	});
 }
 
-app.post("/form.html", insertUser, initSession, (request, response, next) =>{
+app.post("/new_user.html", datosCorrectos, insertUser, initSession, (request, response, next) =>{
   response.redirect("profile.html");
 });
 
 app.get("/profile.html", (request, response, next) =>{
 	if(request.session.email === undefined){
     response.status(403);
-    response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
+    setFlash(request, "Debes iniciar sesion para acceder a tu perfil");
+    response.redirect("login.html");
+    //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }else{
     servUser(request, response);
   }
@@ -124,7 +146,8 @@ app.get("/amigos.html", (request, response, next) =>{
 app.get("/logout.html", (request, response, next)=>{
 	request.session.email = undefined;
   request.session.password = undefined;
-	response.render("login", {message: ""});
+  response.status(200);
+	response.redirect("login.html");
 })
 
 function servUser(request, response){
@@ -149,8 +172,9 @@ app.get("/modify_profile", (request, response, next) =>{
 })
 
 app.get("/", (request, response, next)=>{
-  response.render("login", {message: ""});
+  response.redirect("login.html");
 })
+
 
 //manejador de error
 app.use((error, request, response, next) =>{
