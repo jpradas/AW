@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Amigos - FaceBluff</title>
-    <link rel="stylesheet" type="text/css" href="./css/list_amigos.css">
+    <link rel="stylesheet" type="text/css" href="./css/search.css">
 </head>
 <body>
    <header>
@@ -23,24 +23,11 @@
    </header>
    <section class="contenido">
         <div class="superior">
-            <span>Amigos</span>
+            <span>Resultados de la busqueda</span>
         </div>
         <div class="friends">
           <ul class="lista-amigos">
-            <%- include("amigos") %>
-          </ul>
-        </div>
-        <div class="buscar">
-          <span>Buscar</span>
-        </div>
-        <div class="buscador">
-          <ul class="busca">
-            <li>
-              <form action="amigos.html" method="post">
-              <input class="input-buscador" type="text" name="busca">
-              <input id="boton" type="submit" value="Buscar">
-              </form>
-            </li>
+            <%- include("buscar_patron") %>
           </ul>
         </div>
    </section>

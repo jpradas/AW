@@ -155,11 +155,35 @@ app.get("/amigos.html", auth, (request, response, next) =>{
         next(err);
       }
       response.status(200);
-      response.render("list_amigos" , {amigos: rows, usuario: user});
+      response.render("list_amigos" , {amigos: rows, usuario: user, patrones: ""});
     });
   });
 })
 
+app.post("/amigos.html", auth, (request, response, next) =>{
+  daou.getUserPattern(request.body.busca, (err, usuarios)=>{
+    if(err){
+      next(err);
+    }
+    daoa.getAmigos(request.session.email, (err, friends)=>{
+        if(err){
+          next(err);
+        }
+        daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
+          if(err){
+            next(err);
+          }
+          response.status(200);
+          response.render("search" , {amigos: friends, usuario: user, patrones: usuarios});
+        });
+    });
+  });
+})
+
+
+app.post("/solicitud", auth, (request, response, next)=>{
+  
+})
 
 app.get("/logout.html", (request, response, next)=>{
 	request.session.email = undefined;

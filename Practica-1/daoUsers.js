@@ -100,18 +100,18 @@ class DAOusers{
         });
     }
 
-    getAmigos(user, callback){
+    getUserPattern(pattern, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err); return;
         }
+       let query = "SELECT * FROM facebluff.users WHERE nombre_completo LIKE '" + pattern + "%'";
         connection.query(
-          "SELECT * FROM amigos WHERE email=?",
-          [user],
+            query,
           (err, rows)=>{
             connection.release();
             if(err){
-              callback(err); return;
+              callback(err);return;
             }
             callback(null, rows);
           }

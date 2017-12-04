@@ -1,0 +1,21 @@
+<%if(patrones && amigos){
+  patrones.forEach(patron =>{
+    let esta = false;
+    amigos.forEach(amigo =>{
+      if(patron.email === amigo.amigo){
+        esta = true;
+      }
+    })
+    if(esta === false){%>
+      <li>
+        <div class="encontrado">
+          <form action="solicitud.html" method="post">
+          <img class="img-perfil" src="<%= patron.imagen %>" alt="avatar">
+          <span><%= patron.nombre_completo %></span>
+          <span class="enviar"><input id="boton" type="submit" value="Enviar solicitud"></span>
+          </form>
+        </div>
+      </li>
+  <% }
+   })
+} %>
