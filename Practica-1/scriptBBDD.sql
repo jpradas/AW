@@ -24,3 +24,10 @@ CREATE TABLE amigos(
 	FOREIGN KEY (email) references users(email),
 	FOREIGN KEY (amigo) references users(email)
 );
+
+CREATE TABLE solicitudes(
+	email VARCHAR(30),
+	solicitado VARCHAR(30),
+	FOREIGN KEY (email) references users(email),
+	FOREIGN KEY (solicitado) references users(email)
+);

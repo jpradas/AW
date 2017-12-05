@@ -90,8 +90,10 @@ li a{
   display: flex;
 }
 
-.enviar{
-  justify: flex-end;
+.derecha{
+  margin-left: auto;
+  margin-right: 15px;
+  margin-top: -5px;
 }
 
 #boton{

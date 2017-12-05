@@ -9,12 +9,17 @@
     if(esta === false){%>
       <li>
         <div class="encontrado">
-          <form action="solicitud.html" method="post">
-          <img class="img-perfil" src="<%= patron.imagen %>" alt="avatar">
-          <span><%= patron.nombre_completo %></span>
-          <span class="enviar"><input id="boton" type="submit" value="Enviar solicitud"></span>
-          </form>
-        </div>
+          <div class="izquierda">
+            <img class="img-perfil" src="<%= patron.imagen %>" alt="avatar">
+            <span><%= patron.nombre_completo %></span>
+          </div>
+          <div class="derecha">
+            <form action="solicitud.html" method="post">
+              <input type="hidden" value="<%= patron.nombre_completo %>" name="nombre">
+              <input id="boton" type="submit" value="Enviar solicitud">
+            </form>
+          </div>
+          </div>
       </li>
   <% }
    })

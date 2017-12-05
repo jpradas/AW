@@ -182,7 +182,11 @@ app.post("/amigos.html", auth, (request, response, next) =>{
 
 
 app.post("/solicitud", auth, (request, response, next)=>{
-  
+  daoa.enviarSolicitud(request.session.email, request.body.nombre, (err, result)=>{
+    if(result === true){
+      //enviar mensaje de que se ha enviado la solicitud
+    }
+  })
 })
 
 app.get("/logout.html", (request, response, next)=>{
