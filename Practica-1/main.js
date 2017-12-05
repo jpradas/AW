@@ -52,7 +52,7 @@ function clearFlash(request){
 function userExists(request, response, next){
 	daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
 		if(err){
-			next(err);
+			next(err);return;
 		}
 		if(result){
 			next();
@@ -148,11 +148,11 @@ app.get("/profile.html", auth, (request, response, next) =>{
 app.get("/amigos.html", auth, (request, response, next) =>{
   daoa.getAmigos(request.session.email, (err, rows) =>{
     if(err){
-      next(err);
+      next(err);return;
     }
     daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
       if(err){
-        next(err);
+        next(err);return;
       }
       response.status(200);
       response.render("list_amigos" , {amigos: rows, usuario: user, patrones: ""});
@@ -163,15 +163,15 @@ app.get("/amigos.html", auth, (request, response, next) =>{
 app.post("/amigos.html", auth, (request, response, next) =>{
   daou.getUserPattern(request.body.busca, (err, usuarios)=>{
     if(err){
-      next(err);
+      next(err);return;
     }
     daoa.getAmigos(request.session.email, (err, friends)=>{
         if(err){
-          next(err);
+          next(err);return;
         }
         daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
           if(err){
-            next(err);
+            next(err);return;
           }
           response.status(200);
           response.render("search" , {amigos: friends, usuario: user, patrones: usuarios});
@@ -199,7 +199,7 @@ app.get("/logout.html", (request, response, next)=>{
 function servUser(request, response){
   daou.getUser(request.session.email, (err, user) =>{
 		if(err){
-			next(err);
+			next(err);return;
 		}
 		response.status(200);
 		response.render("profile", { usuario: user });
@@ -210,11 +210,20 @@ function servUser(request, response){
 app.get("/modify_profile", (request, response, next) =>{
   daou.getUser(request.session.email, (err, user)=>{
     if(err){
-      next(err);
+      next(err);return;
     }
     response.status(200);
     response.render("modify_profile", { usuario: user });
   });
+})
+
+app.post("/client_change", auth, (request, response, next)=>{
+  daou.modifyUser(request.session.email, request.body, (err, result)=>{
+    if(err){
+      next(err);return;
+    }
+    response.redirect("profile.html");
+  })
 })
 
 app.get("/", (request, response, next)=>{

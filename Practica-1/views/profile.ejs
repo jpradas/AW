@@ -32,12 +32,12 @@
                 <li>Edad: <%= usuario.edad %> años</li>
                 <li>Sexo: <%= usuario.sexo %></li>
                 <li>Puntos: <%= usuario.puntos %> puntos</li>
+                <li class="butt">
+                  <form action="/modify_profile" method="get">
+                    <input id="boton" type="submit" value="Modificar perfil">
+                  </form>
+                </li>
             </ul>
-        </div>
-        <div class="button-modificar">
-          <form action="/modify_profile" method="get">
-            <input id="boton" type="submit" value="Modificar perfil">
-          </form>
         </div>
    </section>
 

@@ -118,6 +118,25 @@ class DAOusers{
         )
       })
     }
+
+    modifyUser(user, datos, callback){
+      this.pool.getConnection((err, connection) =>{
+        if(err){
+          callback(err);return;
+        }
+        connection.query(
+          "UPDATE facebluff.users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;",
+          [datos.nombre, datos.edad, datos.sexo, "./icons/"+datos.imagen_perfil, user],
+          (err)=>{
+            connection.release();
+            if(err){
+              callback(err);return;
+            }
+            callback(null, true);
+          }
+        );
+      })
+    }
 }
 
 function calcularEdad(fecha) {

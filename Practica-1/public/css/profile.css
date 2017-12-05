@@ -85,6 +85,7 @@ li a{
     width: 250px;
     height: 250px;
     margin-left: 20px;
+    align-self: center;
 }
 
 #boton{
@@ -92,18 +93,15 @@ li a{
     background-color: #CC2EFA;
     font-weight: bold;
     color:white;
-    font-size: 30px;
+    font-size: 20px;
     padding-left: 25px;
     padding-right: 25px;
     border-style: none;
     border-radius: 20px;
+    margin-top: 20px;
 }
 
-.button-modificar{
+.butt{
   display: flex;
   justify-content: center;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 15px;
 }
