@@ -251,5 +251,5 @@ app.use((error, request, response, next) =>{
 })
 
 app.listen(config.port, ()=>{
-	console.log("Escuchando del puerto 3000");
+	console.log(`Escuchando del puerto ${config.port}`);
 })
