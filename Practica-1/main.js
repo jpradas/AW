@@ -250,6 +250,6 @@ app.use((error, request, response, next) =>{
 	});
 })
 
-app.listen(3000, ()=>{
+app.listen(config.port, ()=>{
 	console.log("Escuchando del puerto 3000");
 })
