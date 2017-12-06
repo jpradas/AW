@@ -10,24 +10,16 @@ CREATE TABLE users(
 	email VARCHAR(30) PRIMARY KEY NOT NULL,
   contraseña VARCHAR(30) NOT NULL,
   nombre_completo VARCHAR(50),
-  sexo CHAR,
+  sexo VARCHAR(15),
   edad INT,
   imagen VARCHAR(50),
 	puntos INT
 );
 
 CREATE TABLE amigos(
-	email VARCHAR(30),
-	amigo VARCHAR(30),
-	img VARCHAR(50),
-	nombre VARCHAR(50),
-	FOREIGN KEY (email) references users(email),
-	FOREIGN KEY (amigo) references users(email)
-);
-
-CREATE TABLE solicitudes(
-	email VARCHAR(30),
-	solicitado VARCHAR(30),
-	FOREIGN KEY (email) references users(email),
-	FOREIGN KEY (solicitado) references users(email)
+	email_origen VARCHAR(30),
+	email_destino VARCHAR(30),
+	confirmado INT,
+	FOREIGN KEY (email_origen) references users(email),
+	FOREIGN KEY (email_destino) references users(email)
 );

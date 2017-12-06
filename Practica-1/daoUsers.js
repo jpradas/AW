@@ -1,5 +1,7 @@
 "use strict"
 
+const config = require("./config");
+
 
 
 class DAOusers{
@@ -33,7 +35,7 @@ class DAOusers{
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM facebluff.users WHERE email=? AND contraseña=?",
+                "SELECT * FROM " + config.database +".users WHERE email=? AND contraseña=?",
                 [email, password],
                 (err, rows)=>{
                     connection.release();
@@ -56,7 +58,7 @@ class DAOusers{
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM facebluff.users WHERE email=?",
+                "SELECT * FROM " + config.database + ".users WHERE email=?",
                 [user],
                 (err, rows)=>{
                     connection.release();
@@ -76,7 +78,7 @@ class DAOusers{
             }
             let edad = calcularEdad(user.fecha_de_nacimiento);
             connection.query(
-                "INSERT INTO facebluff.users VALUES (?,?,?,?,?,?,0)",
+                "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
                 [user.email, user.password, user.nombre_completo, user.sexo, edad, "./icons/"+user.imagen_perfil],
                 (err, result) =>{
                     if(err){
@@ -84,7 +86,7 @@ class DAOusers{
                         callback(err);return;
                     }
                     connection.query(
-                        "SELECT * FROM facebluff.users WHERE email=? AND contraseña=?",
+                        "SELECT * FROM " + config.database + ".users WHERE email=? AND contraseña=?",
                         [user.email, user.password],
                         (err, rows)=>{
                             connection.release();
@@ -100,14 +102,15 @@ class DAOusers{
         });
     }
 
-    getUserPattern(pattern, callback){
+    findUsersPattern(pattern, user, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err); return;
         }
-       let query = "SELECT * FROM facebluff.users WHERE nombre_completo LIKE '" + pattern + "%'";
+       pattern = pattern + "%";
         connection.query(
-            query,
+            "SELECT * FROM users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from amigos WHERE email_origen=?)",
+            [pattern, user],
           (err, rows)=>{
             connection.release();
             if(err){
@@ -125,7 +128,7 @@ class DAOusers{
           callback(err);return;
         }
         connection.query(
-          "UPDATE facebluff.users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;",
+          "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;",
           [datos.nombre, datos.edad, datos.sexo, "./icons/"+datos.imagen_perfil, user],
           (err)=>{
             connection.release();

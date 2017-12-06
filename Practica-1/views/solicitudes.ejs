@@ -1,0 +1,22 @@
+<%if(amigos){
+  amigos.forEach(amigo =>{
+    if(amigo.confirmado === 0){%>
+    <li>
+      <div class="izquierda">
+        <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
+        <span><%= amigo.nombre_completo %></span>
+      </div>
+      <div class="derecha">
+        <form action="añadir_amigo.html" method="post">
+          <input type="hidden" value="aceptar_<%= amigo.email %>">
+          <input id="boton" type="submit" value="Aceptar">
+        </form>
+        <form action="añadir_amigo.html" method="post">
+          <input type="hidden" value="rechazar_<%= amigo.email %>">
+          <input id="boton" type="submit" value="Rechazar">
+        </form>
+      </div>
+    </li>
+  <%  }
+ })
+} %>

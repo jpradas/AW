@@ -1,5 +1,6 @@
 "use strict"
 
+const config = require("./config");
 
 
 class DAOamigos{
@@ -19,7 +20,7 @@ class DAOamigos{
           callback(err); return;
         }
         connection.query(
-          "SELECT * FROM amigos WHERE email=?",
+          "SELECT * FROM " + config.database + ".amigos as a JOIN " + config.database + ".users as u WHERE a.email_origen=? AND a.email_destino=u.email",
           [user],
           (err, rows)=>{
             connection.release();

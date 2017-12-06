@@ -84,6 +84,7 @@ li a{
   width: 50px;
   height: 50px;
   margin-bottom: -10px;
+  align-self: center;
 }
 
 .buscar{
@@ -120,6 +121,43 @@ li a{
   margin-left: 20px;
   height: 20px;
   padding-top: 5px;
+}
+
+.solicitudes{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.amistad-solicitada{
+  margin-top: 30px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lista-solicitudes li{
+  display: flex;
+  border-style: dotted;
+  border-radius: 15px;
+  border-color: white;
+  background-color: #8904B1;
+  list-style: none;
+  height: 60px;
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.derecha{
+  display: flex;
+  margin-left: auto;
+  margin-right: 20px;
+  margin-top: -5px;
 }
 
 #boton{

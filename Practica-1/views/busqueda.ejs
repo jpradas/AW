@@ -1,0 +1,16 @@
+<%if(buscados){
+  buscados.forEach(amigo =>{ %>
+    <li>
+      <div class="izquierda">
+        <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
+        <span><%= amigo.nombre_completo %></span>
+      </div>
+      <div class="derecha">
+        <form action="solicitud.html" method="post">
+          <input type="hidden" value="<%= amigo.nombre_completo %>">
+          <input id="boton" type="submit" value="Enviar solicitud">
+        </form>
+      </div>
+    </li>
+  <% })
+} %>

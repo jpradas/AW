@@ -87,7 +87,7 @@ app.get("/login.html", (request, response, next)=>{
 function datosCorrectos(request, response, next){
   if(request.body.email === "" || request.body.password === ""){
     setFlash(request, "Es obligatorio rellenar el email y la contraseña");
-    response.redirect("new_user.html"); //hay que hacer new-user dinamica para que imprima un mensaje
+    response.redirect("new_user.html");
   }else{
     next();
   }
@@ -101,7 +101,6 @@ function insertUser(request, response, next){
 		if(result){//mostrar alerta de usuario existente
       setFlash(request, "Usuario existente en base de datos");
       response.redirect("login.html");
-      //response.render("login", {message: request.session.flashMsg});
 		}else{
 			daou.setUser(request.body, (err, result)=>{
         if(err){
@@ -155,29 +154,24 @@ app.get("/amigos.html", auth, (request, response, next) =>{
         next(err);return;
       }
       response.status(200);
-      response.render("list_amigos" , {amigos: rows, usuario: user, patrones: ""});
+      response.render("list_amigos" , {amigos: rows, usuario: user});
     });
   });
 })
 
 app.post("/amigos.html", auth, (request, response, next) =>{
-  daou.getUserPattern(request.body.busca, (err, usuarios)=>{
-    if(err){
-      next(err);return;
-    }
-    daoa.getAmigos(request.session.email, (err, friends)=>{
+    daou.findUsersPattern(request.body.busca, request.session.email, (err, usuarios)=>{
+      if(err){
+        next(err);return;
+      }
+      daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
         if(err){
           next(err);return;
         }
-        daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
-          if(err){
-            next(err);return;
-          }
-          response.status(200);
-          response.render("search" , {amigos: friends, usuario: user, patrones: usuarios});
-        });
-    });
-  });
+        response.status(200);
+        response.render("search" , {buscados: usuarios, usuario: user, busqueda: request.body.busca});
+      });
+    })
 })
 
 

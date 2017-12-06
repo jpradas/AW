@@ -1,8 +1,10 @@
 <%if(amigos){
-  amigos.forEach(amigo =>{ %>
+  amigos.forEach(amigo =>{
+    if(amigo.confirmado === 1){%>
     <li>
-      <img class="img-perfil" src="<%= amigo.img %>" alt="avatar">
-      <span><%= amigo.nombre %></span>
+      <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
+      <span><%= amigo.nombre_completo %></span>
     </li>
-  <% })
+  <%  }
+ })
 } %>
