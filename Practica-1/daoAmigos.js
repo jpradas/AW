@@ -39,8 +39,8 @@ class DAOamigos{
           callback(err);return;
         }
         connection.query(
-          "INSERT INTO facebluff.solicitudes VALUES(?,?)",
-          [userOrigen, userDestino],
+          "INSERT INTO " + config.database + ".amigos VALUES(?,?,?),(?,?,?)",
+          [userOrigen, userDestino, 2, userDestino, userOrigen, 0],
           (err)=>{
             connection.release();
             if(err){

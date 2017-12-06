@@ -153,11 +153,28 @@ app.get("/amigos.html", auth, (request, response, next) =>{
       if(err){
         next(err);return;
       }
+      let amigos=[]; let pendientes=[]; let solicitudes=[];
+      crearArrays(amigos, pendientes, solicitudes, rows);
       response.status(200);
-      response.render("list_amigos" , {amigos: rows, usuario: user});
+      response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, usuario: user});
     });
   });
 })
+
+
+function crearArrays(amigos, pendientes, solicitudes, rows){
+    rows.forEach(row =>{
+      if(row.confirmado === 0){
+        solicitudes.push(row);
+      }
+      if(row.confirmado === 1){
+        amigos.push(row);
+      }
+      if(row.confirmado === 2){
+        pendientes.push(row);
+      }
+    });
+}
 
 app.post("/amigos.html", auth, (request, response, next) =>{
     daou.findUsersPattern(request.body.busca, request.session.email, (err, usuarios)=>{
@@ -175,10 +192,13 @@ app.post("/amigos.html", auth, (request, response, next) =>{
 })
 
 
-app.post("/solicitud", auth, (request, response, next)=>{
-  daoa.enviarSolicitud(request.session.email, request.body.nombre, (err, result)=>{
+app.post("/solicitud.html", auth, (request, response, next)=>{
+  daoa.enviarSolicitud(request.session.email, request.body.email, (err, result)=>{
+    if(err){
+      next(err);return;
+    }
     if(result === true){
-      //enviar mensaje de que se ha enviado la solicitud
+      response.redirect("amigos.html");
     }
   })
 })

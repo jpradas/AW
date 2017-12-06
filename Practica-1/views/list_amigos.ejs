@@ -22,20 +22,21 @@
        </nav>
    </header>
    <section class="contenido">
-        <div class="superior">
-            <span>Amigos</span>
-        </div>
-        <div class="friends">
-          <ul class="lista-amigos">
-            <%- include("amigos") %>
-          </ul>
-        </div>
+        <%- include("amigos") %>
         <div class="solicitudes">
           <span>Solicitudes</span>
         </div>
         <div class="amistad-solicitada">
           <ul class="lista-solicitudes">
             <%- include("solicitudes") %>
+          </ul>
+        </div>
+        <div class="pendientes">
+          <span>Pendientes</span>
+        </div>
+        <div class="amistad-solicitada">
+          <ul class="lista-solicitudes">
+            <%- include("pendientes") %>
           </ul>
         </div>
         <div class="buscar">

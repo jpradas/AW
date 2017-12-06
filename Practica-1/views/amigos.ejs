@@ -1,10 +1,16 @@
-<%if(amigos){
-  amigos.forEach(amigo =>{
-    if(amigo.confirmado === 1){%>
+<%if(amigos){%>
+  <div class="superior">
+      <span>Amigos</span>
+  </div>
+  <div class="friends">
+    <ul class="lista-amigos">
+
+<% amigos.forEach(amigo =>{%>
     <li>
       <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
       <span><%= amigo.nombre_completo %></span>
     </li>
-  <%  }
- })
-} %>
+  <%})%>
+</ul>
+</div>
+<%} %>

@@ -1,6 +1,5 @@
-<%if(amigos){
-  amigos.forEach(amigo =>{
-    if(amigo.confirmado === 0){%>
+<%if(solicitudes){
+  solicitudes.forEach(amigo =>{%>
     <li>
       <div class="izquierda">
         <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
@@ -17,6 +16,5 @@
         </form>
       </div>
     </li>
-  <%  }
- })
+  <%})
 } %>
