@@ -52,28 +52,34 @@ class DAOamigos{
       })
     }
 
-    yaExisteSolicitud(userOrigen, userDestino, callback){
-      this.pool.getConnection((err, connection) =>{
+    aceptarSolicitud(userOrigen, userDestino, callback){
+      this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err);return;
         }
         connection.query(
-          "SELECT * FROM facebluff.solicitudes WHERE email=? AND solicitado=?",
-          [userOrigen, userDestino],
-          (err, rows)=>{
-            connection.release();
+          "UPDATE " + config.database + ".amigos SET confirmado=? WHERE email_origen=? AND email_destino=?;",
+          [1, userOrigen, userDestino],
+          (err)=>{
             if(err){
               callback(err);return;
             }
-            if(rows.length === 0){
-              callback(null, false);
-            }else{
-              callback(null, true);
-            }
+            connection.query(
+              "UPDATE " + config.database + ".amigos SET confirmado=? WHERE email_origen=? AND email_destino=?;",
+              [1, userDestino, userOrigen],
+              (err)=>{
+                connection.release();
+                if(err){
+                  callback(err);return;
+                }
+                callback(null, true);
+              }
+            )
           }
         )
       })
     }
+
 }
 
 

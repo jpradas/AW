@@ -109,7 +109,7 @@ class DAOusers{
         }
        pattern = pattern + "%";
         connection.query(
-            "SELECT * FROM users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from amigos WHERE email_origen=?)",
+            "SELECT * FROM " + config.database + "users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +"amigos WHERE email_origen=?)",
             [pattern, user],
           (err, rows)=>{
             connection.release();

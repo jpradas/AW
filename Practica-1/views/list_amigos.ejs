@@ -23,22 +23,11 @@
    </header>
    <section class="contenido">
         <%- include("amigos") %>
-        <div class="solicitudes">
-          <span>Solicitudes</span>
-        </div>
-        <div class="amistad-solicitada">
-          <ul class="lista-solicitudes">
-            <%- include("solicitudes") %>
-          </ul>
-        </div>
-        <div class="pendientes">
-          <span>Pendientes</span>
-        </div>
-        <div class="amistad-solicitada">
-          <ul class="lista-solicitudes">
-            <%- include("pendientes") %>
-          </ul>
-        </div>
+
+        <%- include("solicitudes") %>
+
+        <%- include("pendientes") %>
+
         <div class="buscar">
           <span>Buscar</span>
         </div>

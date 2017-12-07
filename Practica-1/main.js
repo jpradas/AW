@@ -198,10 +198,29 @@ app.post("/solicitud.html", auth, (request, response, next)=>{
       next(err);return;
     }
     if(result === true){
+      //TO DO insertar mensaje flash de peticion enviada
       response.redirect("amigos.html");
     }
   })
 })
+
+app.post("/confirmar_amigo", (request, response, next) =>{
+  if(request.body.accion === 1){ //aceptamos amigo
+    daoa.aceptarSolicitud(request.session.email, request.body.email, (err, result)=>{
+      if(err){
+        next(err);return;
+      }
+      if(result === true){
+        //mensaje flash de aceptado y volvemos a cargar Amigos  TO DO que la pagina de amigos proyecte mensajes flash
+      }else{
+        //mensaje flash de cagada y cargamos amigos de nuevo
+      }
+      response.redirect("amigos.html");
+    })
+  }else{ //rechazamos
+
+  }
+});
 
 app.get("/logout.html", (request, response, next)=>{
 	request.session.email = undefined;

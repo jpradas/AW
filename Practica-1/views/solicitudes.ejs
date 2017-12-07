@@ -1,20 +1,29 @@
-<%if(solicitudes){
-  solicitudes.forEach(amigo =>{%>
+<%if(solicitudes.length !== 0){ %>
+  <div class="superior">
+    <span>Solicitudes</span>
+  </div>
+  <div class="amistad-solicitada">
+    <ul class="lista-solicitudes">
+  <% solicitudes.forEach(amigo =>{%>
     <li>
       <div class="izquierda">
         <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
         <span><%= amigo.nombre_completo %></span>
       </div>
       <div class="derecha">
-        <form action="añadir_amigo.html" method="post">
-          <input type="hidden" value="aceptar_<%= amigo.email %>">
+        <form action="confirmar_amigo.html" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="email">
+          <input type="hidden" value=1 name="accion">
           <input id="boton" type="submit" value="Aceptar">
         </form>
-        <form action="añadir_amigo.html" method="post">
-          <input type="hidden" value="rechazar_<%= amigo.email %>">
+        <form action="confirmar_amigo.html" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="email">
+          <input type="hidden" value=0 name="accion">
           <input id="boton" type="submit" value="Rechazar">
         </form>
       </div>
     </li>
-  <%})
-} %>
+  <%}) %>
+    </ul>
+  </div>
+<% } %>

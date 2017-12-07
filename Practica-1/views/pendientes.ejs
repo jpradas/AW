@@ -1,8 +1,15 @@
-<%if(pendientes){
-  pendientes.forEach(amigo =>{%>
+<%if(pendientes.length !== 0){ %>
+  <div class="superior">
+    <span>Pendientes</span>
+  </div>
+  <div class="friends">
+    <ul class="lista-amigos">
+  <% pendientes.forEach(amigo =>{%>
     <li>
       <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
       <span><%= amigo.nombre_completo %></span>
     </li>
-  <%})
-} %>
+  <%}) %>
+</ul>
+</div>
+<% } %>
