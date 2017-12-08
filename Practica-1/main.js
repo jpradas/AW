@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const cookieParser = require("cookie-parser");
 const mysql = require("mysql");
 const session = require("express-session");
@@ -11,6 +12,9 @@ const flash = require("express-flash")
 const config = require("./config");
 const daoUsers = require("./daoUsers");
 const daoAmigos = require("./daoAmigos");
+const daoImagenes = require("./daoImg");
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const pool = mysql.createPool({
     host: config.host,
@@ -31,6 +35,7 @@ const ficherosEstaticos = path.join(__dirname, "public");
 
 const daou = new daoUsers.DAOusers(pool);
 const daoa = new daoAmigos.DAOamigos(pool);
+const daoi = new daoImagenes.DAOimg(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
@@ -108,7 +113,9 @@ function insertUser(request, response, next){
       setFlash(request, "Usuario existente en base de datos");
       response.redirect("login.html");
 		}else{
-			daou.setUser(request.body, (err, result)=>{
+      let usuario = {email: request.body.email, password: request.body.password, nombre_completo: request.body.nombre_completo,
+                      sexo: request.body.sexo, fecha_de_nacimiento: request.body.fecha_de_nacimiento, imagen_perfil: request.file }
+      daou.setUser(usuario, (err, result)=>{
         if(err){
           next(err);return;
         }
@@ -122,7 +129,8 @@ function insertUser(request, response, next){
 	});
 }
 
-app.post("/new_user.html", datosCorrectos, insertUser, initSession, (request, response, next) =>{
+
+app.post("/new_user.html", upload.single("imagen_perfil"), datosCorrectos, insertUser, initSession, (request, response, next) =>{
   response.redirect("profile.html");
 });
 
@@ -276,12 +284,25 @@ app.get("/modify_profile", (request, response, next) =>{
   });
 })
 
-app.post("/client_change", auth, (request, response, next)=>{
-  daou.modifyUser(request.session.email, request.body, (err, result)=>{
+app.post("/client_change", auth, upload.single("imagen_perfil"), (request, response, next)=>{
+  daou.modifyUser(request.session.email, request.body, (err, result)=>{ //TO DO faltar cambiar el aspecto de que si no hay foto no se cambie ese campo.
     if(err){
       next(err);return;
     }
     response.redirect("profile.html");
+  })
+})
+
+
+app.get("/imagen_perfil/:email", (request, response)=>{
+  let email = request.params.email;
+  daou.obtenerImg(email, (err, img)=>{
+    if(img){
+      response.end(img);
+    }else{
+      response.status(404);
+      response.end("not found");
+    }
   })
 })
 

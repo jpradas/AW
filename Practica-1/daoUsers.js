@@ -79,24 +79,13 @@ class DAOusers{
             let edad = calcularEdad(user.fecha_de_nacimiento);
             connection.query(
                 "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
-                [user.email, user.password, user.nombre_completo, user.sexo, edad, "./icons/"+user.imagen_perfil],
+                [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil.buffer],
                 (err, result) =>{
+                    connection.release();
                     if(err){
-                        connection.release();
-                        callback(err);return;
+                      callback(err);return;
                     }
-                    connection.query(
-                        "SELECT * FROM " + config.database + ".users WHERE email=? AND contraseña=?",
-                        [user.email, user.password],
-                        (err, rows)=>{
-                            connection.release();
-                            if(err){
-                                callback(err);return;
-                            }else{
-                                callback(null, true);
-                            }
-                        }
-                    );
+                    callback(null, true);
                 }
             );
         });
@@ -139,6 +128,25 @@ class DAOusers{
           }
         );
       })
+    }
+
+    obtenerImg(email, callback){
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "SELECT * FROM " + config.database + ".users WHERE email=?",
+                [email],
+                (err, rows)=>{
+                    connection.release();
+                    if(err){
+                        callback(err);return;
+                    }
+                    callback(null, rows[0].imagen);
+                }
+            );
+        })
     }
 }
 

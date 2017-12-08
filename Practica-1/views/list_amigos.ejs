@@ -16,10 +16,10 @@
                <li><a href="/amigos.html">Amigos</a></li>
                <li><a href="">Preguntas</a></li>
                <li><a href="/logout.html">Desconectar</a></li>
-               <li><img id="lilav"src=<%= usuario.imagen %>></li>
+               <li><img id="lilav"src="/imagen_perfil/<%= usuario.email %>"></li>
                <li id="ptos"><%= usuario.puntos %> pts</li>
            </ul>
-       </nav>
+         </nav>
    </header>
    <%- include("flash") %>
    <section class="contenido">

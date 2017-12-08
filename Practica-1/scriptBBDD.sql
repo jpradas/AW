@@ -12,7 +12,7 @@ CREATE TABLE users(
   nombre_completo VARCHAR(50),
   sexo VARCHAR(15),
   edad INT,
-  imagen VARCHAR(50),
+  imagen LONGBLOB, -- foto de perfil
 	puntos INT
 );
 
@@ -22,4 +22,11 @@ CREATE TABLE amigos(
 	confirmado INT,
 	FOREIGN KEY (email_origen) references users(email),
 	FOREIGN KEY (email_destino) references users(email)
+);
+
+CREATE TABLE fotos(
+	filename VARCHAR(50) PRIMARY KEY NOT NULL,
+	user VARCHAR(30),
+	foto LONGBLOB,
+	FOREIGN KEY (user) references users(email)
 );
