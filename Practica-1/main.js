@@ -76,7 +76,7 @@ app.post("/login.html", userExists, initSession, (request, response, next) =>{ /
 
 app.get("/login.html", (request, response, next)=>{
   let mensaje = {message: ""};
-  if(request.session.flashMsg !== undefined){
+  if(request.session.flashMsg !== undefined){ // TO DO una funcion que se encargue de meter el mensaje dentro de la variable para ser mostrado
     mensaje = {message: request.session.flashMsg};
     clearFlash(request);
   }
@@ -141,8 +141,16 @@ function auth(request, response, next){
 }
 
 app.get("/profile.html", auth, (request, response, next) =>{
-  servUser(request, response);
+  daou.getUser(request.session.email, (err, user) =>{
+		if(err){
+			next(err);return;
+		}
+		response.status(200);
+		response.render("profile", { usuario: user });
+	});
 })
+
+//TO DO post del perfil, significa que alguien accede a tu perfil.
 
 app.get("/amigos.html", auth, (request, response, next) =>{
   daoa.getAmigos(request.session.email, (err, rows) =>{
@@ -153,10 +161,14 @@ app.get("/amigos.html", auth, (request, response, next) =>{
       if(err){
         next(err);return;
       }
-      let amigos=[]; let pendientes=[]; let solicitudes=[];
+      let amigos=[]; let pendientes=[]; let solicitudes=[]; let mensaje = "";
       crearArrays(amigos, pendientes, solicitudes, rows);
+      if(request.session.flashMsg !== undefined){
+        mensaje = request.session.flashMsg;
+        clearFlash(request);
+      }
       response.status(200);
-      response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, usuario: user});
+      response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, usuario: user, message: mensaje});
     });
   });
 })
@@ -199,26 +211,32 @@ app.post("/solicitud.html", auth, (request, response, next)=>{
     }
     if(result === true){
       //TO DO insertar mensaje flash de peticion enviada
-      response.redirect("amigos.html");
+      setFlash(request, "Peticion de amistad enviada");
     }
+    else{
+      setFlash(request, "Oops, ha ocurrido algo raro. Error al enviar solicitud");
+    }
+    response.redirect("amigos.html");
   })
 })
 
-app.post("/confirmar_amigo", (request, response, next) =>{
-  if(request.body.accion === 1){ //aceptamos amigo
+app.post("/confirmar_amigo.html", (request, response, next) =>{
+  if(request.body.accion === "1"){ //aceptamos amigo
     daoa.aceptarSolicitud(request.session.email, request.body.email, (err, result)=>{
       if(err){
         next(err);return;
       }
       if(result === true){
+        setFlash(request, "Amigo aceptado");
         //mensaje flash de aceptado y volvemos a cargar Amigos  TO DO que la pagina de amigos proyecte mensajes flash
       }else{
+        setFlash(request, "Oops, algo raro ha ocurrido. Error al confirmar amigo");
         //mensaje flash de cagada y cargamos amigos de nuevo
       }
       response.redirect("amigos.html");
     })
   }else{ //rechazamos
-
+    console.log("me fui a la vergaaaa");
   }
 });
 
@@ -228,17 +246,6 @@ app.get("/logout.html", (request, response, next)=>{
   response.status(200);
 	response.redirect("login.html");
 })
-
-function servUser(request, response){
-  daou.getUser(request.session.email, (err, user) =>{
-		if(err){
-			next(err);return;
-		}
-		response.status(200);
-		response.render("profile", { usuario: user });
-	});
-}
-
 
 app.get("/modify_profile", (request, response, next) =>{
   daou.getUser(request.session.email, (err, user)=>{
