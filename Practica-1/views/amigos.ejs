@@ -8,7 +8,10 @@
 <% amigos.forEach(amigo =>{%>
     <li>
       <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
-      <span><%= amigo.nombre_completo %></span>
+      <form action="profile.html" method="post">
+        <input type="hidden" value="<%= amigo.email %>" name="nombre">
+        <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
+      </form>
     </li>
   <%})%>
 </ul>

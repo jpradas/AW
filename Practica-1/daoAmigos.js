@@ -62,11 +62,41 @@ class DAOamigos{
           [1, userOrigen, userDestino],
           (err)=>{
             if(err){
+              connection.release();
               callback(err);return;
             }
             connection.query(
               "UPDATE " + config.database + ".amigos SET confirmado=? WHERE email_origen=? AND email_destino=?;",
               [1, userDestino, userOrigen],
+              (err)=>{
+                connection.release();
+                if(err){
+                  callback(err);return;
+                }
+                callback(null, true);
+              }
+            )
+          }
+        )
+      })
+    }
+
+    rechazarSolicitud(userOrigen, userDestino, callback){
+      this.pool.getConnection((err, connection)=>{
+        if(err){
+          callback(err);return;
+        }
+        connection.query(
+          "DELETE FROM "+ config.database +".amigos WHERE email_origen=? AND email_destino=?;",
+          [userOrigen, userDestino],
+          (err)=>{
+            if(err){
+              connection.release();
+              callback(err);return;
+            }
+            connection.query(
+              "DELETE FROM "+ config.database +".amigos WHERE email_origen=? AND email_destino=?;",
+              [userDestino, userOrigen],
               (err)=>{
                 connection.release();
                 if(err){

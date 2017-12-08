@@ -49,6 +49,15 @@ function clearFlash(request){
   request.session.flashMsg = undefined;
 }
 
+function isMessage(request){
+  let mensaje = "";
+  if(request.session.flashMsg !== undefined){
+    mensaje = request.session.flashMsg;
+    clearFlash(request);
+  }
+  return mensaje;
+}
+
 function userExists(request, response, next){
 	daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
 		if(err){
@@ -75,12 +84,9 @@ app.post("/login.html", userExists, initSession, (request, response, next) =>{ /
 });
 
 app.get("/login.html", (request, response, next)=>{
-  let mensaje = {message: ""};
-  if(request.session.flashMsg !== undefined){ // TO DO una funcion que se encargue de meter el mensaje dentro de la variable para ser mostrado
-    mensaje = {message: request.session.flashMsg};
-    clearFlash(request);
-  }
-  response.render("login", mensaje);
+  let mensaje = "";
+  mensaje = isMessage(request);
+  response.render("login", { message: mensaje });
 })
 
 
@@ -121,12 +127,9 @@ app.post("/new_user.html", datosCorrectos, insertUser, initSession, (request, re
 });
 
 app.get("/new_user.html", (request, response, next)=>{
-  let mensaje = {message: ""};
-  if(request.session.flashMsg !== undefined){
-    mensaje = {message: request.session.flashMsg};
-    clearFlash(request);
-  }
-  response.render("new_user", mensaje);
+  let mensaje = "";
+  mensaje = isMessage(request);
+  response.render("new_user", { message: mensaje });
 });
 
 function auth(request, response, next){
@@ -146,11 +149,20 @@ app.get("/profile.html", auth, (request, response, next) =>{
 			next(err);return;
 		}
 		response.status(200);
-		response.render("profile", { usuario: user });
+		response.render("profile", { usuario: user, modificar: "si" });
 	});
 })
 
 //TO DO post del perfil, significa que alguien accede a tu perfil.
+app.post("/profile.html", auth, (request, response, next)=>{
+  daou.getUser(request.body.nombre, (err, user) =>{
+		if(err){
+			next(err);return;
+		}
+		response.status(200);
+		response.render("profile", { usuario: user, modificar: "no" });
+	});
+})
 
 app.get("/amigos.html", auth, (request, response, next) =>{
   daoa.getAmigos(request.session.email, (err, rows) =>{
@@ -163,10 +175,7 @@ app.get("/amigos.html", auth, (request, response, next) =>{
       }
       let amigos=[]; let pendientes=[]; let solicitudes=[]; let mensaje = "";
       crearArrays(amigos, pendientes, solicitudes, rows);
-      if(request.session.flashMsg !== undefined){
-        mensaje = request.session.flashMsg;
-        clearFlash(request);
-      }
+      mensaje = isMessage(request);
       response.status(200);
       response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, usuario: user, message: mensaje});
     });
@@ -236,7 +245,17 @@ app.post("/confirmar_amigo.html", (request, response, next) =>{
       response.redirect("amigos.html");
     })
   }else{ //rechazamos
-    console.log("me fui a la vergaaaa");
+    daoa.rechazarSolicitud(request.session.email, request.body.email, (err, result)=>{
+      if(err){
+        next(err);return;
+      }
+      if(result === true){
+        setFlash(request, "Amigo rechazado");
+      }else{
+        setFlash(request, "Oops, algo raro ha ocurrido. Error al rechazar amigo.");
+      }
+      response.redirect("amigos.html");
+    })
   }
 });
 
