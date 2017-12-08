@@ -107,7 +107,7 @@ class DAOusers{
         if(err){
           callback(err); return;
         }
-       pattern = pattern + "%";
+       pattern = "%" + pattern + "%";
         connection.query(
             "SELECT * FROM " + config.database + ".users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +".amigos WHERE email_origen=?)",
             [pattern, user],

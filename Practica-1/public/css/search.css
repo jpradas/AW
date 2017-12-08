@@ -83,9 +83,17 @@ li a{
 .img-perfil{
   margin-left: 25px;
   width: 50px;
-  height: 50px;
-  margin-bottom: -10px;
+  height: 50px;  
   align-self: center;
+}
+
+#boton-perfil{
+  font-family: "GloriaHallelujah";
+  color: white;
+  background: none;
+  border: none;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .derecha{
@@ -95,6 +103,7 @@ li a{
 }
 
 .izquierda{
+  display: flex;
   align-items: center;
 }
 

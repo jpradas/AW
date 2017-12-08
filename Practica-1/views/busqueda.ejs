@@ -3,7 +3,10 @@
     <li>
       <div class="izquierda">
         <img class="img-perfil" src="<%= amigo.imagen %>" alt="avatar">
-        <span><%= amigo.nombre_completo %></span>
+        <form action="profile.html" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="nombre">
+          <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
+        </form>
       </div>
       <div class="derecha">
         <form action="solicitud.html" method="post">
