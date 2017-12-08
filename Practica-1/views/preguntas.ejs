@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Amigos - FaceBluff</title>
-    <link rel="stylesheet" type="text/css" href="./css/list_amigos.css">
+    <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
 </head>
 <body>
    <header>
@@ -16,32 +16,30 @@
                <li><a href="/amigos.html">Amigos</a></li>
                <li><a href="/preguntas.html">Preguntas</a></li>
                <li><a href="/logout.html">Desconectar</a></li>
-               <li><img id="lilav"src="/imagen_perfil/<%= usuario.email %>"></li>
+               <li><img id="lilav"src="/imagen_perfil/<%= userEmail %>"></li>
                <li id="ptos"><%= usuario.puntos %> pts</li>
            </ul>
-         </nav>
+       </nav>
    </header>
-   <%- include("flash") %>
    <section class="contenido">
-        <%- include("amigos") %>
-
-        <%- include("solicitudes") %>
-
-        <%- include("pendientes") %>
+        <div class="superior">
+            <span>Preguntas seleccionadas aleatoriamente</span>
+        </div>
+        <ul>
+          <% if(preguntas){
+            preguntas.forEach(pregunta =>{ %>
+              <li> <div class="pregunta"> <span><%= pregunta.texto %></span> </div> </li>
+                <% })
+              } %>
+        </ul>
 
         <div class="superior">
-          <span>Buscar</span>
+            <span>¡Añade tus preguntas!</span>
         </div>
-        <div class="buscador">
-          <ul class="busca">
-            <li>
-              <form action="amigos.html" method="post">
-              <input class="input-buscador" type="text" name="busca">
-              <input id="boton" type="submit" value="Buscar">
-              </form>
-            </li>
-          </ul>
-        </div>
+        <form method="POST" action="/nuevaPregunta">
+          <input id="boton" type="submit" value="Crear nueva pregunta">
+        </form>
+
    </section>
 
 </body>

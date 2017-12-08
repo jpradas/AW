@@ -8,11 +8,13 @@ const multer = require("multer");
 const cookieParser = require("cookie-parser");
 const mysql = require("mysql");
 const session = require("express-session");
+const mysqlSession = require("express-mysql-session");
 const flash = require("express-flash")
 const config = require("./config");
 const daoUsers = require("./daoUsers");
 const daoAmigos = require("./daoAmigos");
 const daoImagenes = require("./daoImg");
+const daoPreguntas = require("./daoPreguntas")
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -23,10 +25,20 @@ const pool = mysql.createPool({
     database: config.database
 });
 
+const MySQLStore = mysqlSession(session);
+
+const sessionStore = new MySQLStore({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "facebluff"
+});
+
 const middlewareSession = session({
 	saveUninitialized: false,
 	secret: "sesion-user",
-	resave: false
+	resave: false,
+  store: sessionStore
 });
 
 const app = express();
@@ -36,13 +48,16 @@ const ficherosEstaticos = path.join(__dirname, "public");
 const daou = new daoUsers.DAOusers(pool);
 const daoa = new daoAmigos.DAOamigos(pool);
 const daoi = new daoImagenes.DAOimg(pool);
+const daoP = new daoPreguntas.DAOPreguntas(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
+//Necesito Exp
 app.use(cookieParser());
 app.use(middlewareSession);
+//Necesito Exp
 app.use(flash());
 
 
@@ -78,9 +93,11 @@ function userExists(request, response, next){
 	});
 }
 
+
 function initSession(request, response, next){
 		request.session.email = request.body.email;
 		request.session.password = request.body.password;
+    response.locals.userEmail = request.session.email;
 		next();
 }
 
@@ -147,6 +164,7 @@ function auth(request, response, next){
     response.redirect("login.html");
     //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }else{
+    response.locals.userEmail = request.session.email;
     next();
   }
 }
@@ -297,13 +315,30 @@ app.post("/client_change", auth, upload.single("imagen_perfil"), (request, respo
 app.get("/imagen_perfil/:email", (request, response)=>{
   let email = request.params.email;
   daou.obtenerImg(email, (err, img)=>{
-    if(img){
-      response.end(img);
+    if (err || img === null){
+      let imagen = __dirname.concat("/public/img/NoProfile.png");
+      response.sendFile(imagen);
     }else{
-      response.status(404);
-      response.end("not found");
+      //response.end(img); deberia valer, pero por si acaso mejor sendFile
+      response.sendFile(img);
     }
   })
+})
+
+app.get("/preguntas.html", (request, response) =>{
+  daoP.getPreguntas(request.session.email, (err, result) =>{
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else {
+      response.render("preguntas", {preguntas : result});
+    }
+  });
+})
+
+app.post("/nuevaPregunta", (request, response) =>{
+
 })
 
 app.get("/", (request, response, next)=>{
@@ -322,7 +357,7 @@ app.use((error, request, response, next) =>{
 })
 
 app.use((error, request, response, next) =>{
-	//codigo 500: Internal server error
+	//codigo 404: Error Not Found
 	response.status(404);
 	response.render("error-404", {
 		mensaje: error.message,

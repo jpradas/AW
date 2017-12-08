@@ -77,17 +77,17 @@ class DAOusers{
                 callback(err); return;
             }
             let edad = calcularEdad(user.fecha_de_nacimiento);
-            connection.query(
-                "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
-                [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil.buffer],
-                (err, result) =>{
-                    connection.release();
-                    if(err){
-                      callback(err);return;
-                    }
-                    callback(null, true);
-                }
-            );
+              connection.query(
+                  "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
+                  [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil],
+                  (err, result) =>{
+                      connection.release();
+                      if(err){
+                        callback(err);return;
+                      }
+                      callback(null, true);
+                  }
+              );
         });
     }
 

@@ -1,0 +1,16 @@
+<% if(preguntas){
+  preguntas.forEach(pregunta =>{ %>
+    <div class="superior">
+        <span><%= pregunta.texto %></span>
+    </div>
+    <li>
+      <span class="finalizada"><%= pregunta.texto %></span>
+
+      <form method="POST" action="finish">
+        <input class="finalizada" value="Marcar finalizada" type="submit">
+        <input type="hidden" name="id" value="<%= task.id %>">
+      </form>
+    <%} %>
+    </li>
+  <%});
+}%>
