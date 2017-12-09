@@ -93,11 +93,23 @@ function userExists(request, response, next){
 	});
 }
 
+function auth(request, response, next){
+  if(request.session.email){
+    response.locals.userEmail = request.session.email;
+    response.locals.puntos = request.session.puntos;
+    next();
+  }else{
+    response.status(403);
+    setFlash(request, "Debes iniciar sesion para acceder a tu perfil");
+    response.redirect("login.html");
+    //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
+  }
+}
 
 function initSession(request, response, next){
 		request.session.email = request.body.email;
 		request.session.password = request.body.password;
-    response.locals.userEmail = request.session.email;
+    request.session.puntos = 0;
 		next();
 }
 
@@ -151,23 +163,12 @@ app.post("/new_user.html", upload.single("imagen_perfil"), datosCorrectos, inser
   response.redirect("profile.html");
 });
 
-app.get("/new_user.html", (request, response, next)=>{
+app.get("/new_user.html",auth, (request, response, next)=>{
   let mensaje = "";
   mensaje = isMessage(request);
   response.render("new_user", { message: mensaje });
 });
 
-function auth(request, response, next){
-  if(request.session.email === undefined){
-    response.status(403);
-    setFlash(request, "Debes iniciar sesion para acceder a tu perfil");
-    response.redirect("login.html");
-    //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
-  }else{
-    response.locals.userEmail = request.session.email;
-    next();
-  }
-}
 
 app.get("/profile.html", auth, (request, response, next) =>{
   daou.getUser(request.session.email, (err, user) =>{
@@ -190,7 +191,7 @@ app.post("/profile.html", auth, (request, response, next)=>{
 	});
 })
 
-app.get("/amigos.html", auth, (request, response, next) =>{
+app.get("/amigos.html",auth, (request, response, next) =>{
   daoa.getAmigos(request.session.email, (err, rows) =>{
     if(err){
       next(err);return;
@@ -286,8 +287,7 @@ app.post("/confirmar_amigo.html", (request, response, next) =>{
 });
 
 app.get("/logout.html", (request, response, next)=>{
-	request.session.email = undefined;
-  request.session.password = undefined;
+  request.session.destroy();
   response.status(200);
 	response.redirect("login.html");
 })
@@ -325,7 +325,7 @@ app.get("/imagen_perfil/:email", (request, response)=>{
   })
 })
 
-app.get("/preguntas.html", (request, response) =>{
+app.get("/preguntas.html", auth, (request, response) =>{
   daoP.getPreguntas(request.session.email, (err, result) =>{
     if (err){
       response.status(404);
@@ -338,7 +338,7 @@ app.get("/preguntas.html", (request, response) =>{
 })
 
 app.post("/nuevaPregunta", (request, response) =>{
-
+  response.end();
 })
 
 app.get("/", (request, response, next)=>{
