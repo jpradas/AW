@@ -316,7 +316,7 @@ app.get("/imagen_perfil/:email", (request, response)=>{
   let email = request.params.email;
   daou.obtenerImg(email, (err, img)=>{
     if (err || img === null){
-      let imagen = __dirname.concat("/public/img/NoProfile.png");
+      let imagen = __dirname.concat("./public/img/NoProfile.png");
       response.sendFile(imagen);
     }else{
       //response.end(img); deberia valer, pero por si acaso mejor sendFile
