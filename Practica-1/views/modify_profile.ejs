@@ -28,7 +28,7 @@
         <div class="info-perfil">
             <img id="leftav" src="/imagen_perfil/<%= usuario.email %>">
             <ul class="datos">
-              <form action="/client_change" method="post">
+              <form action="/modify_profile.html" method="post">
                 <li>
                   <span>Nombre</span>
                   <input class="input_nombre" type="text" name="nombre" value="<%= usuario.nombre_completo %>">
@@ -43,7 +43,7 @@
                 </li>
                 <li class="f_imagen">
                     <span>Imagen de perfil</span>
-                    <input class="input_img" type="file" name="imagen_perfil" value=<%= usuario.imagen %>>
+                    <input class="input_img" type="file" name="imagen_perfil" value="Seleccionar archivo">
                 </li>
                 <li class="butt">
                   <input id="boton" type="submit" value="Aceptar">
