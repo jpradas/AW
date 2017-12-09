@@ -25,7 +25,7 @@ class DAORespuestas{
      * (true => el usuario existe, false => el usuario no existe o la contraseña es incorrecta)
      * En caso de error error, el segundo parámetro de la función callback será indefinido.
      *
-     * @param {string} filename Identificador de la foto
+     * @param {string} id Identificador de la respuesta
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
     getRespuestas(id, callback) {
@@ -47,6 +47,27 @@ class DAORespuestas{
                 }
             );
         })
+    }
+
+    setRespuesta(respuesta, verdadero, id, callback){
+      this.pool.getConnection((err, connection) => {
+        if(err){
+          callback(err);
+        }
+        else{
+          connection.query("INSERT INTO respuestas VALUES (?, ?, ?);",
+          [respuesta, verdadero, id],
+          (err, result) => {
+            connection.release();
+            if (err){
+              callback(err);
+            }
+            else {
+              callback(null);
+            }
+          });
+        }
+      });
     }
     /*
     setImg(foto, callback){

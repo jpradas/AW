@@ -81,7 +81,6 @@ class DAOUsers {
               }
               else{
                 if (result.length > 0){
-                  console.log("entre");
                   callback(null,result[0].img);
                 }
                 else{

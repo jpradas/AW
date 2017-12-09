@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Pregunta - FaceBluff</title>
+    <link rel="stylesheet" type="text/css" href="./css/new-user.css">
+</head>
+<body>
+   <%- include cabecera %>
+     <section class="contenido">
+        <div class="superior">
+            <span>Crear Pregunta</span>
+        </div>
+        <div class="formulario-newuser">
+        <form action="/crearPregunta" method="post">
+            <input type="hidden" name="tipo" value="pregunta">
+            <ul class="formulario">
+                <li class="f_nombre">
+                    <span>Introduce la pregunta</span>
+                    <input class="input_n" type="text" name="pregunta">
+                </li>
+                <li class="f_nombre">
+                    <span>Opcion 1</span>
+                    <input class="input_n" type="text" name="opcion1">
+                    <input type="radio" name="verdadero" value="1"> Verdadero
+                </li>
+                <li class="f_nombre">
+                    <span>Opcion 2</span>
+                    <input class="input_n" type="text" name="opcion2">
+                    <input type="radio" name="verdadero" value="2"> Verdadero
+                </li>
+                <li class="f_nombre">
+                    <span>Opcion 3</span>
+                    <input class="input_n" type="text" name="opcion3">
+                    <input type="radio" name="verdadero" value="3"> Verdadero
+                </li>
+                <li class="f_nombre">
+                    <span>Opcion 4</span>
+                    <input class="input_n" type="text" name="opcion4">
+                    <input type="radio" name="verdadero" value="4"> Verdadero
+                </li>
+                <li class="conectar">
+                    <input id="boton" type="submit" value="Crear pregunta">
+                </li>
+            </ul>
+        </form>
+        </div>
+   </section>
+</body>
+</html>

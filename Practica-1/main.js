@@ -383,8 +383,39 @@ app.post("/contestarPregunta", (request, response) =>{
 
 })
 
+
+
 app.post("/nuevaPregunta", (request, response) =>{
-  response.end();
+    response.render("crearPregunta");
+})
+
+app.post("/crearPregunta", (request, response) =>{
+  let respuesta = {};
+  respuesta.push(request.body.opcion1);
+  respuesta.push(request.body.opcion2);
+  respuesta.push(request.body.opcion3);
+  respuesta.push(request.body.opcion4);
+  console.log(respuesta);
+  console.log(request.body.verdadero);
+  
+  switch(request.body.verdadero){
+    case 1: respuesta.push()
+    case 2:
+    case 3:
+    case 4:
+  }
+  //SIgo sin saber como hacer verdadero
+  /*
+  daoP.setPregunta(request.session.email, request.body.pregunta, respuesta, request.body.verdadero, (err, id) => {
+    if (err){
+      response.status(500);
+      response.end();
+    }
+    else {
+
+    }
+  });
+  */
 })
 
 app.get("/", (request, response, next)=>{

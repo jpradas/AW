@@ -69,26 +69,41 @@ class DAOPreguntas{
             );
         })
     }
-    /*
-    setImg(foto, callback){
-      this.pool.getConnection((err, connection) =>{
-          if(err){
-              callback(err); return;
-          }
-          connection.query(
-              "INSERT INTO "+ config.database +".fotos VALUES (?,?,?)",
-              [foto.originalname, ],
-              (err, result) =>{
-                  connection.release();
-                  if(err){
-                    callback(err);return;
-                  }
-                  callback(null, true);
-              }
-          );
-      });
+
+    setPregunta(user, texto, respuesta, callback) {
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "INSERT INTO" + config.database + ".preguntas VALUES (NULL,?,?);",
+                [texto, user],
+                (err, result)=>{
+                    if(err){
+                        callback(err);
+                    }
+                    else{
+                      respuesta.forEach(resp => {
+                        connection.query("INSERT INTO respuestas VALUES (?, ?, ?);",
+                        [resp, verdadero, id],
+                        (err, result) => {
+                          connection.release();
+                          if (err){
+                            callback(err);
+                          }
+                          else {
+                            callback(null);
+                          }
+                        }
+                        );
+                      })
+                    }
+                }
+            );
+        })
     }
-    */
+
+
   }
 
 module.exports = {
