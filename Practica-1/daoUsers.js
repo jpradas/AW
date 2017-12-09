@@ -79,7 +79,7 @@ class DAOusers{
             let edad = calcularEdad(user.fecha_de_nacimiento);
               connection.query(
                   "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
-                  [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil],
+                  [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil.buffer],
                   (err, result) =>{
                       connection.release();
                       if(err){
@@ -111,14 +111,14 @@ class DAOusers{
       })
     }
 
-    modifyUser(user, datos, callback){
+    modifyUser(email, user, callback){
       this.pool.getConnection((err, connection) =>{
         if(err){
           callback(err);return;
         }
         connection.query(
           "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;",
-          [datos.nombre, datos.edad, datos.sexo, "./icons/"+datos.imagen_perfil, user],
+          [user.nombre, user.edad, user.sexo, user.imagen_perfil , email],
           (err)=>{
             connection.release();
             if(err){

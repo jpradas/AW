@@ -296,7 +296,7 @@ app.get("/logout.html", (request, response, next)=>{
 	response.redirect("login.html");
 })
 
-app.get("/modify_profile", (request, response, next) =>{
+app.get("/modify_profile.html", (request, response, next) =>{
   daou.getUser(request.session.email, (err, user)=>{
     if(err){
       next(err);return;
@@ -306,8 +306,10 @@ app.get("/modify_profile", (request, response, next) =>{
   });
 })
 
-app.post("/client_change", auth, upload.single("imagen_perfil"), (request, response, next)=>{
-  daou.modifyUser(request.session.email, request.body, (err, result)=>{ //TO DO faltar cambiar el aspecto de que si no hay foto no se cambie ese campo.
+app.post("/modify_profile.html", upload.single("imagen_perfil"), auth, (request, response, next)=>{
+  let usuario = {nombre: request.body.nombre, edad: request.body.edad,
+                  sexo: request.body.sexo, imagen_perfil: request.file };
+  daou.modifyUser(request.session.email, usuario, (err, result)=>{
     if(err){
       next(err);return;
     }
@@ -323,8 +325,8 @@ app.get("/imagen_perfil/:email", (request, response)=>{
       let imagen = __dirname.concat("/public/img/NoProfile.png");
       response.sendFile(imagen);
     }else{
-      //response.end(img); deberia valer, pero por si acaso mejor sendFile
-      response.sendFile(img);
+      response.end(img); //deberia valer, pero por si acaso mejor sendFile
+      //response.sendFile(img);
     }
   })
 })
