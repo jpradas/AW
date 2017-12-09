@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Preguntas - FaceBluff</title>
+    <title>Amigos - FaceBluff</title>
     <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
 </head>
 <body>
@@ -23,29 +23,21 @@
    </header>
    <section class="contenido">
         <div class="superior">
-            <span>Preguntas seleccionadas aleatoriamente</span>
+            <span><%= pregunta.texto %></span>
         </div>
-        <ul>
-          <% if(preguntas){
-            preguntas.forEach(pregunta =>{ %>
-              <li>
-              <form action="/pregunta/<%= pregunta.id %>" method="post">
-                //<div class="pregunta"> <a href="/pregunta/<%= pregunta.id %>"><%= pregunta.texto %></a> </div>
-                <input type="submit" value="<%= pregunta.texto %>">
-              </form>
-             </li>
-                <% })
-              } %>
-        </ul>
-
-        <div class="superior">
-            <span>¡Añade tus preguntas!</span>
-        </div>
-        <form method="POST" action="/nuevaPregunta">
-          <input id="boton" type="submit" value="Crear nueva pregunta">
+        <form action="/pregunta/<%= pregunta.id %>" method="post">
+          <ul>
+            <% if(respuestas){
+              respuestas.forEach(respuesta =>{ %>
+                <li>
+                  <input type="radio" name="respuesta" value="<%= respuesta.respuesta %>">
+               </li>
+                  <% })
+                } %>
+                <li> <input type="radio" name="respuesta" value="Otra:"> <input name="otraResp" type="text"> </li>
+          </ul>
+          <input type="submit" value="Responder">
         </form>
-
    </section>
-
 </body>
 </html>

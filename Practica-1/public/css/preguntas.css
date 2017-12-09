@@ -8,6 +8,8 @@ html{
     background-image: url(../img/Fondo.jpg);
 }
 
+
+
 #logo{
     display: block;
     margin-left:auto;
@@ -36,6 +38,7 @@ li a{
     text-decoration: none;
     margin-left: 30px
 }
+
 
 #lilav{
     width: 40px;
@@ -119,4 +122,8 @@ li a{
   border-radius: 20px;
   margin-top: 10px;
   margin-left: 20px;
+}
+
+.pregunta{
+    color: black;
 }

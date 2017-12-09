@@ -4,7 +4,7 @@ const config = require("./config");
 
 
 
-class DAOPreguntas{
+class DAORespuestas{
 /**
      * Inicializa el DAO de usuarios.
      *
@@ -28,34 +28,13 @@ class DAOPreguntas{
      * @param {string} filename Identificador de la foto
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
-    getPreguntas(email, callback) {
+    getRespuestas(id, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM " + config.database +".preguntas WHERE user=?;",
-                [email],
-                (err, result)=>{
-                    connection.release();
-                    if(err){
-                        callback(err);
-                    }
-                    else{
-                        callback(null, result);
-                    }
-                }
-            );
-        })
-    }
-
-    getPreguntasByID(id, callback) {
-        this.pool.getConnection((err, connection) =>{
-            if(err){
-                callback(err); return;
-            }
-            connection.query(
-                "SELECT * FROM " + config.database +".preguntas WHERE id=?;",
+                "SELECT * FROM " + config.database +".respuestas WHERE idPregunta=?;",
                 [id],
                 (err, result)=>{
                     connection.release();
@@ -92,5 +71,5 @@ class DAOPreguntas{
   }
 
 module.exports = {
-    DAOPreguntas: DAOPreguntas
+    DAORespuestas: DAORespuestas
 }

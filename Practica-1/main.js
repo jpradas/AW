@@ -15,6 +15,7 @@ const daoUsers = require("./daoUsers");
 const daoAmigos = require("./daoAmigos");
 const daoImagenes = require("./daoImg");
 const daoPreguntas = require("./daoPreguntas")
+const daoRespuestas = require("./daoRespuestas")
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -49,6 +50,7 @@ const daou = new daoUsers.DAOusers(pool);
 const daoa = new daoAmigos.DAOamigos(pool);
 const daoi = new daoImagenes.DAOimg(pool);
 const daoP = new daoPreguntas.DAOPreguntas(pool);
+const daoR = new daoRespuestas.DAORespuestas(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
@@ -95,8 +97,8 @@ function userExists(request, response, next){
 
 function auth(request, response, next){
   if(request.session.email){
-    response.locals.userEmail = request.session.email;
-    response.locals.puntos = request.session.puntos;
+    app.locals.userEmail = request.session.email;
+    app.locals.puntos = request.session.puntos;
     next();
   }else{
     response.status(403);
@@ -110,11 +112,13 @@ function initSession(request, response, next){
 		request.session.email = request.body.email;
 		request.session.password = request.body.password;
     request.session.puntos = 0;
+    //response.locals.userEmail = request.body.email;
+    //response.locals.puntos = 0;
 		next();
 }
 
 app.post("/login.html", userExists, initSession, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados
-	response.redirect("profile.html");
+  response.redirect("profile.html");
 });
 
 app.get("/login.html", (request, response, next)=>{
@@ -163,7 +167,7 @@ app.post("/new_user.html", upload.single("imagen_perfil"), datosCorrectos, inser
   response.redirect("profile.html");
 });
 
-app.get("/new_user.html",auth, (request, response, next)=>{
+app.get("/new_user.html", (request, response, next)=>{
   let mensaje = "";
   mensaje = isMessage(request);
   response.render("new_user", { message: mensaje });
@@ -335,6 +339,46 @@ app.get("/preguntas.html", auth, (request, response) =>{
       response.render("preguntas", {preguntas : result});
     }
   });
+})
+
+app.post("/pregunta/:id", (request, response) =>{
+  let id = request.params.id;
+  daoP.getPreguntasByID(id, (err, preguntas) =>{
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else {
+      daoa.getAmigos(preguntas[0].user, (err, amigos) => {
+        if (err){
+          response.status(404);
+          response.end();
+        }
+        else{
+          //let obj = {pregunta : preguntas, amigos: amigos};
+          //console.log(obj);
+          //response.render("vistaPregunta", {pregunta : preguntas, amigos: amigos});
+          response.render("vistaPregunta", {preg : preguntas, amigos: amigos});
+        }
+      });
+    }
+  });
+})
+
+app.post("/contestarPregunta", (request, response) =>{
+  console.log(request.body.id);
+  console.log(request.body.pregunta);
+  daoR.getRespuestas(request.body.id, (err, result) =>{
+    if (err){
+      response.status(404);
+      response.end();
+    }
+    else {
+      console.log(result);
+      response.render("responderPregunta", {pregunta: request.body.pregunta , respuesta: result});
+    }
+  })
+
 })
 
 app.post("/nuevaPregunta", (request, response) =>{
