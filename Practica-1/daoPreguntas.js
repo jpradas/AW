@@ -28,14 +28,13 @@ class DAOPreguntas{
      * @param {string} filename Identificador de la foto
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
-    getPreguntas(email, callback) {
+    getPreguntasAleatorias(callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM " + config.database +".preguntas WHERE user=?;",
-                [email],
+                "SELECT * FROM " + config.database +".preguntas;",
                 (err, result)=>{
                     connection.release();
                     if(err){

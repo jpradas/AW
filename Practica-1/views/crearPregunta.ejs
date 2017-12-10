@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Crear Pregunta - FaceBluff</title>
-    <link rel="stylesheet" type="text/css" href="./css/new-user.css">
+    <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
 </head>
 <body>
    <%- include cabecera %>
@@ -11,38 +11,53 @@
         <div class="superior">
             <span>Crear Pregunta</span>
         </div>
-        <div class="formulario-newuser">
+        <div class="formulario-pregunta">
         <form action="/crearPregunta" method="post">
-            <input type="hidden" name="tipo" value="pregunta">
-            <ul class="formulario">
-                <li class="f_nombre">
-                    <span>Introduce la pregunta</span>
-                    <input class="input_n" type="text" name="pregunta">
-                </li>
-                <li class="f_nombre">
-                    <span>Opcion 1</span>
-                    <input class="input_n" type="text" name="opcion1">
-                    <input type="radio" name="verdadero" value="1"> Verdadero
-                </li>
-                <li class="f_nombre">
-                    <span>Opcion 2</span>
-                    <input class="input_n" type="text" name="opcion2">
-                    <input type="radio" name="verdadero" value="2"> Verdadero
-                </li>
-                <li class="f_nombre">
-                    <span>Opcion 3</span>
-                    <input class="input_n" type="text" name="opcion3">
-                    <input type="radio" name="verdadero" value="3"> Verdadero
-                </li>
-                <li class="f_nombre">
-                    <span>Opcion 4</span>
-                    <input class="input_n" type="text" name="opcion4">
-                    <input type="radio" name="verdadero" value="4"> Verdadero
-                </li>
-                <li class="conectar">
-                    <input id="boton" type="submit" value="Crear pregunta">
-                </li>
-            </ul>
+          <ul class="form">
+            <li>
+              <div class="izquierda">
+                Insertar pregunta:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="pregunta">
+              </div>
+            </li>
+            <li>
+              <div class="izquierda">
+                Insertar opcion 1:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="opcion 1">
+              </div>
+            </li>
+            <li>
+              <div class="izquierda">
+                Insertar opcion 2:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="opcion 2">
+              </div>
+            </li>
+            <li>
+              <div class="izquierda">
+                Insertar opcion 3:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="opcion 3">
+              </div>
+            </li>
+            <li>
+              <div class="izquierda">
+                Insertar opcion 4:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="opcion 4">
+              </div>
+            </li>
+          </ul>
+          <div class="botonSubmit">
+            <input id="boton" type="submit" value="Crear pregunta">
+          </div>
         </form>
         </div>
    </section>

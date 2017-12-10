@@ -325,17 +325,15 @@ app.get("/imagen_perfil/:email", (request, response)=>{
       let imagen = __dirname.concat("/public/img/NoProfile.png");
       response.sendFile(imagen);
     }else{
-      response.end(img); //deberia valer, pero por si acaso mejor sendFile
-      //response.sendFile(img);
+      response.end(img); 
     }
   })
 })
 
-app.get("/preguntas.html", auth, (request, response) =>{
-  daoP.getPreguntas(request.session.email, (err, result) =>{
+app.get("/preguntas.html", auth, (request, response, next) =>{
+  daoP.getPreguntasAleatorias((err, result) =>{
     if (err){
-      response.status(404);
-      response.end();
+      next(err);
     }
     else {
       response.render("preguntas", {preguntas : result});
