@@ -6,21 +6,7 @@
     <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
 </head>
 <body>
-   <header>
-          <div>
-                <img src="img/Logo.png" alt="FaceBluff - Logo" id="logo">
-          </div>
-          <nav class="enlaces">
-           <ul class="lista">
-               <li><a href="/profile.html">Perfil</a></li>
-               <li><a href="/amigos.html">Amigos</a></li>
-               <li><a href="/preguntas.html">Preguntas</a></li>
-               <li><a href="/logout.html">Desconectar</a></li>
-               <li><img id="lilav"src="/imagen_perfil/<%= userEmail %>"></li>
-               <li id="ptos"><%= puntos %> pts</li>
-           </ul>
-       </nav>
-   </header>
+   <%- include cabecera %>
    <section class="contenido">
         <div class="superior">
             <span>Preguntas seleccionadas aleatoriamente</span>
@@ -30,8 +16,9 @@
             preguntas.forEach(pregunta =>{ %>
               <li>
               <form action="/pregunta/<%= pregunta.id %>" method="post">
-                //<div class="pregunta"> <a href="/pregunta/<%= pregunta.id %>"><%= pregunta.texto %></a> </div>
-                <input type="submit" value="<%= pregunta.texto %>">
+                <div class="pregunta">
+                  <input type="submit" value="<%= pregunta.texto %>">
+                 </div>
               </form>
              </li>
                 <% })

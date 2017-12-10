@@ -6,21 +6,7 @@
     <link rel="stylesheet" type="text/css" href="./css/search.css">
 </head>
 <body>
-   <header>
-          <div>
-                <img src="img/Logo.png" alt="FaceBluff - Logo" id="logo">
-          </div>
-          <nav class="enlaces">
-           <ul class="lista">
-               <li><a href="/profile.html">Perfil</a></li>
-               <li><a href="/amigos.html">Amigos</a></li>
-               <li><a href="/preguntas.html">Preguntas</a></li>
-               <li><a href="/logout.html">Desconectar</a></li>
-               <li><img id="lilav"src="/imagen_perfil/<%= usuario.email %>"></li>
-               <li id="ptos"><%= usuario.puntos %> pts</li>
-           </ul>
-       </nav>
-   </header>
+   <%- include cabecera %>
    <section class="contenido">
         <div class="superior">
             <span>Resultados de la busqueda '<%= busqueda %>'</span>

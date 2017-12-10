@@ -112,8 +112,6 @@ function initSession(request, response, next){
 		request.session.email = request.body.email;
 		request.session.password = request.body.password;
     request.session.puntos = 0;
-    //response.locals.userEmail = request.body.email;
-    //response.locals.puntos = 0;
 		next();
 }
 
@@ -238,7 +236,7 @@ app.post("/amigos.html", auth, (request, response, next) =>{
           next(err);return;
         }
         response.status(200);
-        response.render("search" , {buscados: usuarios, usuario: user, busqueda: request.body.busca});
+        response.render("search" , {buscados: usuarios, busqueda: request.body.busca});
       });
     })
 })
@@ -325,7 +323,7 @@ app.get("/imagen_perfil/:email", (request, response)=>{
       let imagen = __dirname.concat("/public/img/NoProfile.png");
       response.sendFile(imagen);
     }else{
-      response.end(img); 
+      response.end(img);
     }
   })
 })
@@ -395,7 +393,7 @@ app.post("/crearPregunta", (request, response) =>{
   respuesta.push(request.body.opcion4);
   console.log(respuesta);
   console.log(request.body.verdadero);
-  
+
   switch(request.body.verdadero){
     case 1: respuesta.push()
     case 2:
