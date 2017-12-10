@@ -37,16 +37,19 @@ CREATE TABLE preguntas(
 );
 
 CREATE TABLE opciones(
-	respuesta VARCHAR(30),
+	id INT NOT NULL AUTO_INCREMENT,
+	opcion VARCHAR(100),
 	verdadero INT NOT NULL,
 	idPregunta INT NOT NULL,
 	FOREIGN KEY (idPregunta) references preguntas(id),
-	PRIMARY KEY (respuesta, idPregunta)
+	PRIMARY KEY (id, idPregunta)
 );
 
-CREATE TABLE respuestas(
+CREATE TABLE PreguntasUsers(
 	id_pregunta int,
 	user VARCHAR(30),
+	id_opcion int,
 	FOREIGN KEY (id_pregunta) references preguntas(id),
-	FOREIGN KEY (user) references users(email)
+	FOREIGN KEY (user) references users(email),
+	FOREIGN KEY (id_opcion) references opciones(id)
 );
