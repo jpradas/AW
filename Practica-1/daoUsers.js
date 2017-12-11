@@ -111,14 +111,14 @@ class DAOusers{
       })
     }
 
-    modifyUser(email, user, callback){
+    modifyUser(query, array, callback){
       this.pool.getConnection((err, connection) =>{
         if(err){
           callback(err);return;
         }
         connection.query(
-          "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;",
-          [user.nombre, user.edad, user.sexo, user.imagen_perfil , email],
+          query,
+          array,
           (err)=>{
             connection.release();
             if(err){

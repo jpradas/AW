@@ -25,10 +25,11 @@ CREATE TABLE amigos(
 );
 
 CREATE TABLE fotos(
-	filename VARCHAR(50) PRIMARY KEY NOT NULL,
+	filename VARCHAR(50) NOT NULL,
 	user VARCHAR(30),
 	foto LONGBLOB,
-	FOREIGN KEY (user) references users(email)
+	FOREIGN KEY (user) references users(email),
+	PRIMARY KEY (filename, user)
 );
 
 CREATE TABLE preguntas(

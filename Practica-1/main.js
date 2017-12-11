@@ -177,19 +177,22 @@ app.get("/profile.html", auth, (request, response, next) =>{
 		if(err){
 			next(err);return;
 		}
+    let mensaje = "";
+    mensaje = isMessage(request);
 		response.status(200);
-		response.render("profile", { usuario: user, modificar: "si" });
+		response.render("profile", { usuario: user, modificar: "si", message: mensaje });
 	});
 })
 
-//TO DO post del perfil, significa que alguien accede a tu perfil.
 app.post("/profile.html", auth, (request, response, next)=>{
   daou.getUser(request.body.nombre, (err, user) =>{
 		if(err){
 			next(err);return;
 		}
+    let mensaje = "";
+    mensaje = isMessage(request);
 		response.status(200);
-		response.render("profile", { usuario: user, modificar: "no" });
+		response.render("profile", { usuario: user, modificar: "no", message: mensaje });
 	});
 })
 
@@ -305,9 +308,16 @@ app.get("/modify_profile.html", (request, response, next) =>{
 })
 
 app.post("/modify_profile.html", upload.single("imagen_perfil"), auth, (request, response, next)=>{
-  let usuario = {nombre: request.body.nombre, edad: request.body.edad,
-                  sexo: request.body.sexo, imagen_perfil: request.file };
-  daou.modifyUser(request.session.email, usuario, (err, result)=>{
+  let query; let array;
+  if(request.file){
+    query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;";
+    array = [request.body.nombre, request.body.edad, request.body.sexo, request.file.buffer, request.session.email];
+  }else{
+    query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=? WHERE email=?;";
+    array = [request.body.nombre, request.body.edad, request.body.sexo, request.session.email];
+  }
+
+  daou.modifyUser(query, array, (err, result)=>{
     if(err){
       next(err);return;
     }
@@ -363,7 +373,7 @@ app.post("/pregunta/:id", (request, response) =>{
   });
 })
 
-app.post("/contestarPregunta", (request, response) =>{
+app.post("/contestarPregunta", auth, (request, response) =>{
   console.log(request.body.id);
   console.log(request.body.pregunta);
   daoR.getRespuestas(request.body.id, (err, result) =>{
@@ -381,11 +391,11 @@ app.post("/contestarPregunta", (request, response) =>{
 
 
 
-app.post("/nuevaPregunta", (request, response) =>{
+app.post("/nuevaPregunta", auth, (request, response) =>{
     response.render("crearPregunta");
 })
 
-app.post("/crearPregunta", (request, response) =>{
+app.post("/crearPregunta", auth, (request, response) =>{
   let respuesta = {};
   respuesta.push(request.body.opcion1);
   respuesta.push(request.body.opcion2);
@@ -412,6 +422,25 @@ app.post("/crearPregunta", (request, response) =>{
     }
   });
   */
+})
+
+
+app.get("/upload_photos.html", auth, (request, response, next)=>{
+  response.render("upload_photos");
+});
+
+app.post("/upload_photos", upload.single("foto"), auth, (request, response, next)=>{
+  daoi.setImg(request.file, request.session.email, (err, result)=>{
+    if (err) {
+      next(err);return;
+    }
+    if(result){
+      setFlash(request, "Foto subida con exito");
+    }else{
+      setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo");
+    }
+    response.redirect("profile.html");
+  })
 })
 
 app.get("/", (request, response, next)=>{

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subir fotos - FaceBluff</title>
+    <link rel="stylesheet" type="text/css" href="./css/profile.css">
+</head>
+<body>
+   <%- include cabecera %>
+   <section class="contenido">
+     <div class="superior">
+         <span>Subir foto</span>
+     </div>
+     <div class="cuerpo">
+        <form action="upload_photos" method="post" enctype="multipart/form-data">
+          <span>Seleccionar archivo</span>
+          <input type="file" name="foto" value="Seleccionar archivo">
+          <input id="boton" type="submit" value="Subir">
+        </form>
+     </div>
+   </section>
+
+</body>
+</html>
