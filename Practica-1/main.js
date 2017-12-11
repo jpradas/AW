@@ -217,16 +217,11 @@ app.get("/amigos.html",auth, (request, response, next) =>{
     if(err){
       next(err);return;
     }
-    daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
-      if(err){
-        next(err);return;
-      }
-      let amigos=[]; let pendientes=[]; let solicitudes=[]; let mensaje = "";
-      crearArrays(amigos, pendientes, solicitudes, rows);
-      mensaje = isMessage(request);
-      response.status(200);
-      response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, usuario: user, message: mensaje});
-    });
+    let amigos=[]; let pendientes=[]; let solicitudes=[]; let mensaje = "";
+    crearArrays(amigos, pendientes, solicitudes, rows);
+    mensaje = isMessage(request);
+    response.status(200);
+    response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, message: mensaje});
   });
 })
 
@@ -250,13 +245,8 @@ app.post("/amigos.html", auth, (request, response, next) =>{
       if(err){
         next(err);return;
       }
-      daou.getUser(request.session.email, (err, user) =>{ //podriamos cargar los datos del usuario desde la session
-        if(err){
-          next(err);return;
-        }
-        response.status(200);
-        response.render("search" , {buscados: usuarios, busqueda: request.body.busca});
-      });
+      response.status(200);
+      response.render("search" , {buscados: usuarios, busqueda: request.body.busca});
     })
 })
 

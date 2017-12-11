@@ -159,3 +159,31 @@ li a{
   display:flex;
   justify-content: center;
 }
+
+.preguntas{
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.list-preguntas li{
+  list-style: none;
+  margin-top: 20px;
+}
+
+.list-preguntas{
+  display: flex;
+  justify-content: center;
+}
+
+#pgts{
+  font-family: "GloriaHallelujah";
+  background: none;
+  border-style: dotted;
+  border-radius: 20px;
+  border-color: #8904B1;
+  font-size: 25px;
+  font-weight: bold;
+  padding-left: 40px;
+  padding-right: 40px;
+}

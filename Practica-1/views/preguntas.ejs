@@ -11,19 +11,11 @@
         <div class="superior">
             <span>Preguntas seleccionadas aleatoriamente</span>
         </div>
-        <ul>
-          <% if(preguntas){
-            preguntas.forEach(pregunta =>{ %>
-              <li>
-              <form action="/pregunta_<%= pregunta.id %>" method="post">
-                <div class="pregunta">
-                  <input type="submit" value="<%= pregunta.texto %>">
-                 </div>
-              </form>
-             </li>
-                <% })
-              } %>
-        </ul>
+        <div class="preguntas">
+          <ul class="list-preguntas">
+            <%- include("preguntas_aleatorias") %>
+          </ul>
+        </div>
 
         <div class="superior">
             <span>¡Añade tus preguntas!</span>
