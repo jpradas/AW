@@ -348,9 +348,10 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
     if (err){
       next(err);
     }
-    else {
-      response.render("preguntas", {preguntas : result});
-    }
+    let mensaje ="";
+    mensaje = isMessage(request);
+    response.status(200);
+    response.render("preguntas", { preguntas : result, message: mensaje });
   });
 })
 
