@@ -35,7 +35,7 @@ class DAOPreguntas{
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM " + config.database +".preguntas;",
+                "SELECT * FROM " + config.database +".preguntas ORDER BY RAND() LIMIT 5;",
                 (err, result)=>{
                     connection.release();
                     if(err){
