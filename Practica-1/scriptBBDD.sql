@@ -38,17 +38,16 @@ CREATE TABLE preguntas(
 
 CREATE TABLE opciones(
 	id INT NOT NULL AUTO_INCREMENT,
-	opcion VARCHAR(100),
-	verdadero INT NOT NULL,
+	opcion VARCHAR(100) NOT NULL,
 	idPregunta INT NOT NULL,
 	FOREIGN KEY (idPregunta) references preguntas(id),
 	PRIMARY KEY (id, idPregunta)
 );
 
 CREATE TABLE PreguntasUsers(
-	id_pregunta int,
-	user VARCHAR(30),
-	id_opcion int,
+	id_pregunta int NOT NULL,
+	user VARCHAR(30) NOT NULL,
+	id_opcion int, /* Opcion que marcas como respuesta */
 	FOREIGN KEY (id_pregunta) references preguntas(id),
 	FOREIGN KEY (user) references users(email),
 	FOREIGN KEY (id_opcion) references opciones(id)

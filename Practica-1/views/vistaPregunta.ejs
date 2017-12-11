@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Vista Pregunta - FaceBluff</title>
-    <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
+    <link rel="stylesheet" type="text/css" href="./css/search.css">
 </head>
 <body>
    <%- include cabecera %>
@@ -11,35 +12,40 @@
         <div class="superior">
             <span><%= preg.texto %></span>
         </div>
-        <div> No has contestado a esta pregunta </div>
-        <form method="POST" action="contestarPregunta">
-          <input type="hidden" name="id" value="<% preg.id %>">
-          <input type="hidden" name="pregunta" value="<% preg.texto %>">
-          <input id="boton" type="submit" value="Contestar Pregunta">
-        </form>
+
+        <% if (!contestado){ %>
+          <div> No has contestado a esta pregunta </div>
+          <form method="POST" action="contestarPregunta">
+            <input type="hidden" name="id" value="<% preg.id %>">
+            <input type="hidden" name="pregunta" value="<% preg.texto %>">
+            <input id="boton" type="submit" value="Contestar Pregunta">
+          </form>
+        <% } %>
 
         <div> Los siguientes amigos han contestado a esta pregunta </div>
-
-        <%if(amigos){
-          amigos.forEach(amigo =>{ %>
-            <li>
-              <div class="izquierda">
-                <img class="img-perfil" src="/imagen_perfil/<%= amigo.email %>" alt="avatar">
-                <form action="/profile.html" method="post">
-                  <input type="hidden" value="<%= amigo.email %>" name="nombre">
-                  <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
-                </form>
-              </div>
-              <div class="derecha">
-                <form action="responderPregunta.html" method="post">
-                  <!--TODO Falta hacer has acertado y has fallado -->
-                  <input id="boton" type="submit" value="Adivinar">
-
-                </form>
-              </div>
-            </li>
-          <% })
-        } %>
+        <div class="friends">
+          <ul class="lista-amigos">
+            <%if(amigos){
+              amigos.forEach(amigo =>{ %>
+                <li>
+                  <div class="izquierda">
+                    <img class="img-perfil" src="/imagen_perfil/<%= amigo.email %>" alt="avatar">
+                    <form action="profile.html" method="post">
+                      <input type="hidden" value="<%= amigo.email %>" name="nombre">
+                      <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
+                    </form>
+                  </div>
+                  <div class="derecha">
+                    <form action="/contestarPregunta" method="post">
+                      <input type="hidden" value="<%= amigo.email %>" name="email">
+                      <input id="boton" type="submit" value="Adivinar">
+                    </form>
+                  </div>
+                </li>
+                <% })
+              } %>
+            </ul>
+          </div>
 
    </section>
 

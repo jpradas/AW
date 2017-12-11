@@ -28,6 +28,7 @@ class DAOPreguntas{
      * @param {string} filename Identificador de la foto
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
+
     getPreguntasAleatorias(callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -47,14 +48,13 @@ class DAOPreguntas{
             );
         })
     }
-
-    getPreguntasByID(id, callback) {
+  //Saca los usuarios que han contestado a la pregunta
+    getPreguntaUserByID(id, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
-            connection.query(
-                "SELECT * FROM " + config.database +".preguntas WHERE id=?;",
+            connection.query("SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=?;",
                 [id],
                 (err, result)=>{
                     connection.release();
@@ -68,6 +68,57 @@ class DAOPreguntas{
             );
         })
     }
+      //Saca si el usuario ha contestado a la pregunta
+    getPreguntaContestadaByUser(id, user, callback) {
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query("SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=? AND preguntasusers.user=?;",
+                [id, user],
+                (err, result)=>{
+                    connection.release();
+                    if(err){
+                        callback(err);
+                    }
+                    else{
+                        callback(null, result);
+                    }
+                }
+            );
+        })
+    }
+
+    crearPregunta(texto,opciones,callback){
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+              "INSERT INTO " + config.database + ".preguntas VALUES (NULL,?);",
+              [texto],
+              (err, result)=>{
+                  if(err){
+                      callback(err);
+                  }
+                  else{
+                    console.log(result);
+                    for (let i = 0; i < 4; i++){
+                      connection.query(
+                          "INSERT INTO " + config.database + ".opciones VALUES (NULL,?,?);",
+                          [opciones[i],result.insertId],
+                          (err, result)=>{
+                              if(err){
+                                  callback(err);
+                              }
+                          });
+                    }
+                    connection.release();
+                    callback(null);
+                  }
+              });
+        });
+      }
 
     setPregunta(user, texto, respuesta, callback) {
         this.pool.getConnection((err, connection) =>{

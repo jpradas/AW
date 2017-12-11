@@ -15,7 +15,7 @@
           <% if(preguntas){
             preguntas.forEach(pregunta =>{ %>
               <li>
-              <form action="/pregunta/<%= pregunta.id %>" method="post">
+              <form action="/pregunta_<%= pregunta.id %>" method="post">
                 <div class="pregunta">
                   <input type="submit" value="<%= pregunta.texto %>">
                  </div>

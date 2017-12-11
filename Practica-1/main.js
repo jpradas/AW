@@ -339,30 +339,31 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
   });
 })
 
-app.post("/pregunta/:id", (request, response) =>{
-  let id = request.params.id;
-  daoP.getPreguntasByID(id, (err, preguntas) =>{
+app.post("/pregunta_:id", (request, response, next) =>{
+  let idPregunta = request.params.id;
+  daoP.getPreguntaContestadaByUser(idPregunta, request.session.email, (err, result) =>{
     if (err){
-      response.status(404);
-      response.end();
+      next(err);
     }
     else {
-      daoa.getAmigos(preguntas[0].user, (err, amigos) => {
-        if (err){
-          response.status(404);
-          response.end();
+      let contestado = false;
+      if(result[0].id_opcion !== null){
+        contestado = true;
+      }
+        daoa.getAmigosContestanPregunta(request.session.email, idPregunta, (err, amigo) => {
+            if (err){
+              next(err);
+            }
+            else {
+              response.render("vistaPregunta", {preg : result[0], amigos: amigo, contestado: contestado});
+            }
+          });
         }
-        else{
-          //let obj = {pregunta : preguntas, amigos: amigos};
-          //console.log(obj);
-          //response.render("vistaPregunta", {pregunta : preguntas, amigos: amigos});
-          response.render("vistaPregunta", {preg : preguntas, amigos: amigos});
-        }
-      });
-    }
-  });
-})
+    });
+});
 
+
+//REHACER TODO
 app.post("/contestarPregunta", (request, response) =>{
   console.log(request.body.id);
   console.log(request.body.pregunta);
@@ -376,42 +377,30 @@ app.post("/contestarPregunta", (request, response) =>{
       response.render("responderPregunta", {pregunta: request.body.pregunta , respuesta: result});
     }
   })
-
 })
-
-
 
 app.post("/nuevaPregunta", (request, response) =>{
     response.render("crearPregunta");
 })
 
-app.post("/crearPregunta", (request, response) =>{
-  let respuesta = {};
-  respuesta.push(request.body.opcion1);
-  respuesta.push(request.body.opcion2);
-  respuesta.push(request.body.opcion3);
-  respuesta.push(request.body.opcion4);
-  console.log(respuesta);
-  console.log(request.body.verdadero);
-
-  switch(request.body.verdadero){
-    case 1: respuesta.push()
-    case 2:
-    case 3:
-    case 4:
-  }
-  //SIgo sin saber como hacer verdadero
-  /*
-  daoP.setPregunta(request.session.email, request.body.pregunta, respuesta, request.body.verdadero, (err, id) => {
+app.post("/crearPregunta", (request, response, next) =>{
+  let opciones = [];
+  opciones.push(request.body.opcion1);
+  opciones.push(request.body.opcion2);
+  opciones.push(request.body.opcion3);
+  opciones.push(request.body.opcion4);
+  daoP.crearPregunta(request.body.pregunta, opciones, (err, id) => {
     if (err){
-      response.status(500);
-      response.end();
+      next(err);
     }
     else {
-
+      //Posible Flash de Pregunta creada con exito
+      //No funciona
+      setFlash(request, "Pregunta creada con exito");
+      response.redirect("preguntas.html")
     }
   });
-  */
+
 })
 
 app.get("/", (request, response, next)=>{
