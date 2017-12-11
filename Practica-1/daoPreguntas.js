@@ -48,7 +48,8 @@ class DAOPreguntas{
             );
         })
     }
-  //Saca los usuarios que han contestado a la pregunta
+
+  //Saca los usuarios que han contestado a la pregunta, no usada de momento, no borrar
     getPreguntaUserByID(id, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -68,13 +69,33 @@ class DAOPreguntas{
             );
         })
     }
+    getPregunta(id, callback) {
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query("SELECT * FROM preguntas WHERE id=?;",
+                [id],
+                (err, preg)=>{
+                    connection.release();
+                    if(err){
+                        callback(err);
+                    }
+                    else{
+                      callback(null, preg[0]);
+                    }
+                }
+            );
+        })
+    }
+
       //Saca si el usuario ha contestado a la pregunta
     getPreguntaContestadaByUser(id, user, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
-            connection.query("SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=? AND preguntasusers.user=?;",
+            connection.query("SELECT id_opcion FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=? AND preguntasusers.user=?;",
                 [id, user],
                 (err, result)=>{
                     connection.release();
@@ -82,7 +103,13 @@ class DAOPreguntas{
                         callback(err);
                     }
                     else{
-                        callback(null, result);
+                      if(result.length > 0){
+                          callback(null, true);
+                      }
+                      else{
+                          callback(null, false);
+                      }
+
                     }
                 }
             );
@@ -102,8 +129,7 @@ class DAOPreguntas{
                       callback(err);
                   }
                   else{
-                    console.log(result);
-                    for (let i = 0; i < 4; i++){
+                    for (let i = 0; i < opciones.length; i++){
                       connection.query(
                           "INSERT INTO " + config.database + ".opciones VALUES (NULL,?,?);",
                           [opciones[i],result.insertId],
@@ -120,38 +146,7 @@ class DAOPreguntas{
         });
       }
 
-    setPregunta(user, texto, respuesta, callback) {
-        this.pool.getConnection((err, connection) =>{
-            if(err){
-                callback(err); return;
-            }
-            connection.query(
-                "INSERT INTO" + config.database + ".preguntas VALUES (NULL,?,?);",
-                [texto, user],
-                (err, result)=>{
-                    if(err){
-                        callback(err);
-                    }
-                    else{
-                      respuesta.forEach(resp => {
-                        connection.query("INSERT INTO respuestas VALUES (?, ?, ?);",
-                        [resp, verdadero, id],
-                        (err, result) => {
-                          connection.release();
-                          if (err){
-                            callback(err);
-                          }
-                          else {
-                            callback(null);
-                          }
-                        }
-                        );
-                      })
-                    }
-                }
-            );
-        })
-    }
+
 
 
   }

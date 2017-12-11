@@ -11,6 +11,7 @@
         <div class="superior">
             <span>Preguntas seleccionadas aleatoriamente</span>
         </div>
+        <%- include("flash") %>
         <div class="preguntas">
           <ul class="list-preguntas">
             <%- include("preguntas_aleatorias") %>
@@ -21,13 +22,10 @@
             <span>¡Añade tus preguntas!</span>
         </div>
         <div class="nuevaPregunta">
-          <form method="POST" action="/nuevaPregunta">
+          <form method="GET" action="/nuevaPregunta">
             <input id="boton" type="submit" value="Crear nueva pregunta">
           </form>
         </div>
-
-
    </section>
-
 </body>
 </html>

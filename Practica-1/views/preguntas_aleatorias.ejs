@@ -1,11 +1,11 @@
 <% if(preguntas){
   preguntas.forEach(pregunta =>{ %>
     <li>
-    <form action="/pregunta_<%= pregunta.id %>" method="post">
-      <div class="pregunta">
-        <input id="pgts" type="submit" value="<%= pregunta.texto %>">
-       </div>
-    </form>
+        <form action="/pregunta_<%= pregunta.id %>" method="post">
+          <div class="pregunta">
+            <input id="preg" type="submit" value="<%= pregunta.texto %>">
+           </div>
+        </form>
    </li>
       <% })
   } %>

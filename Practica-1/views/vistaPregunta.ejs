@@ -16,8 +16,8 @@
         <% if (!contestado){ %>
           <div> No has contestado a esta pregunta </div>
           <form method="POST" action="contestarPregunta">
-            <input type="hidden" name="id" value="<% preg.id %>">
-            <input type="hidden" name="pregunta" value="<% preg.texto %>">
+            <input type="hidden" name="idPregunta" value="<%= preg.id %>">
+            <input type="hidden" name="pregunta" value="<%= preg.texto %>">
             <input id="boton" type="submit" value="Contestar Pregunta">
           </form>
         <% } %>

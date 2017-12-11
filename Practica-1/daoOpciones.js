@@ -4,7 +4,7 @@ const config = require("./config");
 
 
 
-class DAORespuestas{
+class DAOOpciones{
 /**
      * Inicializa el DAO de usuarios.
      *
@@ -28,14 +28,14 @@ class DAORespuestas{
      * @param {string} id Identificador de la respuesta
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
-    getRespuestas(id, callback) {
+    getOpciones(idPregunta, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
             connection.query(
-                "SELECT * FROM " + config.database +".respuestas WHERE idPregunta=?;",
-                [id],
+                "SELECT * FROM " + config.database +".opciones WHERE idPregunta=?;",
+                [idPregunta],
                 (err, result)=>{
                     connection.release();
                     if(err){
@@ -49,7 +49,7 @@ class DAORespuestas{
         })
     }
 
-    setRespuesta(respuesta, verdadero, id, callback){
+    setOpciones(respuesta, verdadero, id, callback){
       this.pool.getConnection((err, connection) => {
         if(err){
           callback(err);
@@ -69,28 +69,9 @@ class DAORespuestas{
         }
       });
     }
-    /*
-    setImg(foto, callback){
-      this.pool.getConnection((err, connection) =>{
-          if(err){
-              callback(err); return;
-          }
-          connection.query(
-              "INSERT INTO "+ config.database +".fotos VALUES (?,?,?)",
-              [foto.originalname, ],
-              (err, result) =>{
-                  connection.release();
-                  if(err){
-                    callback(err);return;
-                  }
-                  callback(null, true);
-              }
-          );
-      });
-    }
-    */
+
   }
 
 module.exports = {
-    DAORespuestas: DAORespuestas
+    DAOOpciones: DAOOpciones
 }

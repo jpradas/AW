@@ -15,7 +15,7 @@ const daoUsers = require("./daoUsers");
 const daoAmigos = require("./daoAmigos");
 const daoImagenes = require("./daoImg");
 const daoPreguntas = require("./daoPreguntas")
-const daoRespuestas = require("./daoRespuestas")
+const daoOpciones = require("./daoOpciones")
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -50,7 +50,7 @@ const daou = new daoUsers.DAOusers(pool);
 const daoa = new daoAmigos.DAOamigos(pool);
 const daoi = new daoImagenes.DAOimg(pool);
 const daoP = new daoPreguntas.DAOPreguntas(pool);
-const daoR = new daoRespuestas.DAORespuestas(pool);
+const daoO = new daoOpciones.DAOOpciones(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
@@ -349,49 +349,56 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
       next(err);
     }
     else {
-      response.render("preguntas", {preguntas : result});
+      let mensaje ="";
+      mensaje = isMessage(request);
+      response.status(200);
+      response.render("preguntas", { preguntas : result, message: mensaje });
     }
   });
 })
 
 app.post("/pregunta_:id", (request, response, next) =>{
   let idPregunta = request.params.id;
-  daoP.getPreguntaContestadaByUser(idPregunta, request.session.email, (err, result) =>{
+  daoP.getPregunta(idPregunta, (err, pregunta) =>{
     if (err){
       next(err);
     }
     else {
-      let contestado = false;
-      if(result[0].id_opcion !== null){
-        contestado = true;
-      }
-        daoa.getAmigosContestanPregunta(request.session.email, idPregunta, (err, amigo) => {
-            if (err){
-              next(err);
-            }
-            else {
-              response.render("vistaPregunta", {preg : result[0], amigos: amigo, contestado: contestado});
-            }
-          });
+      daoP.getPreguntaContestadaByUser(idPregunta, request.session.email, (err, contestado) =>{
+        if (err){
+          next(err);
         }
-    });
+        else {
+            daoa.getAmigosContestanPregunta(request.session.email, idPregunta, (err, amigo) => {
+                if (err){
+                  next(err);
+                }
+                else {
+                  response.render("vistaPregunta", {preg : pregunta, amigos: amigo, contestado: contestado});
+                }
+              });
+            }
+        });
+    }
+  });
 });
 
 
-//REHACER TODO
-app.post("/contestarPregunta", auth, (request, response) =>{
-  console.log(request.body.id);
-  console.log(request.body.pregunta);
-  daoR.getRespuestas(request.body.id, (err, result) =>{
+
+app.post("/contestarPregunta", auth, (request, response, next) =>{
+  daoO.getOpciones(request.body.idPregunta, (err, result) =>{
     if (err){
-      response.status(404);
-      response.end();
+      next(err);
     }
     else {
-      console.log(result);
-      response.render("responderPregunta", {pregunta: request.body.pregunta , respuesta: result});
+      //DE MOMENTO IDPREGUNTA NO SE USA, borrar en un futuro
+      response.render("responderPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result});
     }
   })
+})
+
+app.post("/contestacion", (request, response) =>{
+  response.redirect("preguntas.html");
 })
 
 

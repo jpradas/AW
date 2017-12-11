@@ -9,18 +9,20 @@
    <%- include cabecera %>
    <section class="contenido">
         <div class="superior">
-            <span><%= pregunta.texto %></span>
+            <span><%= pregunta %></span>
         </div>
-        <form action="/pregunta/<%= pregunta.id %>" method="post">
+        <form action="/contestacion" method="post">
           <ul>
-            <% if(respuestas){
-              respuestas.forEach(respuesta =>{ %>
+            <% if(opciones){
+              opciones.forEach(opcion =>{ %>
                 <li>
-                  <input type="radio" name="respuesta" value="<%= respuesta.respuesta %>">
+                  <input type="radio" name="opcion" value="<%= opcion.id %>">
+                  <span> <%= opcion.opcion %> </span>
+                  <!--<input type="hidden" name="opcionElegida" value -->
                </li>
                   <% })
                 } %>
-                <li> <input type="radio" name="respuesta" value="Otra:"> <input name="otraResp" type="text"> </li>
+                <li> <input type="radio" name="opcion" value="otra"> <span> Otra: </span> <input name="otraResp" type="text"> </li>
           </ul>
           <input type="submit" value="Responder">
         </form>

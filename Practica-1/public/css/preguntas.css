@@ -9,7 +9,6 @@ html{
 }
 
 
-
 #logo{
     display: block;
     margin-left:auto;
@@ -172,11 +171,10 @@ li a{
 }
 
 .list-preguntas{
-  display: flex;
   justify-content: center;
 }
 
-#pgts{
+#preg{
   font-family: "GloriaHallelujah";
   background: none;
   border-style: dotted;
@@ -186,4 +184,24 @@ li a{
   font-weight: bold;
   padding-left: 40px;
   padding-right: 40px;
+}
+
+.flash{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  height: 40px;
+  background-color:  #FFD878;
+  border-color:  #FFB708;
+  border-style: ridge;
+  border-radius: 10px;
+}
+
+.flash span{
+  color: #FFAA00;
+  font-size: 20px;
+  font-weight: bold;
 }
