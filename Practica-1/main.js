@@ -379,6 +379,7 @@ app.post("/contestarPregunta", (request, response) =>{
   })
 })
 
+
 app.post("/nuevaPregunta", (request, response) =>{
     response.render("crearPregunta");
 })

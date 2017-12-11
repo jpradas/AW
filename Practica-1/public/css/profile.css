@@ -99,9 +99,64 @@ li a{
     border-style: none;
     border-radius: 20px;
     margin-top: 20px;
+    margin-left: 20px;
 }
 
 .butt{
   display: flex;
   justify-content: center;
+}
+
+.cuerpo{
+  display: flex;
+  color: white;
+  border-radius: 20px;
+  background-color: #8904B1;
+  justify-content: center;
+  width: 40%;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 90px;
+}
+
+.campo{
+  display: flex;
+  justify-content: space-around;
+}
+
+.izquierda{
+  display: flex;
+  align-items: center;
+}
+
+.derecha{
+  align-self: center;
+  margin-left: auto;
+  width: 55%;
+  margin-right: 40px;
+}
+
+#inputs{
+  width: 100%;
+}
+
+.flash{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 80px;
+  height: 40px;
+  background-color:  #ec7063;
+  border-color:  #922b21;
+  border-style: dotted;
+  border-radius: 10px;
+}
+
+.flash span{
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
 }

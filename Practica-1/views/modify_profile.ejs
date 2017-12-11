@@ -14,18 +14,30 @@
         <div class="info-perfil">
             <img id="leftav" src="/imagen_perfil/<%= usuario.email %>">
             <ul class="datos">
-              <form action="/modify_profile.html" method="post">
-                <li>
-                  <span>Nombre</span>
-                  <input class="input_nombre" type="text" name="nombre" value="<%= usuario.nombre_completo %>">
+              <form action="/modify_profile.html" method="post" enctype="multipart/form-data">
+                <li class="campo">
+                  <div class="izquierda">
+                    <span>Nombre</span>
+                  </div>
+                  <div class="derecha">
+                    <input id="inputs" type="text" name="nombre" value="<%= usuario.nombre_completo %>">
+                  </div>
                 </li>
-                <li>
-                  <span>Edad</span>
-                  <input class="input_edad" type="number" name="edad" value=<%= usuario.edad %>>
+                <li class="campo">
+                  <div class="izquierda">
+                    <span>Edad</span>
+                  </div>
+                  <div class="derecha">
+                    <input id="inputs" type="number" name="edad" value=<%= usuario.edad %>>
+                  </div>
                 </li>
-                <li>
-                  <span>Sexo</span>
-                  <input class="input_sexo" type="text" name="sexo" value=<%= usuario.sexo %>>
+                <li class="campo">
+                  <div class="izquierda">
+                    <span>Sexo</span>
+                  </div>
+                  <div class="derecha">
+                    <input id="inputs" type="text" name="sexo" value=<%= usuario.sexo %>>
+                  </div>
                 </li>
                 <li class="f_imagen">
                     <span>Imagen de perfil</span>
