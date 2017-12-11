@@ -160,3 +160,22 @@ li a{
   font-size: 20px;
   font-weight: bold;
 }
+
+#imagen{
+  width: 250px;
+  height: auto;
+  margin: 10px;
+  border-radius: 10px;
+
+}
+
+.fotos-perfil{
+  margin-top: 40px;
+  display: flex;
+  border-style: dotted;
+  border-color: #8904B1;
+  border-radius: 20px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}

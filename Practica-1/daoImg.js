@@ -24,7 +24,30 @@ class DAOimg{
           "SELECT filename FROM " + config.database + ".fotos WHERE user=?",
           [email],
           (err, rows)=>{
-            
+            connection.release();
+            if(err){
+              callback(err);return;
+            }
+            callback(null, rows);
+          }
+        )
+      })
+    }
+
+    getImgbyFilename(filename, callback){
+      this.pool.getConnection((err, connection) =>{
+        if(err){
+          callback(err);return;
+        }
+        connection.query(
+          "SELECT foto FROM " + config.database + ".fotos WHERE filename=?;",
+          [filename],
+          (err, result)=>{
+            connection.release();
+            if(err){
+              callback(err);return;
+            }
+            callback(null, result[0].foto);
           }
         )
       })

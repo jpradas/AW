@@ -173,23 +173,42 @@ app.get("/new_user.html", (request, response, next)=>{
 
 
 app.get("/profile.html", auth, (request, response, next) =>{
+  let fotos = "";let mensaje = "";
   daou.getUser(request.session.email, (err, user) =>{
 		if(err){
 			next(err);return;
 		}
-		response.status(200);
-		response.render("profile", { usuario: user, modificar: "si" });
+    daoi.getImgbyUser(request.session.email, (err, imgs)=>{
+      if(err){
+        next(err);return;
+      }
+      if(imgs.length !== 0){
+        fotos = imgs;
+      }
+      mensaje = isMessage(request);
+      response.status(200);
+      response.render("profile", { usuario: user, modificar: "si", message: mensaje, fotos: fotos});
+    });
 	});
 })
 
-//TO DO post del perfil, significa que alguien accede a tu perfil.
 app.post("/profile.html", auth, (request, response, next)=>{
+  let fotos = "";let mensaje = "";
   daou.getUser(request.body.nombre, (err, user) =>{
 		if(err){
 			next(err);return;
 		}
-		response.status(200);
-		response.render("profile", { usuario: user, modificar: "no" });
+    daoi.getImgbyUser(request.body.nombre, (err, imgs)=>{
+      if(err){
+        next(err);return;
+      }
+      if(imgs.length !== 0){
+        fotos = imgs;
+      }
+      mensaje = isMessage(request);
+      response.status(200);
+      response.render("profile", { usuario: user, modificar: "no", message: mensaje, fotos: fotos});
+    });
 	});
 })
 
@@ -305,9 +324,15 @@ app.get("/modify_profile.html", (request, response, next) =>{
 })
 
 app.post("/modify_profile.html", upload.single("imagen_perfil"), auth, (request, response, next)=>{
-  let usuario = {nombre: request.body.nombre, edad: request.body.edad,
-                  sexo: request.body.sexo, imagen_perfil: request.file };
-  daou.modifyUser(request.session.email, usuario, (err, result)=>{
+  let query; let array;
+  if(request.file){
+     query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;";
+     array = [request.body.nombre, request.body.edad, request.body.sexo, request.file.buffer, request.session.email];
+  }else{
+     query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=? WHERE email=?;";
+     array = [request.body.nombre, request.body.edad, request.body.sexo, request.session.email];
+  }
+  daou.modifyUser(query, array, (err, result)=>{
     if(err){
       next(err);return;
     }
@@ -364,7 +389,7 @@ app.post("/pregunta_:id", (request, response, next) =>{
 
 
 //REHACER TODO
-app.post("/contestarPregunta", (request, response) =>{
+app.post("/contestarPregunta", auth, (request, response) =>{
   console.log(request.body.id);
   console.log(request.body.pregunta);
   daoR.getRespuestas(request.body.id, (err, result) =>{
@@ -380,11 +405,11 @@ app.post("/contestarPregunta", (request, response) =>{
 })
 
 
-app.post("/nuevaPregunta", (request, response) =>{
+app.post("/nuevaPregunta", auth, (request, response) =>{
     response.render("crearPregunta");
 })
 
-app.post("/crearPregunta", (request, response, next) =>{
+app.post("/crearPregunta", auth, (request, response, next) =>{
   let opciones = [];
   opciones.push(request.body.opcion1);
   opciones.push(request.body.opcion2);
@@ -395,13 +420,37 @@ app.post("/crearPregunta", (request, response, next) =>{
       next(err);
     }
     else {
-      //Posible Flash de Pregunta creada con exito
-      //No funciona
       setFlash(request, "Pregunta creada con exito");
       response.redirect("preguntas.html")
     }
   });
+})
 
+app.get("/upload_photos.html", auth, (request, response, next)=>{
+  response.render("upload_photos");
+});
+
+app.post("/upload_photos", upload.single("foto"), auth, (request, response, next)=>{
+  daoi.setImg(request.file, request.session.email, (err, result)=>{
+    if (err) {
+      next(err);return;
+    }
+    if(result){
+      setFlash(request, "Foto subida con exito");
+    }else{
+      setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo");
+    }
+    response.redirect("profile.html");
+  })
+});
+
+app.get("/fotos/:filename", (request, response, next)=>{
+  daoi.getImgbyFilename(request.params.filename, (err, result)=>{
+    if(err){
+      next(err);return;
+    }
+    response.end(result);
+  })
 })
 
 app.get("/", (request, response, next)=>{

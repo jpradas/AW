@@ -1,6 +1,10 @@
-<div class="superior">
-  <span>Fotos</span>
-</div>
-<div class="fotos-perfil">
-
-</div>   
+<%if(fotos){ %>
+  <div class="superior">
+    <span>Fotos</span>
+  </div>
+  <div class="fotos-perfil">
+  <%fotos.forEach(foto =>{ %>
+    <img id="imagen" src="/fotos/<%= foto.filename %>">
+  <% }) %>
+  </div>
+<%} %>
