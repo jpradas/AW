@@ -348,19 +348,10 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
     if (err){
       next(err);
     }
-<<<<<<< HEAD
-    else {
-      let mensaje ="";
-      mensaje = isMessage(request);
-      response.status(200);
-      response.render("preguntas", { preguntas : result, message: mensaje });
-    }
-=======
     let mensaje ="";
     mensaje = isMessage(request);
     response.status(200);
     response.render("preguntas", { preguntas : result, message: mensaje });
->>>>>>> 841d426c35ab1e444108bdd6bcb7152b30437ee0
   });
 })
 
