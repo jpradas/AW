@@ -52,7 +52,7 @@ class DAOusers{
         })
     }
 
-    sumarPuntos(user, puntos, callback){
+    actualizarPuntos(user, puntos, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
               callback(err); return;
@@ -60,7 +60,7 @@ class DAOusers{
           connection.query(
               "UPDATE " + config.database +".users SET puntos=? WHERE email=?",
               [puntos, user],
-              (err, rows)=>{
+              (err)=>{
                   connection.release();
                   if(err){
                       callback(err);
@@ -119,8 +119,8 @@ class DAOusers{
         }
        pattern = "%" + pattern + "%";
         connection.query(
-            "SELECT * FROM " + config.database + ".users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +".amigos WHERE email_origen=?)",
-            [pattern, user],
+            "SELECT * FROM " + config.database + ".users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +".amigos WHERE email_origen=?) AND u.email not in (select email from facebluff.users where email=?);",
+            [pattern, user, user],
           (err, rows)=>{
             connection.release();
             if(err){

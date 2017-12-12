@@ -6,6 +6,7 @@
 html{
     font-family: "GloriaHallelujah";
     background-image: url(../img/Fondo.jpg);
+    background-repeat: repeat-x;
 }
 
 

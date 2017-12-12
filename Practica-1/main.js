@@ -107,10 +107,15 @@ function auth(request, response, next){
 }
 
 function initSession(request, response, next){
-		request.session.email = request.body.email;
-		request.session.password = request.body.password;
-    request.session.puntos = 0;
-		next();
+    daou.getUser(request.body.email, (err, user)=>{
+      if(err){
+        next(err);return;
+      }
+      request.session.email = user.email;
+      request.session.password = user.password;
+      request.session.puntos = user.puntos;
+      next();
+    });
 }
 
 app.post("/login.html", userExists, initSession, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados
@@ -466,39 +471,72 @@ app.post("/opcionesAdivinar", auth, (request, response, next) =>{
 app.post("/adivinar", (request, response, next) =>{
 
   if(exito){
-    daou.sumarPuntos(request.session.email, 50, (err) =>{
+    request.session.puntos += 50;
+    daou.actualizarPuntos(request.session.email, request.session.puntos, (err) =>{
       if (err){
-        next(err);
+        request.session.puntos -= 50;
+        next(err);return;
       }
       else {
-        app.locals.puntos += 50;
         setFlash(request, "Respuesta adivinada con exito");
+        response.redirect("preguntas.html");
       }
     })
   }
   else {
     setFlash(request, "Respuesta no adivinada, mala suerte");
+    response.redirect("preguntas.html");
   }
-  response.redirect("preguntas.html");
+
 })
 */
 
-app.get("/upload_photos.html", auth, (request, response, next)=>{
-  response.render("upload_photos");
+function havePoints(request, response, next){
+  if(request.session.puntos >= 100){
+    next();
+  }else{
+    setFlash(request, "No tienes puntos suficientes para subir una foto");
+    response.redirect("profile.html");
+  }
+}
+
+
+app.get("/upload_photos.html", auth, havePoints, (request, response, next)=>{
+  let mensaje = "";
+  mensaje = isMessage(request);
+  response.render("upload_photos", {message: mensaje});
 });
 
-app.post("/upload_photos", upload.single("foto"), auth, (request, response, next)=>{
-  daoi.setImg(request.file, request.session.email, (err, result)=>{
-    if (err) {
-      next(err);return;
-    }
-    if(result){
-      setFlash(request, "Foto subida con exito");
-    }else{
-      setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo");
-    }
-    response.redirect("profile.html");
-  })
+
+function theresImg(request, response, next){
+  if(request.file){
+    next();
+  }else{
+    setFlash(request, "No ha seleccionado ninguna imagen");
+    response.redirect("upload_photos.html");
+  }
+}
+
+app.post("/upload_photos", upload.single("foto"), auth, theresImg, (request, response, next)=>{
+    daoi.setImg(request.file, request.session.email, (err, result)=>{
+      if (err) {
+        next(err);return;
+      }
+      if(result){
+        request.session.puntos -= 100;
+        daou.actualizarPuntos(request.session.email, request.session.puntos, (err)=>{
+          if(err){
+            request.session.puntos += 100;
+            next(err);return;
+          }
+          setFlash(request, "Foto subida con exito");
+          response.redirect("profile.html");
+        })
+      }else{
+        setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo");
+        response.redirect("profile.html");
+      }
+    })
 });
 
 app.get("/fotos/:filename", (request, response, next)=>{

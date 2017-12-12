@@ -6,6 +6,7 @@
 html{
     font-family: "GloriaHallelujah";
     background-image: url(../img/Fondo.jpg);
+    background-repeat: repeat-x;
 }
 
 #logo{
@@ -172,10 +173,12 @@ li a{
 .fotos-perfil{
   margin-top: 40px;
   display: flex;
+  flex-wrap: wrap;
   border-style: dotted;
   border-color: #8904B1;
   border-radius: 20px;
   width: 50%;
   margin-left: auto;
   margin-right: auto;
+  padding: auto;
 }
