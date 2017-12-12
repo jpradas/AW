@@ -84,7 +84,7 @@ li a{
 
 #leftav{
     width: 250px;
-    height: 250px;
+    height: auto;
     margin-left: 20px;
     align-self: center;
 }
