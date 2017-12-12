@@ -1,0 +1,28 @@
+<%if(amigos.length !== 0){ %>
+
+  <div class="friends">
+    <ul class="lista-amigos">
+
+  <% amigos.forEach(amigo =>{ %>
+    <li>
+      <div class="izquierda">
+        <img class="img-perfil" src="/imagen_perfil/<%= amigo.email %>" alt="avatar">
+        <form action="profile.html" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="nombre">
+          <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
+        </form>
+      </div>
+      <div class="derecha">
+        <form action="/contestarPregunta" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="email">
+          <input id="boton" type="submit" value="Adivinar">
+        </form>
+      </div>
+    </li>
+    <% }) %>
+
+
+    </ul>
+  </div>
+
+<%  } %>
