@@ -8,10 +8,10 @@
 <body>
    <%- include cabecera %>
    <section class="contenido">
+       <%- include("flash") %>
         <div class="superior">
             <span>Preguntas seleccionadas aleatoriamente</span>
         </div>
-        <%- include("flash") %>
         <div class="preguntas">
           <ul class="list-preguntas">
             <%- include("preguntas_aleatorias") %>
