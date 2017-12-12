@@ -49,14 +49,36 @@ class DAOOpciones{
         })
     }
 
-    setOpciones(respuesta, verdadero, id, callback){
+    crearOpcion(textoOpcion, idPregunta, callback){
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          else{
+            connection.query(
+                "INSERT INTO " + config.database + ".opciones VALUES (NULL, ?, ?);",
+                [textoOpcion, idPregunta],
+                (err, result) =>{
+                    connection.release();
+                    if(err){
+                        callback(err);
+                    }
+                    else {
+                      callback(null, result);
+                    }
+                });
+          }
+        });
+    }
+
+    setRespuesta(idPregunta, user, idOpcion, callback){
       this.pool.getConnection((err, connection) => {
         if(err){
           callback(err);
         }
         else{
-          connection.query("INSERT INTO respuestas VALUES (?, ?, ?);",
-          [respuesta, verdadero, id],
+          connection.query("INSERT INTO preguntasusers VALUES (?, ?, ?);",
+          [idPregunta, user, idOpcion],
           (err, result) => {
             connection.release();
             if (err){

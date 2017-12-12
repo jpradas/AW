@@ -56,10 +56,8 @@ app.use(express.static(ficherosEstaticos));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
-//Necesito Exp
 app.use(cookieParser());
 app.use(middlewareSession);
-//Necesito Exp
 app.use(flash());
 
 
@@ -381,24 +379,48 @@ app.post("/pregunta_:id", (request, response, next) =>{
   });
 });
 
-
-
 app.post("/contestarPregunta", auth, (request, response, next) =>{
   daoO.getOpciones(request.body.idPregunta, (err, result) =>{
     if (err){
       next(err);
     }
     else {
-      //DE MOMENTO IDPREGUNTA NO SE USA, borrar en un futuro
       response.render("responderPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result});
     }
   })
 })
 
-app.post("/contestacion", (request, response) =>{
-  response.redirect("preguntas.html");
+app.post("/contestacion", (request, response, next) =>{
+  if (request.body.idOpcion === "otra"){
+    daoO.crearOpcion(request.body.otraResp, request.body.idPregunta, (err, result) =>{
+      if (err){
+        next(err);
+      }
+      else {
+        daoO.setRespuesta(request.body.idPregunta, request.session.email, result.insertId,(err) =>{
+          if (err){
+            next(err);
+          }
+          else {
+            setFlash(request, "Pregunta contestada con exito");
+            response.redirect("preguntas.html");
+          }
+        });
+      }
+    });
+  }
+  else{
+    daoO.setRespuesta(request.body.idPregunta, request.session.email, request.body.idOpcion,(err) =>{
+      if (err){
+        next(err);
+      }
+      else {
+        setFlash(request, "Pregunta contestada con exito");
+        response.redirect("preguntas.html");
+      }
+    });
+  }
 })
-
 
 app.post("/nuevaPregunta", auth, (request, response) =>{
     response.render("crearPregunta");
@@ -451,7 +473,6 @@ app.get("/fotos/:filename", (request, response, next)=>{
 app.get("/", (request, response, next)=>{
   response.redirect("login.html");
 })
-
 
 //manejador de error
 app.use((error, request, response, next) =>{

@@ -12,17 +12,18 @@
             <span><%= pregunta %></span>
         </div>
         <form action="/contestacion" method="post">
+          <input type="hidden" name="idPregunta" value="<%= idPregunta %>">
           <ul>
             <% if(opciones){
               opciones.forEach(opcion =>{ %>
                 <li>
-                  <input type="radio" name="opcion" value="<%= opcion.id %>">
+                  <input type="radio" name="idOpcion" value="<%= opcion.id %>">
                   <span> <%= opcion.opcion %> </span>
                   <!--<input type="hidden" name="opcionElegida" value -->
                </li>
                   <% })
                 } %>
-                <li> <input type="radio" name="opcion" value="otra"> <span> Otra: </span> <input name="otraResp" type="text"> </li>
+                <li> <input type="radio" name="idOpcion" value="otra"> <span> Otra: </span> <input name="otraResp" type="text"> </li>
           </ul>
           <input type="submit" value="Responder">
         </form>
