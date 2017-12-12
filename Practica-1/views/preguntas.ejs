@@ -8,7 +8,6 @@
 <body>
    <%- include cabecera %>
    <section class="contenido">
-       <%- include("flash") %>
         <div class="superior">
             <span>Preguntas seleccionadas aleatoriamente</span>
         </div>
@@ -23,7 +22,7 @@
             <span>¡Añade tus preguntas!</span>
         </div>
         <div class="nuevaPregunta">
-          <form method="GET" action="/nuevaPregunta">
+          <form method="POST" action="/nuevaPregunta">
             <input id="boton" type="submit" value="Crear nueva pregunta">
           </form>
         </div>
