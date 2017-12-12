@@ -166,8 +166,8 @@ li a{
 }
 
 .list-preguntas li{
-  list-style: none;
-  margin-top: 20px;
+  list-style: circle;
+  margin-top: 30px;
 }
 
 .list-preguntas{

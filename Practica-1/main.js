@@ -400,7 +400,7 @@ app.post("/contestacion", (request, response) =>{
 })
 
 
-app.post("/nuevaPregunta", auth, (request, response) =>{
+app.get("/nuevaPregunta", auth, (request, response) =>{
     response.render("crearPregunta");
 })
 
