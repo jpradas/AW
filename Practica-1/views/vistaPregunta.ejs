@@ -13,39 +13,11 @@
             <span><%= preg.texto %></span>
         </div>
 
-        <% if (!contestado){ %>
-          <div> No has contestado a esta pregunta </div>
-          <form method="POST" action="contestarPregunta">
-            <input type="hidden" name="idPregunta" value="<%= preg.id %>">
-            <input type="hidden" name="pregunta" value="<%= preg.texto %>">
-            <input id="boton" type="submit" value="Contestar Pregunta">
-          </form>
-        <% } %>
+        <%- include("noContestado") %>
 
-        <div> Los siguientes amigos han contestado a esta pregunta </div>
-        <div class="friends">
-          <ul class="lista-amigos">
-            <%if(amigos){
-              amigos.forEach(amigo =>{ %>
-                <li>
-                  <div class="izquierda">
-                    <img class="img-perfil" src="/imagen_perfil/<%= amigo.email %>" alt="avatar">
-                    <form action="profile.html" method="post">
-                      <input type="hidden" value="<%= amigo.email %>" name="nombre">
-                      <input id="boton-perfil" type="submit" value="<%= amigo.nombre_completo %>">
-                    </form>
-                  </div>
-                  <div class="derecha">
-                    <form action="/contestarPregunta" method="post">
-                      <input type="hidden" value="<%= amigo.email %>" name="email">
-                      <input id="boton" type="submit" value="Adivinar">
-                    </form>
-                  </div>
-                </li>
-                <% })
-              } %>
-            </ul>
-          </div>
+        <div class="span"> Los siguientes amigos han contestado a esta pregunta </div>
+
+        <%- include("amigos_adivinar") %>
 
    </section>
 
