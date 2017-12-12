@@ -146,6 +146,30 @@ class DAOPreguntas{
         });
       }
 
+      compararRespuestas(idPregunta, userComparar, idOpcion, callback){
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "SELECT * FROM " + config.database + ".preguntasusers WHERE id_pregunta=? AND user=? AND id_opcion=?;",
+                [idPregunta, userComparar, idOpcion],
+                (err, result)=>{
+                  connection.release();
+                    if(err){
+                        callback(err);
+                    }
+                    else{
+                      if(result.length > 0){
+                        callback(null, true);
+                      }
+                      else {
+                        callback(null, false);
+                      }
+                    }
+                });
+          });
+      }
 
 
 

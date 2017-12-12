@@ -13,6 +13,7 @@
         </div>
         <div class="preguntas">
           <form action="/adivinar" method="post">
+            <input type="hidden" name="amigo" value="<%= amigo %>">
             <input type="hidden" name="idPregunta" value="<%= idPregunta %>">
             <ul class="li">
               <%- include options %>

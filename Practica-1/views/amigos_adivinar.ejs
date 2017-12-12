@@ -14,10 +14,11 @@
       </div>
       <div class="derecha">
         <form action="/opcionesAdivinar" method="post">
+          <input type="hidden" value="<%= amigo.email %>" name="nombre">
           <input type="hidden" name="idPregunta" value="<%= preg.id %>">
           <input type="hidden" name="pregunta" value="<%= preg.texto %>">
           <input type="hidden" name="opcIniciales" value="<%= preg.opcionesIniciales %>">
-          <input type="hidden" name="opcContestada" value="<%= opcion.id %>">
+          <input type="hidden" name="opcContestada" value="<%= amigo.id_opcion %>">
           <input id="boton" type="submit" value="Adivinar">
         </form>
       </div>

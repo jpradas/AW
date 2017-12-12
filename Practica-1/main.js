@@ -462,35 +462,40 @@ app.post("/opcionesAdivinar", auth, (request, response, next) =>{
       next(err);
     }
     else {
-      response.render("adivinarPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result});
+      response.render("adivinarPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result, amigo: request.body.nombre});
     }
   })
 })
 
-/*
-app.post("/adivinar", (request, response, next) =>{
 
-  if(exito){
-    request.session.puntos += 50;
-    daou.actualizarPuntos(request.session.email, request.session.puntos, (err) =>{
-      if (err){
-        request.session.puntos -= 50;
-        next(err);return;
+app.post("/adivinar", (request, response, next) =>{
+  daoP.compararRespuestas(request.body.idPregunta, request.body.amigo, request.body.idOpcion, (err, exito) =>{
+    if (err){
+      next(err);
+    }
+    else {
+      if(exito){
+        request.session.puntos += 50;
+        daou.actualizarPuntos(request.session.email, request.session.puntos, (err) =>{
+          if (err){
+            request.session.puntos -= 50;
+            next(err);return;
+          }
+          else {
+            setFlash(request, "Respuesta adivinada con exito");
+            response.redirect("preguntas.html");
+          }
+        })
       }
       else {
-        setFlash(request, "Respuesta adivinada con exito");
+        setFlash(request, "Respuesta no adivinada, mala suerte");
         response.redirect("preguntas.html");
       }
-    })
-  }
-  else {
-    setFlash(request, "Respuesta no adivinada, mala suerte");
-    response.redirect("preguntas.html");
-  }
-
+    }
+  });
 })
-*/
 
+//HABRA QUE RESTAR LOS 100 puntos al subir la foto
 function havePoints(request, response, next){
   if(request.session.puntos >= 100){
     next();

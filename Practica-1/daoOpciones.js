@@ -63,7 +63,7 @@ class DAOOpciones{
                         connection.release();
                         callback(err);
                     }
-                    else{
+                    else if(num > 0){
                       connection.query(
                           "SELECT * FROM " + config.database +".opciones WHERE idPregunta=? AND NOT id=? ORDER BY RAND() LIMIT ?;",
                           [idPregunta, idOpcion, num],
@@ -73,15 +73,16 @@ class DAOOpciones{
                                   callback(err);
                               }
                               else{
-                                let opciones = [];
-                                opciones.push(opcion[0]);
                                 for (let i =0; i < result.length; i++){
-                                  opciones.push(result[i]);
+                                  opcion.push(result[i]);
                                 }
-                                  callback(null, opciones);
+                                  callback(null, opcion);
                               }
                           }
                       );
+                    }
+                    else {
+                      callback(null, opcion);
                     }
                 }
             );
