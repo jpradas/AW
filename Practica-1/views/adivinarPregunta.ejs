@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Responder Pregunta - FaceBluff</title>
+    <title>Adivinar Pregunta - FaceBluff</title>
     <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
 </head>
 <body>
@@ -12,11 +12,10 @@
             <span><%= pregunta %></span>
         </div>
         <div class="preguntas">
-          <form action="/contestacion" method="post">
+          <form action="/adivinar" method="post">
             <input type="hidden" name="idPregunta" value="<%= idPregunta %>">
             <ul class="li">
-              <%- include("options") %>
-              <li class="opts"> <input type="radio" name="idOpcion" value="otra"> <span> Otra: </span> <input id="otra" name="otraResp" type="text"> </li>
+              <%- include options %>
             </ul>
             <div class="butts">
               <input id="boton" type="submit" value="Responder">

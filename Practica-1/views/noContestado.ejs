@@ -1,5 +1,5 @@
+<div class="noContestado">
 <% if (!contestado){ %>
-  <div class="noContestado">
     <div class="span">
       <span>No has contestado a esta pregunta</span>
     </div>
@@ -10,5 +10,12 @@
         <input id="boton" type="submit" value="Contestar Pregunta">
       </form>
     </div>
-  </div>
-<% } %>
+<% } else { %>
+    <div class="span">
+      <span>Tu respuesta ha sido:</span>
+    </div>
+    <div class="span">
+      <span><%= opcion.opcion %></span>
+    </div>
+  <% } %>
+</div>

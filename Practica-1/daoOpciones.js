@@ -49,6 +49,46 @@ class DAOOpciones{
         })
     }
 
+    getOpcionesAdivinar(idPregunta, limite, idOpcion, callback) {
+      let num = limite - 1;
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "SELECT * FROM " + config.database +".opciones WHERE id=?;",
+                [idOpcion],
+                (err, opcion)=>{
+                    if(err){
+                        connection.release();
+                        callback(err);
+                    }
+                    else{
+                      connection.query(
+                          "SELECT * FROM " + config.database +".opciones WHERE idPregunta=? AND NOT id=? ORDER BY RAND() LIMIT ?;",
+                          [idPregunta, idOpcion, num],
+                          (err, result)=>{
+                              connection.release();
+                              if(err){
+                                  callback(err);
+                              }
+                              else{
+                                let opciones = [];
+                                opciones.push(opcion[0]);
+                                for (let i =0; i < result.length; i++){
+                                  opciones.push(result[i]);
+                                }
+                                  callback(null, opciones);
+                              }
+                          }
+                      );
+                    }
+                }
+            );
+
+        })
+    }
+
     crearOpcion(textoOpcion, idPregunta, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){

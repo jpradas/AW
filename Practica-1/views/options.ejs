@@ -1,10 +1,8 @@
 <% if(opciones){
   opciones.forEach(opcion =>{ %>
     <li class="opts">
-      <input type="radio" name="opcion" value="<%= opcion.id %>">
+      <input type="radio" name="idOpcion" value="<%= opcion.id %>">
       <span> <%= opcion.opcion %> </span>
-      <!--<input type="hidden" name="opcionElegida" value -->
    </li>
       <% })
     } %>
-    <li class="opts"> <input type="radio" name="opcion" value="otra"> <span> Otra: </span> <input id="otra" name="otraResp" type="text"> </li>

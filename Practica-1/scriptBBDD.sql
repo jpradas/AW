@@ -34,7 +34,8 @@ CREATE TABLE fotos(
 
 CREATE TABLE preguntas(
 	id int PRIMARY KEY AUTO_INCREMENT,
-	texto VARCHAR(100) NOT NULL
+	texto VARCHAR(100) NOT NULL,
+	opcionesIniciales int NOT NULL
 );
 
 CREATE TABLE opciones(

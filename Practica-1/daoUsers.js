@@ -52,6 +52,27 @@ class DAOusers{
         })
     }
 
+    sumarPuntos(user, puntos, callback){
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+          connection.query(
+              "UPDATE " + config.database +".users SET puntos=? WHERE email=?",
+              [puntos, user],
+              (err, rows)=>{
+                  connection.release();
+                  if(err){
+                      callback(err);
+                  }
+                  else{
+                    callback(null);
+                  }
+              }
+          );
+      })
+    }
+
     getUser(user, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){

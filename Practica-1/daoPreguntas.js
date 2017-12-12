@@ -95,7 +95,7 @@ class DAOPreguntas{
             if(err){
                 callback(err); return;
             }
-            connection.query("SELECT id_opcion FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=? AND preguntasusers.user=?;",
+            connection.query("SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta JOIN opciones ON preguntasusers.id_opcion=opciones.id WHERE preguntas.id=? AND preguntasusers.user=?;",
                 [id, user],
                 (err, result)=>{
                     connection.release();
@@ -104,7 +104,7 @@ class DAOPreguntas{
                     }
                     else{
                       if(result.length > 0){
-                          callback(null, true);
+                          callback(null, result[0]);
                       }
                       else{
                           callback(null, false);
@@ -122,8 +122,8 @@ class DAOPreguntas{
               callback(err); return;
           }
           connection.query(
-              "INSERT INTO " + config.database + ".preguntas VALUES (NULL, ?);",
-              [texto],
+              "INSERT INTO " + config.database + ".preguntas VALUES (NULL, ?, ?);",
+              [texto, opciones.length],
               (err, result)=>{
                   if(err){
                       callback(err);

@@ -355,22 +355,29 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
 
 app.post("/pregunta_:id", (request, response, next) =>{
   let idPregunta = request.params.id;
+  let contestado;
   daoP.getPregunta(idPregunta, (err, pregunta) =>{
     if (err){
       next(err);
     }
     else {
-      daoP.getPreguntaContestadaByUser(idPregunta, request.session.email, (err, contestado) =>{
+      daoP.getPreguntaContestadaByUser(idPregunta, request.session.email, (err, opcion) =>{
         if (err){
           next(err);
         }
         else {
+          if(opcion === false){
+              contestado = false;
+          }
+          else{
+              contestado = true;
+          }
             daoa.getAmigosContestanPregunta(request.session.email, idPregunta, (err, amigo) => {
                 if (err){
                   next(err);
                 }
                 else {
-                  response.render("vistaPregunta", {preg : pregunta, amigos: amigo, contestado: contestado});
+                  response.render("vistaPregunta", {preg : pregunta, amigos: amigo, contestado: contestado, opcion: opcion});
                 }
               });
             }
@@ -442,6 +449,39 @@ app.post("/crearPregunta", auth, (request, response, next) =>{
     }
   });
 })
+
+
+app.post("/opcionesAdivinar", auth, (request, response, next) =>{
+  daoO.getOpcionesAdivinar(request.body.idPregunta, request.body.opcIniciales, request.body.opcContestada, (err, result) =>{
+    if (err){
+      next(err);
+    }
+    else {
+      response.render("adivinarPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result});
+    }
+  })
+})
+
+/*
+app.post("/adivinar", (request, response, next) =>{
+
+  if(exito){
+    daou.sumarPuntos(request.session.email, 50, (err) =>{
+      if (err){
+        next(err);
+      }
+      else {
+        app.locals.puntos += 50;
+        setFlash(request, "Respuesta adivinada con exito");
+      }
+    })
+  }
+  else {
+    setFlash(request, "Respuesta no adivinada, mala suerte");
+  }
+  response.redirect("preguntas.html");
+})
+*/
 
 app.get("/upload_photos.html", auth, (request, response, next)=>{
   response.render("upload_photos");
