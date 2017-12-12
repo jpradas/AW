@@ -61,18 +61,20 @@ app.use(middlewareSession);
 app.use(flash());
 
 
-function setFlash(request, msg){
+function setFlash(request, msg, type){
   request.session.flashMsg = msg;
+  request.session.type = type;
 }
 
 function clearFlash(request){
   request.session.flashMsg = undefined;
+  request.session.type = undefined;
 }
 
 function isMessage(request){
   let mensaje = "";
   if(request.session.flashMsg !== undefined){
-    mensaje = request.session.flashMsg;
+    mensaje = { text: request.session.flashMsg, type: request.session.type }
     clearFlash(request);
   }
   return mensaje;
@@ -86,7 +88,7 @@ function userExists(request, response, next){
 		if(result){
 			next();
 		}else{//mostrar alerta de usuario no encontrado
-      setFlash(request, "Usuario inexistente en base de datos");
+      setFlash(request, "Usuario inexistente en base de datos", "danger");
       response.redirect("login.html");
       //response.render("login", {message: request.session.flashMsg});
 		}
@@ -100,7 +102,7 @@ function auth(request, response, next){
     next();
   }else{
     response.status(403);
-    setFlash(request, "Debes iniciar sesion para acceder a tu perfil");
+    setFlash(request, "Debes iniciar sesion para acceder a tu perfil", "danger");
     response.redirect("login.html");
     //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }
@@ -123,15 +125,14 @@ app.post("/login.html", userExists, initSession, (request, response, next) =>{ /
 });
 
 app.get("/login.html", (request, response, next)=>{
-  let mensaje = "";
-  mensaje = isMessage(request);
+  let mensaje = isMessage(request);
   response.render("login", { message: mensaje });
 })
 
 
 function datosCorrectos(request, response, next){
   if(request.body.email === "" || request.body.password === ""){
-    setFlash(request, "Es obligatorio rellenar el email y la contraseña");
+    setFlash(request, "Es obligatorio rellenar el email y la contraseña", "danger");
     response.redirect("new_user.html");
   }else{
     next();
@@ -144,7 +145,7 @@ function insertUser(request, response, next){
 			next(err);return;
 		}
 		if(result){//mostrar alerta de usuario existente
-      setFlash(request, "Usuario existente en base de datos");
+      setFlash(request, "Usuario existente en base de datos", "danger");
       response.redirect("login.html");
 		}else{
       let usuario = {email: request.body.email, password: request.body.password, nombre_completo: request.body.nombre_completo,
@@ -169,14 +170,13 @@ app.post("/new_user.html", upload.single("imagen_perfil"), datosCorrectos, inser
 });
 
 app.get("/new_user.html", (request, response, next)=>{
-  let mensaje = "";
-  mensaje = isMessage(request);
+  let mensaje = isMessage(request);
   response.render("new_user", { message: mensaje });
 });
 
 
 app.get("/profile.html", auth, (request, response, next) =>{
-  let fotos = "";let mensaje = "";
+  let fotos = "";
   daou.getUser(request.session.email, (err, user) =>{
 		if(err){
 			next(err);return;
@@ -188,7 +188,7 @@ app.get("/profile.html", auth, (request, response, next) =>{
       if(imgs.length !== 0){
         fotos = imgs;
       }
-      mensaje = isMessage(request);
+      let mensaje = isMessage(request);
       response.status(200);
       response.render("profile", { usuario: user, modificar: "si", message: mensaje, fotos: fotos});
     });
@@ -196,7 +196,7 @@ app.get("/profile.html", auth, (request, response, next) =>{
 })
 
 app.post("/profile.html", auth, (request, response, next)=>{
-  let fotos = "";let mensaje = "";
+  let fotos = "";
   daou.getUser(request.body.nombre, (err, user) =>{
 		if(err){
 			next(err);return;
@@ -208,7 +208,7 @@ app.post("/profile.html", auth, (request, response, next)=>{
       if(imgs.length !== 0){
         fotos = imgs;
       }
-      mensaje = isMessage(request);
+      let mensaje = isMessage(request);
       response.status(200);
       response.render("profile", { usuario: user, modificar: "no", message: mensaje, fotos: fotos});
     });
@@ -220,9 +220,9 @@ app.get("/amigos.html",auth, (request, response, next) =>{
     if(err){
       next(err);return;
     }
-    let amigos=[]; let pendientes=[]; let solicitudes=[]; let mensaje = "";
+    let amigos=[]; let pendientes=[]; let solicitudes=[];
     crearArrays(amigos, pendientes, solicitudes, rows);
-    mensaje = isMessage(request);
+    let mensaje = isMessage(request);
     response.status(200);
     response.render("list_amigos" , {amigos: amigos, pendientes: pendientes, solicitudes: solicitudes, message: mensaje});
   });
@@ -261,10 +261,10 @@ app.post("/solicitud.html", auth, (request, response, next)=>{
     }
     if(result === true){
       //TO DO insertar mensaje flash de peticion enviada
-      setFlash(request, "Peticion de amistad enviada");
+      setFlash(request, "Peticion de amistad enviada", "info");
     }
     else{
-      setFlash(request, "Oops, ha ocurrido algo raro. Error al enviar solicitud");
+      setFlash(request, "Oops, ha ocurrido algo raro. Error al enviar solicitud", "danger");
     }
     response.redirect("amigos.html");
   })
@@ -277,10 +277,10 @@ app.post("/confirmar_amigo.html", (request, response, next) =>{
         next(err);return;
       }
       if(result === true){
-        setFlash(request, "Amigo aceptado");
+        setFlash(request, "Amigo aceptado", "info");
         //mensaje flash de aceptado y volvemos a cargar Amigos  TO DO que la pagina de amigos proyecte mensajes flash
       }else{
-        setFlash(request, "Oops, algo raro ha ocurrido. Error al confirmar amigo");
+        setFlash(request, "Oops, algo raro ha ocurrido. Error al confirmar amigo", "danger");
         //mensaje flash de cagada y cargamos amigos de nuevo
       }
       response.redirect("amigos.html");
@@ -291,9 +291,9 @@ app.post("/confirmar_amigo.html", (request, response, next) =>{
         next(err);return;
       }
       if(result === true){
-        setFlash(request, "Amigo rechazado");
+        setFlash(request, "Amigo rechazado", "info");
       }else{
-        setFlash(request, "Oops, algo raro ha ocurrido. Error al rechazar amigo.");
+        setFlash(request, "Oops, algo raro ha ocurrido. Error al rechazar amigo.", "danger");
       }
       response.redirect("amigos.html");
     })
@@ -351,8 +351,7 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
     if (err){
       next(err);
     }
-    let mensaje ="";
-    mensaje = isMessage(request);
+    let mensaje = isMessage(request);
     response.status(200);
     response.render("preguntas", { preguntas : result, message: mensaje });
   });
@@ -414,7 +413,7 @@ app.post("/contestacion", (request, response, next) =>{
             next(err);
           }
           else {
-            setFlash(request, "Pregunta contestada con exito");
+            setFlash(request, "Pregunta contestada con exito", "info");
             response.redirect("preguntas.html");
           }
         });
@@ -427,7 +426,7 @@ app.post("/contestacion", (request, response, next) =>{
         next(err);
       }
       else {
-        setFlash(request, "Pregunta contestada con exito");
+        setFlash(request, "Pregunta contestada con exito", "info");
         response.redirect("preguntas.html");
       }
     });
@@ -449,7 +448,7 @@ app.post("/crearPregunta", auth, (request, response, next) =>{
       next(err);
     }
     else {
-      setFlash(request, "Pregunta creada con exito");
+      setFlash(request, "Pregunta creada con exito", "info");
       response.redirect("preguntas.html")
     }
   });
@@ -482,13 +481,13 @@ app.post("/adivinar", (request, response, next) =>{
             next(err);return;
           }
           else {
-            setFlash(request, "Respuesta adivinada con exito");
+            setFlash(request, "Respuesta adivinada con exito", "info");
             response.redirect("preguntas.html");
           }
         })
       }
       else {
-        setFlash(request, "Respuesta no adivinada, mala suerte");
+        setFlash(request, "Respuesta no adivinada, mala suerte", "info");
         response.redirect("preguntas.html");
       }
     }
@@ -500,15 +499,14 @@ function havePoints(request, response, next){
   if(request.session.puntos >= 100){
     next();
   }else{
-    setFlash(request, "No tienes puntos suficientes para subir una foto");
+    setFlash(request, "No tienes puntos suficientes para subir una foto", "danger");
     response.redirect("profile.html");
   }
 }
 
 
 app.get("/upload_photos.html", auth, havePoints, (request, response, next)=>{
-  let mensaje = "";
-  mensaje = isMessage(request);
+  let mensaje = isMessage(request);
   response.render("upload_photos", {message: mensaje});
 });
 
@@ -517,7 +515,7 @@ function theresImg(request, response, next){
   if(request.file){
     next();
   }else{
-    setFlash(request, "No ha seleccionado ninguna imagen");
+    setFlash(request, "No ha seleccionado ninguna imagen", "danger");
     response.redirect("upload_photos.html");
   }
 }
@@ -534,11 +532,11 @@ app.post("/upload_photos", upload.single("foto"), auth, theresImg, (request, res
             request.session.puntos += 100;
             next(err);return;
           }
-          setFlash(request, "Foto subida con exito");
+          setFlash(request, "Foto subida con exito", "info");
           response.redirect("profile.html");
         })
       }else{
-        setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo");
+        setFlash(request, "Oops, no se pudo insertar la imagen. Reintentalo", "danger");
         response.redirect("profile.html");
       }
     })

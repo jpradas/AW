@@ -99,7 +99,7 @@ li a{
     margin-top: 25px;
 }
 
-.flash{
+.flash-danger{
   display: flex;
   justify-content: center;
   width: 50%;
@@ -119,7 +119,7 @@ li a{
   border-radius: 10px;
 }
 
-.flash span{
+.flash-danger span{
   align-self: center;
   color: #B40404;
   font-size: 20px;

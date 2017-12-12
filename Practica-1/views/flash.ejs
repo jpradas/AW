@@ -1,5 +1,12 @@
-<% if(message) { %>
-        <div class="flash">
-          <span><%= message %></span>
+<% if(message) {
+    if(message.type === "danger"){
+  %>
+        <div class="flash-danger">
+          <span><%= message.text %></span>
         </div>
-<%  } %>
+<%  }else{ %>
+        <div class="flash-info">
+          <span><%= message.text %></span>
+        </div>
+  <% }
+} %>

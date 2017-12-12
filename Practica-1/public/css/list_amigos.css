@@ -174,7 +174,7 @@ li a{
   margin-top: -5px;
 }
 
-.flash{
+.flash-info{
   display: flex;
   justify-content: center;
   width: 50%;
@@ -194,9 +194,36 @@ li a{
   border-radius: 10px;
 }
 
-.flash span{
+.flash-info span{
   align-self: center;
   color: #8904B1;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.flash-danger{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 80px;
+  height: 50px;
+  background-color:  #F5A9A9;
+  background-image: url(../img/warning.png);
+  background-repeat: no-repeat;
+  background-position: 13% 65%;
+  border-left: 7px solid;
+  border-right: 7px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color:  #B40404;
+  border-radius: 10px;
+}
+
+.flash-danger span{
+  align-self: center;
+  color: #B40404;
   font-size: 20px;
   font-weight: bold;
 }
