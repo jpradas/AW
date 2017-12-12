@@ -11,13 +11,17 @@
         <div class="superior">
             <span><%= pregunta %></span>
         </div>
-        <form action="/contestacion" method="post">
-          <input type="hidden" name="idPregunta" value="<%= idPregunta %>">
-          <ul>
-            <%- include("options") %>
-          </ul>
-          <input id="boton" type="submit" value="Responder">
-        </form>
+        <div class="preguntas">
+          <form action="/contestacion" method="post">
+            <input type="hidden" name="idPregunta" value="<%= idPregunta %>">
+            <ul class="li">
+              <%- include("options") %>
+            </ul>
+            <div class="butts">
+              <input id="boton" type="submit" value="Responder">
+            </div>
+          </form>
+        </div>
    </section>
 </body>
 </html>

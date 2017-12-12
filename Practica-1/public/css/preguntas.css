@@ -166,12 +166,8 @@ li a{
 }
 
 .list-preguntas li{
-  list-style: none;
+  list-style: circle;
   margin-top: 30px;
-}
-
-.list-preguntas{
-  justify-content: center;
 }
 
 #preg{
@@ -208,5 +204,25 @@ li a{
 
 .pregunta{
   display: flex;
+  justify-content: flex-start;
+}
+
+.opts{
+  list-style: none;
+  font-size: 25px;
+}
+
+.preguntas form{
+  margin-top: 40px;
+  margin-left: 10%;
+}
+
+#otra{
+  width: 60%;
+}
+
+.butts{
+  display: flex;
   justify-content: center;
+  margin-left: -20px;
 }
