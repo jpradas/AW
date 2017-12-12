@@ -122,7 +122,7 @@ class DAOPreguntas{
               callback(err); return;
           }
           connection.query(
-              "INSERT INTO " + config.database + ".preguntas VALUES (NULL,?);",
+              "INSERT INTO " + config.database + ".preguntas VALUES (NULL, ?);",
               [texto],
               (err, result)=>{
                   if(err){
@@ -131,8 +131,8 @@ class DAOPreguntas{
                   else{
                     for (let i = 0; i < opciones.length; i++){
                       connection.query(
-                          "INSERT INTO " + config.database + ".opciones VALUES (NULL,?,?);",
-                          [opciones[i],result.insertId],
+                          "INSERT INTO " + config.database + ".opciones VALUES (NULL, ?, ?);",
+                          [opciones[i], result.insertId],
                           (err, result)=>{
                               if(err){
                                   callback(err);
