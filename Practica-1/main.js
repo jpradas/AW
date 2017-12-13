@@ -381,6 +381,7 @@ app.post("/pregunta_:id", (request, response, next) =>{
                   next(err);
                 }
                 else {
+                  //daoP.getAcierto( (err, acierta))
                   response.render("vistaPregunta", {preg : pregunta, amigos: amigo, contestado: contestado, opcion: opcion});
                 }
               });
@@ -473,23 +474,28 @@ app.post("/adivinar", (request, response, next) =>{
       next(err);
     }
     else {
-      if(exito){
-        request.session.puntos += 50;
-        daou.actualizarPuntos(request.session.email, request.session.puntos, (err) =>{
-          if (err){
-            request.session.puntos -= 50;
-            next(err);return;
-          }
-          else {
-            setFlash(request, "Respuesta adivinada con exito", "info");
-            response.redirect("preguntas.html");
-          }
-        })
-      }
-      else {
-        setFlash(request, "Respuesta no adivinada, mala suerte", "info");
-        response.redirect("preguntas.html");
-      }
+      daoP.setAdivinar(request.body.idPregunta,request.session.email ,request.body.amigo, exito, (err, result) => {
+        if (err){
+          next(err);
+        }
+        else if(exito){
+          request.session.puntos += 50;
+          daou.actualizarPuntos(request.session.email, request.session.puntos, (err) =>{
+            if (err){
+              request.session.puntos -= 50;
+              next(err);return;
+            }
+            else {
+              setFlash(request, "Respuesta adivinada con exito", "info");
+              response.redirect("preguntas.html");
+            }
+          })
+        }
+        else {
+          setFlash(request, "Respuesta no adivinada, mala suerte", "info");
+          response.redirect("preguntas.html");
+        }
+      });
     }
   });
 })

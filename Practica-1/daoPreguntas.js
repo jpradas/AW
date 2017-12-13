@@ -171,8 +171,30 @@ class DAOPreguntas{
           });
       }
 
+      setAdivinar(idPregunta, userAdivina, userRespondio, acierto, callback){
+        this.pool.getConnection((err, connection) =>{
+            if(err){
+                callback(err); return;
+            }
+            connection.query(
+                "INSERT INTO " + config.database + ".adivinar VALUES (?, ?, ?, ?);",
+                [idPregunta, userAdivina, userRespondio, acierto],
+                (err, result)=>{
+                  connection.release();
+                    if(err){
+                        callback(err);
+                    }
+                    else{
+                      callback(null);
+                    }
 
+                });
+          });
+      }
 
+      getAdivinar(callback){
+        
+      }
   }
 
 module.exports = {

@@ -169,6 +169,8 @@ class DAOusers{
             );
         })
     }
+
+    //adivinaUser(email, id_pregunta,)
 }
 
 function calcularEdad(fecha) {

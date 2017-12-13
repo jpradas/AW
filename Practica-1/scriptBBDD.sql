@@ -54,3 +54,13 @@ CREATE TABLE PreguntasUsers(
 	FOREIGN KEY (user) references users(email),
 	FOREIGN KEY (id_opcion) references opciones(id)
 );
+
+CREATE TABLE adivinar(
+		id_pregunta int not null,
+    user_adivina varchar(30) not null,
+		user_destino varchar(30) not null,
+    acierta tinyint(1) not null,
+    foreign key (id_pregunta) references preguntas(id),
+    foreign key (user_adivina) references users(email),
+		foreign key (user_destino) references users(email)
+);

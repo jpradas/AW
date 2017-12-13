@@ -35,21 +35,24 @@ class DAOamigos{
       })
     }
 
-    //Saca la lista de amigos del usuario que han contestado a la pregunta
+    //Saca la lista de amigos del usuario que han contestado a la pregunta y si han acertado la pregunta
     getAmigosContestanPregunta(user,idPregunta, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err); return;
         }
         connection.query(
-          "SELECT * FROM " + config.database + ".amigos as a JOIN " + config.database + ".users as u ON a.email_destino=u.email JOIN " + config.database + ".preguntasusers as p ON u.email=p.user WHERE a.email_origen=? AND id_pregunta=?",
+          //"SELECT * FROM " + config.database + ".amigos as a JOIN " + config.database + ".users as u ON a.email_origen=u.email JOIN " + config.database + ".preguntasusers as p ON a.email_destino=p.user LEFT JOIN " + config.database + ".adivinar as ad ON ad.user_respondio=a.email_destino AND ad.user_adivina=u.email WHERE a.email_origen=? AND p.id_pregunta=?;",
+          "SELECT * FROM amigos as a JOIN users as u ON a.email_destino=u.email JOIN preguntasusers as p ON a.email_destino=p.user LEFT JOIN adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen WHERE a.email_origen=? AND p.id_pregunta=?;",
           [user, idPregunta],
           (err, rows)=>{
-            connection.release();
+
             if(err){
+              connection.release();
               callback(err); return;
             }
             else{
+              connection.release();
               callback(null, rows);
             }
           }

@@ -13,6 +13,7 @@
         </form>
       </div>
       <div class="derecha">
+        <% if(amigo.acierta === null){ %>
         <form action="/opcionesAdivinar" method="post">
           <input type="hidden" value="<%= amigo.email %>" name="nombre">
           <input type="hidden" name="idPregunta" value="<%= preg.id %>">
@@ -21,6 +22,11 @@
           <input type="hidden" name="opcContestada" value="<%= amigo.id_opcion %>">
           <input id="boton" type="submit" value="Adivinar">
         </form>
+        <% } else if (amigo.acierta){ %>
+            <span>Has acertado</span>
+        <% } else{ %>
+            <span>Has fallado</span>
+        <% }%>
       </div>
     </li>
     <% }) %>
