@@ -192,9 +192,6 @@ class DAOPreguntas{
           });
       }
 
-      getAdivinar(callback){
-        
-      }
   }
 
 module.exports = {

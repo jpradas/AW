@@ -474,7 +474,7 @@ app.post("/adivinar", (request, response, next) =>{
       next(err);
     }
     else {
-      daoP.setAdivinar(request.body.idPregunta,request.session.email ,request.body.amigo, exito, (err, result) => {
+      daoP.setAdivinar(request.body.idPregunta, request.session.email, request.body.amigo, exito, (err, result) => {
         if (err){
           next(err);
         }

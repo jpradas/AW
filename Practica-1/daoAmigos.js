@@ -43,7 +43,7 @@ class DAOamigos{
         }
         connection.query(
           //"SELECT * FROM " + config.database + ".amigos as a JOIN " + config.database + ".users as u ON a.email_origen=u.email JOIN " + config.database + ".preguntasusers as p ON a.email_destino=p.user LEFT JOIN " + config.database + ".adivinar as ad ON ad.user_respondio=a.email_destino AND ad.user_adivina=u.email WHERE a.email_origen=? AND p.id_pregunta=?;",
-          "SELECT * FROM amigos as a JOIN users as u ON a.email_destino=u.email JOIN preguntasusers as p ON a.email_destino=p.user LEFT JOIN adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen WHERE a.email_origen=? AND p.id_pregunta=?;",
+          "SELECT * FROM "+ config.database +".amigos as a JOIN "+ config.database +".users as u ON a.email_destino=u.email JOIN "+ config.database +".preguntasusers as p ON a.email_destino=p.user LEFT JOIN "+ config.database +".adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen AND a.email_destino=ad.user_destino WHERE a.email_origen=? AND p.id_pregunta=?",
           [user, idPregunta],
           (err, rows)=>{
 
