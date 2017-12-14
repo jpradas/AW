@@ -16,7 +16,9 @@
             <img id="leftav" src="/imagen_perfil/<%= usuario.email %>">
             <ul class="datos">
                 <li>Nombre: <%= usuario.nombre_completo %></li>
-                <li>Edad: <%= usuario.edad %> años</li>
+                <% if(usuario.edad){ %>
+                  <li>Edad: <%= usuario.edad %> años</li>
+              <%  } %>
                 <li>Sexo: <%= usuario.sexo %></li>
                 <li>Puntos: <%= usuario.puntos %> puntos</li>
                 <%- include("modificar") %>

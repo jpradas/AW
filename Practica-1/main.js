@@ -139,6 +139,18 @@ function datosCorrectos(request, response, next){
   }
 }
 
+function calcularEdad(fecha) {
+    var hoy = new Date();
+    var cumpleanos = new Date(fecha);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+    return edad;
+}
+
 function insertUser(request, response, next){
   daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
 		if(err){
@@ -148,8 +160,20 @@ function insertUser(request, response, next){
       setFlash(request, "Usuario existente en base de datos", "danger");
       response.redirect("login.html");
 		}else{
+      let img; let edad;
+      if(request.file){
+        img = request.file.buffer;
+      }else{
+        img = null;
+      }
+      if(request.body.fecha_de_nacimiento){
+        edad = calcularEdad(request.body.fecha_de_nacimiento);
+      }
+      else{
+        edad = null;
+      }
       let usuario = {email: request.body.email, password: request.body.password, nombre_completo: request.body.nombre_completo,
-                      sexo: request.body.sexo, fecha_de_nacimiento: request.body.fecha_de_nacimiento, imagen_perfil: request.file }
+                      sexo: request.body.sexo, edad: edad, imagen_perfil: img }
       daou.setUser(usuario, (err, result)=>{
         if(err){
           next(err);return;

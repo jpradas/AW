@@ -97,10 +97,9 @@ class DAOusers{
             if(err){
                 callback(err); return;
             }
-            let edad = calcularEdad(user.fecha_de_nacimiento);
               connection.query(
                   "INSERT INTO "+ config.database +".users VALUES (?,?,?,?,?,?,0)",
-                  [user.email, user.password, user.nombre_completo, user.sexo, edad, user.imagen_perfil.buffer],
+                  [user.email, user.password, user.nombre_completo, user.sexo, user.edad, user.imagen_perfil],
                   (err, result) =>{
                       connection.release();
                       if(err){
@@ -171,18 +170,6 @@ class DAOusers{
     }
 
     //adivinaUser(email, id_pregunta,)
-}
-
-function calcularEdad(fecha) {
-    var hoy = new Date();
-    var cumpleanos = new Date(fecha);
-    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
-    var m = hoy.getMonth() - cumpleanos.getMonth();
-
-    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
-        edad--;
-    }
-    return edad;
 }
 
 module.exports = {
