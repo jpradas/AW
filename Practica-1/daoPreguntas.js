@@ -129,16 +129,23 @@ class DAOPreguntas{
                       callback(err);
                   }
                   else{
-                    for (let i = 0; i < opciones.length; i++){
-                      connection.query(
-                          "INSERT INTO " + config.database + ".opciones VALUES (NULL, ?, ?);",
-                          [opciones[i], result.insertId],
-                          (err, result)=>{
-                              if(err){
-                                  callback(err);
-                              }
-                          });
+                    let sql = "INSERT INTO " + config.database + ".opciones VALUES"
+                    let datos = [];
+                    for (let i = 0; i < opciones.length -1 ; i++){                        
+                        sql = sql.concat(" (NULL, ?, ?),");
+                        datos.push(opciones[i]);
+                        datos.push(result.insertId);
                     }
+                    sql = sql.concat(" (NULL, ?, ?);");
+                    datos.push(opciones[opciones.length -1]);
+                    datos.push(result.insertId);
+                    connection.query(sql,
+                        datos,
+                        (err, result)=>{
+                            if(err){
+                                callback(err);
+                            }
+                        });
                     connection.release();
                     callback(null);
                   }

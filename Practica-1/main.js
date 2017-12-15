@@ -16,6 +16,8 @@ const daoAmigos = require("./daoAmigos");
 const daoImagenes = require("./daoImg");
 const daoPreguntas = require("./daoPreguntas")
 const daoOpciones = require("./daoOpciones")
+const underscore = require("underscore");
+const expressValidator = require("express-validator");
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -59,6 +61,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(middlewareSession);
 app.use(flash());
+app.use(expressValidator());
 
 
 function setFlash(request, msg, type){
@@ -405,7 +408,6 @@ app.post("/pregunta_:id", (request, response, next) =>{
                   next(err);
                 }
                 else {
-                  //daoP.getAcierto( (err, acierta))
                   response.render("vistaPregunta", {preg : pregunta, amigos: amigo, contestado: contestado, opcion: opcion});
                 }
               });
@@ -459,16 +461,18 @@ app.post("/contestacion", (request, response, next) =>{
 })
 
 app.post("/nuevaPregunta", auth, (request, response) =>{
-    response.render("crearPregunta");
+  response.render("formPregunta");
 })
 
+app.post("/formPregunta", auth, (request, response) => {
+  response.render("crearPregunta", {num : request.body.numOpciones, preg: request.body.pregunta});
+});
+
 app.post("/crearPregunta", auth, (request, response, next) =>{
-  let opciones = [];
-  opciones.push(request.body.opcion1);
-  opciones.push(request.body.opcion2);
-  opciones.push(request.body.opcion3);
-  opciones.push(request.body.opcion4);
-  daoP.crearPregunta(request.body.pregunta, opciones, (err, id) => {
+  console.log(request.body.pregunta);
+  console.log(request.body.opcion);
+  daoP.crearPregunta(request.body.pregunta, request.body.opcion, (err, id) => {
+    console.log("no");
     if (err){
       next(err);
     }
@@ -477,6 +481,7 @@ app.post("/crearPregunta", auth, (request, response, next) =>{
       response.redirect("preguntas.html")
     }
   });
+  
 })
 
 
@@ -486,7 +491,8 @@ app.post("/opcionesAdivinar", auth, (request, response, next) =>{
       next(err);
     }
     else {
-      response.render("adivinarPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: result, amigo: request.body.nombre});
+      let opciones = underscore.shuffle(result);
+      response.render("adivinarPregunta", {idPregunta : request.body.idPregunta, pregunta: request.body.pregunta, opciones: opciones, amigo: request.body.nombre});
     }
   })
 })
@@ -524,7 +530,7 @@ app.post("/adivinar", (request, response, next) =>{
   });
 })
 
-//HABRA QUE RESTAR LOS 100 puntos al subir la foto
+
 function havePoints(request, response, next){
   if(request.session.puntos >= 100){
     next();

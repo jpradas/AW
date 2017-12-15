@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Pregunta - FaceBluff</title>
+    <link rel="stylesheet" type="text/css" href="./css/preguntas.css">
+</head>
+<body>
+   <%- include cabecera %>
+     <section class="contenido">
+        <div class="superior">
+            <span>Crear Pregunta</span>
+        </div>
+        <div class="formulario-pregunta">
+        <form action="/formPregunta" method="post">
+          <ul class="form">
+            <li>
+              <div class="izquierda">
+                Insertar pregunta:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="pregunta">
+              </div>
+            </li>
+            <li>
+              <div class="izquierda">
+                Insertar numero de opciones:
+              </div>
+              <div class="derecha">
+                <input id="inputs" type="text" name="numOpciones">
+              </div>
+            </li>
+          </ul>
+          <div class="botonSubmit">
+            <input class="boton" type="submit" value="Crear formulario pregunta">
+          </div>
+        </form>
+        </div>
+   </section>
+</body>
+</html>

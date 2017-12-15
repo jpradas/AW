@@ -14,49 +14,20 @@
         <div class="formulario-pregunta">
         <form action="/crearPregunta" method="post">
           <ul class="form">
-            <li>
-              <div class="izquierda">
-                Insertar pregunta:
-              </div>
-              <div class="derecha">
-                <input id="inputs" type="text" name="pregunta">
-              </div>
-            </li>
-            <li>
-              <div class="izquierda">
-                Insertar opcion 1:
-              </div>
-              <div class="derecha">
-                <input id="inputs" type="text" name="opcion1">
-              </div>
-            </li>
-            <li>
-              <div class="izquierda">
-                Insertar opcion 2:
-              </div>
-              <div class="derecha">
-                <input id="inputs" type="text" name="opcion2">
-              </div>
-            </li>
-            <li>
-              <div class="izquierda">
-                Insertar opcion 3:
-              </div>
-              <div class="derecha">
-                <input id="inputs" type="text" name="opcion3">
-              </div>
-            </li>
-            <li>
-              <div class="izquierda">
-                Insertar opcion 4:
-              </div>
-              <div class="derecha">
-                <input id="inputs" type="text" name="opcion4">
-              </div>
-            </li>
+            <input type="hidden" name="pregunta" value="<%= preg %>">
+            <% for (let i=0; i < num; i++){ %>
+              <li>
+                <div class="izquierda">
+                  Insertar opcion <%= (i+1) %>:
+                </div>
+                <div class="derecha">
+                  <input id="inputs" type="text" name="opcion[<%= i %>]">
+                </div>
+              </li>
+            <% } %>
           </ul>
           <div class="botonSubmit">
-            <input id="boton" type="submit" value="Crear pregunta">
+            <input class="boton" type="submit" value="Crear pregunta">
           </div>
         </form>
         </div>
