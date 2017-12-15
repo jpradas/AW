@@ -481,7 +481,7 @@ app.post("/crearPregunta", auth, (request, response, next) =>{
       response.redirect("preguntas.html")
     }
   });
-  
+
 })
 
 
@@ -522,7 +522,7 @@ app.post("/adivinar", (request, response, next) =>{
           })
         }
         else {
-          setFlash(request, "Respuesta no adivinada, mala suerte", "info");
+          setFlash(request, "Respuesta no adivinada, mala suerte", "danger");
           response.redirect("preguntas.html");
         }
       });

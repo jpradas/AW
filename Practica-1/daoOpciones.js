@@ -16,18 +16,10 @@ class DAOOpciones{
     }
 
     /**
-     * Determina si un determinado usuario aparece en la BD con la contraseña
-     * pasada como parámetro.
-     *
-     * Es una operación asíncrona, de modo que se llamará a la función callback
-     * pasando, por un lado, el objeto Error (si se produce, o null en caso contrario)
-     * y, por otro lado, un booleano indicando el resultado de la operación
-     * (true => el usuario existe, false => el usuario no existe o la contraseña es incorrecta)
-     * En caso de error error, el segundo parámetro de la función callback será indefinido.
-     *
-     * @param {string} id Identificador de la respuesta
-     * @param {function} callback Función que recibirá el objeto error y el resultado
-     */
+    * Extrae las opciones de una pregunta
+    * @param {Integer} idPregunta id de la pregunta de la cual extraer las opciones
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     getOpciones(idPregunta, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){

@@ -4,7 +4,7 @@ const config = require("./config");
 
 
 class DAOamigos{
-/**
+    /**
      * Inicializa el DAO de usuarios.
      *
      * @param {Pool} pool Pool de conexiones MySQL. Todas las operaciones
@@ -14,6 +14,11 @@ class DAOamigos{
         this.pool = pool;
     }
 
+    /**
+    * Extrae todos los amigos de un usuario
+    * @param {String} user Email del usuario del que extraemos sus amigos
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     getAmigos(user, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
@@ -35,24 +40,26 @@ class DAOamigos{
       })
     }
 
-    //Saca la lista de amigos del usuario que han contestado a la pregunta y si han acertado la pregunta
+    /**
+    * Saca la lista de amigos del usuario que han contestado a la pregunta y si han acertado la pregunta
+    * @param {String} user Email del usuario del que extraemos sus amigos
+    * @param {Integer} idPregunta id de la pregunta a la cual nos referimos
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     getAmigosContestanPregunta(user,idPregunta, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err); return;
         }
         connection.query(
-          //"SELECT * FROM " + config.database + ".amigos as a JOIN " + config.database + ".users as u ON a.email_origen=u.email JOIN " + config.database + ".preguntasusers as p ON a.email_destino=p.user LEFT JOIN " + config.database + ".adivinar as ad ON ad.user_respondio=a.email_destino AND ad.user_adivina=u.email WHERE a.email_origen=? AND p.id_pregunta=?;",
           "SELECT * FROM "+ config.database +".amigos as a JOIN "+ config.database +".users as u ON a.email_destino=u.email JOIN "+ config.database +".preguntasusers as p ON a.email_destino=p.user LEFT JOIN "+ config.database +".adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen AND a.email_destino=ad.user_destino WHERE a.email_origen=? AND p.id_pregunta=?",
           [user, idPregunta],
           (err, rows)=>{
-
+            connection.release();
             if(err){
-              connection.release();
               callback(err); return;
             }
             else{
-              connection.release();
               callback(null, rows);
             }
           }
@@ -60,6 +67,12 @@ class DAOamigos{
       })
     }
 
+    /**
+    * Inserta en BBDD la solicitud a un amigo
+    * @param {String} userOrigen Email del usuario que envia la peticion
+    * @param {String} userDestino Email del usuario que recibe la peticion
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     enviarSolicitud(userOrigen, userDestino, callback){
       this.pool.getConnection((err, connection) =>{
         if(err){
@@ -79,6 +92,12 @@ class DAOamigos{
       })
     }
 
+    /**
+    * Acepta una solicitud de amistad
+    * @param {String} userOrigen Email del usuario que envia la peticion
+    * @param {String} userDestino Email del usuario que recibe la peticion
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     aceptarSolicitud(userOrigen, userDestino, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
@@ -108,6 +127,12 @@ class DAOamigos{
       })
     }
 
+    /**
+    * Rechaza una solicitud de amistad
+    * @param {String} userOrigen Email del usuario que envia la peticion
+    * @param {String} userDestino Email del usuario que recibe la peticion
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     rechazarSolicitud(userOrigen, userDestino, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
