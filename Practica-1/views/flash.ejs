@@ -1,4 +1,4 @@
-<% if(message) {
+<% if((typeof message.text) === "string") {
     if(message.type === "danger"){
   %>
         <div class="flash-danger">
@@ -9,4 +9,13 @@
           <span><%= message.text %></span>
         </div>
   <% }
-} %>
+}else if(message.text !== undefined){ %>
+  <% if(message.type === "danger"){ %>
+    <% message.text.forEach(m => { %>
+            <div class="flash-danger">
+              <span><%= m.msg %> </span>
+              <span><%= m.value %></span>
+            </div>
+    <% }) %>
+    <% } %>
+<% } %>

@@ -4,8 +4,6 @@ INSERT INTO `users` (`email`, `contraseña`, `nombre_completo`, `sexo`, `edad`, 
 
 INSERT INTO preguntas (`id`, `texto`, `opcionesIniciales`) VALUES (1,'¿Quien es el mejor desarrollador de js?', 4);
 INSERT INTO preguntas (`id`, `texto`, `opcionesIniciales`) VALUES (2,'¿Quien es el mejor jugador de cr?', 2);
-INSERT INTO preguntas (`id`, `texto`, `opcionesIniciales`) VALUES (3,'¿Quien es el mejor desarrollador de bbdd?', 0);
-INSERT INTO preguntas (`id`, `texto`, `opcionesIniciales`) VALUES (4,'¿Quien es el peor profesor?', 0);
 
 INSERT INTO opciones (`id`, `opcion`, `idPregunta`) VALUES (1, 'carlos', 1);
 INSERT INTO opciones (`id`, `opcion`, `idPregunta`) VALUES (2,'juan', 1);

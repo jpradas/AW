@@ -132,7 +132,7 @@ app.get("/login.html", (request, response, next)=>{
   response.render("login", { message: mensaje });
 })
 
-
+/*
 function datosCorrectos(request, response, next){
   if(request.body.email === "" || request.body.password === ""){
     setFlash(request, "Es obligatorio rellenar el email y la contraseña", "danger");
@@ -141,6 +141,8 @@ function datosCorrectos(request, response, next){
     next();
   }
 }
+*/
+
 
 function calcularEdad(fecha) {
     var hoy = new Date();
@@ -155,44 +157,57 @@ function calcularEdad(fecha) {
 }
 
 function insertUser(request, response, next){
-  daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
-		if(err){
-			next(err);return;
-		}
-		if(result){//mostrar alerta de usuario existente
-      setFlash(request, "Usuario existente en base de datos", "danger");
+  request.checkBody("email","Dirección de correo no válida: ").isEmail();
+  request.checkBody("nombre_completo", "Nombre de usuario vacío").notEmpty();
+  request.checkBody("sexo", "Sexo vacío").notEmpty();
+  request.checkBody("password", "La contraseña no tiene entre 6 y 30 caracteres: ").isLength({ min: 6, max: 10 });
+  request.checkBody("fecha_de_nacimiento", "Fecha de nacimiento no válida").isBefore();
+  request.getValidationResult().then((result) => {
+    if (result.isEmpty()) {
+      daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
+    		if(err){
+    			next(err);return;
+    		}
+    		if(result){//mostrar alerta de usuario existente
+          setFlash(request, "Usuario existente en base de datos", "danger");
+          response.redirect("login.html");
+    		}else{
+          let img; let edad;
+          if(request.file){
+            img = request.file.buffer;
+          }else{
+            img = null;
+          }
+          if(request.body.fecha_de_nacimiento){
+            edad = calcularEdad(request.body.fecha_de_nacimiento);
+          }
+          else{
+            edad = null;
+          }
+          let usuario = {email: request.body.email, password: request.body.password, nombre_completo: request.body.nombre_completo,
+                          sexo: request.body.sexo, edad: edad, imagen_perfil: img }
+          daou.setUser(usuario, (err, result)=>{
+            if(err){
+              next(err);return;
+            }
+            if(result){
+              next();
+            }else{
+              next(err);return;
+            }
+          })
+    		}
+    	});
+    } else {
+      setFlash(request, result.array(), "danger");
       response.redirect("login.html");
-		}else{
-      let img; let edad;
-      if(request.file){
-        img = request.file.buffer;
-      }else{
-        img = null;
-      }
-      if(request.body.fecha_de_nacimiento){
-        edad = calcularEdad(request.body.fecha_de_nacimiento);
-      }
-      else{
-        edad = null;
-      }
-      let usuario = {email: request.body.email, password: request.body.password, nombre_completo: request.body.nombre_completo,
-                      sexo: request.body.sexo, edad: edad, imagen_perfil: img }
-      daou.setUser(usuario, (err, result)=>{
-        if(err){
-          next(err);return;
-        }
-        if(result){
-          next();
-        }else{
-          next(err);return;
-        }
-      })
-		}
-	});
+    }
+  });
 }
 
 
-app.post("/new_user.html", upload.single("imagen_perfil"), datosCorrectos, insertUser, initSession, (request, response, next) =>{
+app.post("/new_user.html", upload.single("imagen_perfil"), insertUser, initSession, (request, response, next) =>{
+  setFlash(request, "Usuario creado correctamente", "info");
   response.redirect("profile.html");
 });
 
@@ -216,6 +231,7 @@ app.get("/profile.html", auth, (request, response, next) =>{
         fotos = imgs;
       }
       let mensaje = isMessage(request);
+      console.log(mensaje.text);
       response.status(200);
       response.render("profile", { usuario: user, modificar: "si", message: mensaje, fotos: fotos});
     });
@@ -384,7 +400,7 @@ app.get("/preguntas.html", auth, (request, response, next) =>{
   });
 })
 
-app.post("/pregunta_:id", (request, response, next) =>{
+app.post("/pregunta_:id", auth, (request, response, next) =>{
   let idPregunta = request.params.id;
   let contestado;
   daoP.getPregunta(idPregunta, (err, pregunta) =>{
@@ -440,20 +456,29 @@ function vContestacion(request, response, next){
 
 app.post("/contestacion", vContestacion, (request, response, next) =>{
   if (request.body.idOpcion === "otra"){
-    daoO.crearOpcion(request.body.otraResp, request.body.idPregunta, (err, result) =>{
-      if (err){
-        next(err);
-      }
-      else {
-        daoO.setRespuesta(request.body.idPregunta, request.session.email, result.insertId,(err) =>{
+    request.checkBody("otraResp", "No has escrito otra respuesta").notEmpty();
+    request.getValidationResult().then((result) => {
+      if (result.isEmpty()) {
+        daoO.crearOpcion(request.body.otraResp, request.body.idPregunta, (err, result) =>{
           if (err){
             next(err);
           }
           else {
-            setFlash(request, "Pregunta contestada con exito", "info");
-            response.redirect("preguntas.html");
+            daoO.setRespuesta(request.body.idPregunta, request.session.email, result.insertId,(err) =>{
+              if (err){
+                next(err);
+              }
+              else {
+                setFlash(request, "Pregunta contestada con exito", "info");
+                response.redirect("preguntas.html");
+              }
+            });
           }
         });
+      }
+      else {
+        setFlash(request, result.array(), "danger");
+        response.redirect("preguntas.html");
       }
     });
   }
@@ -475,34 +500,63 @@ app.post("/nuevaPregunta", auth, (request, response) =>{
 })
 
 app.post("/formPregunta", auth, (request, response) => {
-  response.render("crearPregunta", {num : request.body.numOpciones, preg: request.body.pregunta});
+  request.checkBody("numOpciones", "No has metido un entero para las opciones: ").isInt();
+  request.checkBody("pregunta", "Pregunta vacía").notEmpty();
+  request.getValidationResult().then((result) => {
+    if (result.isEmpty()) {
+        response.render("crearPregunta", {num : request.body.numOpciones, preg: request.body.pregunta});
+    } else {
+      setFlash(request, result.array(), "danger");
+      response.redirect("preguntas.html");
+    }
+  });
 });
 
-app.post("/crearPregunta", auth, (request, response, next) =>{
-  daoP.crearPregunta(request.body.pregunta, request.body.opcion.length, (err, id) => {
-    if (err){
-      next(err);return;
+function validarOpciones(request, response, next){
+  let mensaje = "Las siguientes opciones estan vacias: ";
+  let error = false;
+  for (let i = 0; i < request.body.opcion.length - 1; i++){
+    if (request.body.opcion[i] === ""){
+      mensaje = mensaje.concat(i).concat(", ");
+      error = true;
     }
-    let sql = "INSERT INTO " + config.database + ".opciones VALUES"
-    let datos = [];
-    for (let i = 0; i < request.body.opcion.length -1 ; i++){
-        sql = sql.concat(" (NULL, ?, ?),");
-        datos.push(request.body.opcion[i]);
-        datos.push(id);
-    }
-    sql = sql.concat(" (NULL, ?, ?);");
-    datos.push(request.body.opcion[request.body.opcion.length -1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
-    datos.push(id);
+  }
+  if(error){
+    mensaje = mensaje.concat(" pregunta no creada");
+    setFlash(request, mensaje, "danger");
+    response.redirect("preguntas.html");
+  }else{
+    next();
+  }
+}
 
-    daoO.setOpciones(sql, datos, (err, result)=>{
-      if(err){
+app.post("/crearPregunta", auth, validarOpciones, (request, response, next) =>{
+    daoP.crearPregunta(request.body.pregunta, request.body.opcion.length, (err, id) => {
+      if (err){
         next(err);return;
       }
-      setFlash(request, "Pregunta creada con exito", "info");
-      response.redirect("preguntas.html")
-    })
-  });
-})
+      let sql = "INSERT INTO " + config.database + ".opciones VALUES"
+      let datos = [];
+      for (let i = 0; i < request.body.opcion.length - 1 ; i++){
+          sql = sql.concat(" (NULL, ?, ?),");
+          datos.push(request.body.opcion[i]);
+          datos.push(id);
+      }
+      sql = sql.concat(" (NULL, ?, ?);");
+      datos.push(request.body.opcion[request.body.opcion.length - 1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
+      datos.push(id);
+
+      daoO.setOpciones(sql, datos, (err, result)=>{
+        if(err){
+          next(err);return;
+        }
+        setFlash(request, "Pregunta creada con exito", "info");
+        response.redirect("preguntas.html")
+      })
+    });
+});
+
+
 
 
 app.post("/opcionesAdivinar", auth, (request, response, next) =>{
@@ -518,7 +572,7 @@ app.post("/opcionesAdivinar", auth, (request, response, next) =>{
 })
 
 
-app.post("/adivinar", (request, response, next) =>{
+app.post("/adivinar", auth, vContestacion, (request, response, next) =>{
   daoP.compararRespuestas(request.body.idPregunta, request.body.amigo, request.body.idOpcion, (err, exito) =>{
     if (err){
       next(err);
