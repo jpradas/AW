@@ -62,35 +62,34 @@ li a{
 }
 
 .formulario{
+    padding-top: 50px;
     list-style: none;
     color: white;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-.f_email{
-    display:flex;
-    padding-top: 50px;
-    padding-right: 25px;
+.formulario li{
+  display: flex;
+  margin-bottom: 15px;
 }
 
-.f_pass{
-    display:flex;
-    padding-top: 10px;
-    padding-right: 25px;
+.izq{
+  display: flex;
+  width: 15%;
+  height: 20px;
+  margin-right: 20px;
+  justify-content: flex-end;
+  font-size: 18px;
 }
 
-.input_p{
-    width: 80%;
-    height: 15px;
-    flex-grow: 2;
-    margin-left: 42px;
+.der{
+  flex-grow: 2;
+  margin-right: 40px;
 }
 
-.input_e{
-    width: 80%;
-    height: 15px;
-    flex-grow: 2;
-    margin-left: 80px;
+.der input{
+  width: 100%;
+  border-radius: 5px;
 }
 
 .conectar{
@@ -126,7 +125,7 @@ li a{
   font-weight: bold;
 }
 
-#boton{
+.boton{
     font-family: "GloriaHallelujah";
     background-color: #CC2EFA;
     font-weight: bold;

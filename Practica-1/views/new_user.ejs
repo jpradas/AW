@@ -26,34 +26,56 @@
         <form action="new_user.html" method="post" enctype="multipart/form-data">
             <input type="hidden" name="tipo" value="newuser">
             <ul class="formulario">
-                <li class="f_email">
+                <li>
+                  <div class="izq">
                     <span>Email</span>
-                    <input class="input_e" type="text" name="email">
+                  </div>
+                  <div class="der">
+                    <input type="text" name="email">
+                  </div>
                 </li>
-                <li class="f_pass">
+                <li>
+                  <div class="izq">
                     <span>Contraseña</span>
-                    <input class="input_p" type="password" name="password">
+                  </div>
+                  <div class="der">
+                    <input type="password" name="password">
+                  </div>
                 </li>
-                <li class="f_nombre">
+                <li>
+                  <div class="izq">
                     <span>Nombre completo</span>
-                    <input class="input_n" type="text" name="nombre_completo">
+                  </div>
+                  <div class="der">
+                    <input type="text" name="nombre_completo">
+                  </div>
                 </li>
-                <li class="f_sexo">
+                <li>
+                  <div class="izq">
                     <span>Sexo</span>
-                    <input class= "input_s" type="radio" name="sexo" value="Hombre"> Masculino
+                  </div class="radios">
+                    <input type="radio" name="sexo" value="Hombre"> Masculino
                     <input type="radio" name="sexo" value="Mujer"> Femenino
                     <input type="radio" name="sexo" value="Otro"> Otro
                 </li>
-                <li class="f_fnacimiento">
+                <li>
+                  <div class="izq">
                     <span>Fecha de nacimiento</span>
-                    <input class="input_fn" type="date" name="fecha_de_nacimiento">
+                  </div>
+                  <div class="der">
+                    <input type="date" name="fecha_de_nacimiento">
+                  </div>
                 </li>
-                <li class="f_imagen">
+                <li>
+                  <div class="izq">
                     <span>Imagen de perfil</span>
-                    <input class="input_img" type="file" name="imagen_perfil" value="Seleccionar archivo">
+                  </div>
+                  <div class="der">
+                    <input type="file" name="imagen_perfil" value="Seleccionar archivo">
+                  </div>
                 </li>
                 <li class="conectar">
-                    <input id="boton" type="submit" value="Crear usuario">
+                    <input class="boton" type="submit" value="Crear usuario">
                 </li>
             </ul>
         </form>

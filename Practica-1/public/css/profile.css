@@ -74,22 +74,81 @@ li a{
     width: 50%;
 }
 
+.datos{
+  margin-left: auto;
+  width: 70%;
+}
+
 .datos li{
+    display: flex;
+    margin-bottom: 15px;
     list-style: none;
     color: white;
-    margin-left: 50px;
     font-size: 25px;
     font-weight: bold;
 }
 
-#leftav{
+.datos-modificar{
+  margin-left: auto;
+  width: 100%;
+}
+
+.datos-modificar li{
+  display: flex;
+  margin-bottom: 15px;
+  list-style: none;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.butt{
+  display:flex;
+  justify-content: center;
+}
+
+.file-img{
+  margin-left: 10px;
+}
+
+.izquierda{
+  display: flex;
+  width: 45%;
+  height: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  justify-content:flex-end;
+  font-size: 18px;
+}
+
+.izq{
+  display: flex;
+  width: 45%;
+  height: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  justify-content:flex-end;
+  font-size: 18px;
+}
+
+.der{
+  flex-grow: 2;
+  margin-right: 40px;
+}
+
+.der input{
+  width: 100%;
+  border-radius: 5px;
+}
+
+.leftav{
     width: 220px;
     height: auto;
     margin-left: 20px;
     align-self: center;
 }
 
-#boton{
+.boton{
     font-family: "GloriaHallelujah";
     background-color: #CC2EFA;
     font-weight: bold;
@@ -101,11 +160,6 @@ li a{
     border-radius: 20px;
     margin-top: 20px;
     margin-left: 20px;
-}
-
-.butt{
-  display: flex;
-  justify-content: center;
 }
 
 .cuerpo{
@@ -121,26 +175,6 @@ li a{
   height: 90px;
 }
 
-.campo{
-  display: flex;
-  justify-content: space-around;
-}
-
-.izquierda{
-  display: flex;
-  align-items: center;
-}
-
-.derecha{
-  align-self: center;
-  margin-left: auto;
-  width: 55%;
-  margin-right: 40px;
-}
-
-#inputs{
-  width: 100%;
-}
 
 .flash-danger{
   display: flex;
@@ -196,7 +230,7 @@ li a{
   font-weight: bold;
 }
 
-#imagen{
+.imagen{
   width: 250px;
   height: auto;
   margin: 10px;

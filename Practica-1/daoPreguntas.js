@@ -123,29 +123,20 @@ class DAOPreguntas{
         })
     }
 
-    crearPregunta(texto, opciones, sql, datos, callback){
+    crearPregunta(texto, opciones, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
               callback(err); return;
           }
           connection.query(
               "INSERT INTO " + config.database + ".preguntas VALUES (NULL, ?, ?);",
-              [texto, opciones.length],
+              [texto, opciones],
               (err, result)=>{
+                  connection.release();
                   if(err){
-                      callback(err);
+                    callback(err);
                   }
-                  else{
-                    connection.query(sql,
-                        datos,
-                        (err, result)=>{
-                            if(err){
-                                callback(err);
-                            }
-                        });
-                    connection.release();
-                    callback(null);
-                  }
+                  callback(null, result.insertId);
               });
         });
       }

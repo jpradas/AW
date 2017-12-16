@@ -62,74 +62,34 @@ li a{
 }
 
 .formulario{
+    padding-top: 50px;
     list-style: none;
     color: white;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-.f_email{
-    display:flex;
-    padding-top: 50px;
-    padding-right: 25px;
+.formulario li{
+  display: flex;
+  margin-bottom: 15px;
 }
 
-.f_pass{
-    display:flex;
-    padding-top: 10px;
-    padding-right: 25px;
+.izq{
+  display: flex;
+  width: 20%;
+  height: 20px;
+  margin-right: 20px;
+  justify-content: flex-end;
+  font-size: 18px;
 }
 
-.f_nombre{
-    display:flex;
-    padding-top: 10px;
-    padding-right: 25px;
+.der{
+  flex-grow: 2;
+  margin-right: 40px;
 }
 
-.f_fnacimiento{
-    display:flex;
-    padding-top: 15px;
-    padding-right: 25px;
-}
-
-.input_e{
-    width: 80%;
-    height: 20px;
-    flex-grow: 2;
-    margin-left: 118px;
-}
-
-.input_p{
-    width: 80%;
-    height: 20px;
-    flex-grow: 2;
-    margin-left: 80px;
-}
-
-.input_n{
-    width: 70%;
-    height: 20px;
-    flex-grow: 2;
-    margin-left: 40px;
-}
-.f_sexo{
-     padding-top: 10px;
-}
-.input_s{
-    margin-left: 120px;
-}
-
-.input_fn{
-    width: 20%;
-    height: 20px;
-    margin-left: 22px;
-}
-
-.input_img{
-    margin-left: 47px;
-}
-
-.f_imagen{
-  margin-top: 10px;
+.der input{
+  width: 100%;
+  border-radius: 5px;
 }
 
 .conectar{
@@ -138,7 +98,7 @@ li a{
     margin-top: 25px;
 }
 
-#boton{
+.boton{
     font-family: "GloriaHallelujah";
     background-color: #CC2EFA;
     font-weight: bold;

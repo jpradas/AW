@@ -42,6 +42,31 @@ class DAOOpciones{
     }
 
     /**
+    * Inserta las opciones de una pregunta
+    * @param {String} query query que realizar en base de datos
+    * @param {Array} datos datos a insertar en la query parametrizada
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
+    setOpciones(query, datos, callback){
+      this.pool.getConnection((err, connection)=>{
+        if(err){
+          callback(err);return;
+        }
+        connection.query(
+          query,
+          datos,
+          (err, result)=>{
+            connection.release();
+            if(err){
+              callback(err);return;
+            }
+            callback(null, true);
+          }
+        )
+      })
+    }
+
+    /**
     * Extrae opciones para tratar de adivinar la pregunta
     * @param {Integer} idPregunta id de la pregunta de la cual extraer las opciones
     * @param {Integer} limite numero de opciones a visualizar
@@ -60,7 +85,7 @@ class DAOOpciones{
                 (err, opcion)=>{
                     if(err){
                         connection.release();
-                        callback(err);
+                        callback(err); return;
                     }
                     else if(num > 0){
                       connection.query(
@@ -69,7 +94,7 @@ class DAOOpciones{
                           (err, result)=>{
                               connection.release();
                               if(err){
-                                  callback(err);
+                                  callback(err); return;
                               }
                               else{
                                 for (let i =0; i < result.length; i++){

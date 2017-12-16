@@ -479,26 +479,29 @@ app.post("/formPregunta", auth, (request, response) => {
 });
 
 app.post("/crearPregunta", auth, (request, response, next) =>{
-  let sql = "INSERT INTO " + config.database + ".opciones VALUES"
-  let datos = [];
-  for (let i = 0; i < request.body.opcion.length -1 ; i++){
-      sql = sql.concat(" (NULL, ?, ?),");
-      datos.push(opciones[i]);
-      datos.push(result.insertId);
-  }
-  sql = sql.concat(" (NULL, ?, ?);");
-  datos.push(opciones[request.body.opcion.length -1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
-  datos.push(result.insertId);
-  daoP.crearPregunta(request.body.pregunta, request.body.opcion, (err, id) => {
+  daoP.crearPregunta(request.body.pregunta, request.body.opcion.length, (err, id) => {
     if (err){
-      next(err);
+      next(err);return;
     }
-    else {
+    let sql = "INSERT INTO " + config.database + ".opciones VALUES"
+    let datos = [];
+    for (let i = 0; i < request.body.opcion.length -1 ; i++){
+        sql = sql.concat(" (NULL, ?, ?),");
+        datos.push(request.body.opcion[i]);
+        datos.push(id);
+    }
+    sql = sql.concat(" (NULL, ?, ?);");
+    datos.push(request.body.opcion[request.body.opcion.length -1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
+    datos.push(id);
+
+    daoO.setOpciones(sql, datos, (err, result)=>{
+      if(err){
+        next(err);return;
+      }
       setFlash(request, "Pregunta creada con exito", "info");
       response.redirect("preguntas.html")
-    }
+    })
   });
-
 })
 
 

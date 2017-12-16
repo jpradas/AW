@@ -12,42 +12,46 @@
             <span>Tu perfil</span>
         </div>
         <div class="info-perfil">
-            <img id="leftav" src="/imagen_perfil/<%= usuario.email %>">
-            <ul class="datos">
-              <form action="/modify_profile.html" method="post" enctype="multipart/form-data">
-                <li class="campo">
-                  <div class="izquierda">
+            <img class="leftav" src="/imagen_perfil/<%= usuario.email %>">
+            <form action="/modify_profile.html" method="post" enctype="multipart/form-data">
+              <ul class="datos-modificar">
+                <li>
+                  <div class="izq">
                     <span>Nombre</span>
                   </div>
-                  <div class="derecha">
-                    <input id="inputs" type="text" name="nombre" value="<%= usuario.nombre_completo %>">
+                  <div class="der">
+                    <input type="text" name="nombre" value="<%= usuario.nombre_completo %>">
                   </div>
                 </li>
-                <li class="campo">
-                  <div class="izquierda">
+                <li>
+                  <div class="izq">
                     <span>Edad</span>
                   </div>
-                  <div class="derecha">
-                    <input id="inputs" type="number" name="edad" value=<%= usuario.edad %>>
+                  <div class="der">
+                    <input type="number" name="edad" value=<%= usuario.edad %>>
                   </div>
                 </li>
-                <li class="campo">
-                  <div class="izquierda">
+                <li>
+                  <div class="izq">
                     <span>Sexo</span>
                   </div>
-                  <div class="derecha">
-                    <input id="inputs" type="text" name="sexo" value=<%= usuario.sexo %>>
+                  <div class="der">
+                    <input type="text" name="sexo" value=<%= usuario.sexo %>>
                   </div>
                 </li>
-                <li class="f_imagen">
+                <li>
+                  <div class="izq">
                     <span>Imagen de perfil</span>
-                    <input class="input_img" type="file" name="imagen_perfil" value="Seleccionar archivo">
+                  </div>
+                  <div class="file-img">
+                    <input type="file" name="imagen_perfil" value="Seleccionar archivo">
+                  </div>
                 </li>
                 <li class="butt">
-                  <input id="boton" type="submit" value="Aceptar">
+                  <input class="boton" type="submit" value="Aceptar">
                 </li>
-                </form>
-            </ul>
+              </ul>
+            </form>
         </div>
    </section>
 
