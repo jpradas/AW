@@ -93,7 +93,6 @@ function userExists(request, response, next){
 		}else{//mostrar alerta de usuario no encontrado
       setFlash(request, "Usuario inexistente en base de datos", "danger");
       response.redirect("login.html");
-      //response.render("login", {message: request.session.flashMsg});
 		}
 	});
 }
@@ -107,7 +106,6 @@ function auth(request, response, next){
     response.status(403);
     setFlash(request, "Debes iniciar sesion para acceder a tu perfil", "danger");
     response.redirect("login.html");
-    //response.render("login", {message: "Debes iniciar sesión para acceder a tu perfil"});
   }
 }
 
@@ -123,7 +121,7 @@ function initSession(request, response, next){
     });
 }
 
-app.post("/login.html", userExists, initSession, (request, response, next) =>{ //necesitamos un middleware intermedio que compruebe los datos de sesión para saber si estamos logueados
+app.post("/login.html", userExists, initSession, (request, response, next) =>{
   response.redirect("profile.html");
 });
 
@@ -131,17 +129,6 @@ app.get("/login.html", (request, response, next)=>{
   let mensaje = isMessage(request);
   response.render("login", { message: mensaje });
 })
-
-/*
-function datosCorrectos(request, response, next){
-  if(request.body.email === "" || request.body.password === ""){
-    setFlash(request, "Es obligatorio rellenar el email y la contraseña", "danger");
-    response.redirect("new_user.html");
-  }else{
-    next();
-  }
-}
-*/
 
 
 function calcularEdad(fecha) {
@@ -543,7 +530,7 @@ app.post("/crearPregunta", auth, validarOpciones, (request, response, next) =>{
           datos.push(id);
       }
       sql = sql.concat(" (NULL, ?, ?);");
-      datos.push(request.body.opcion[request.body.opcion.length - 1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
+      datos.push(request.body.opcion[request.body.opcion.length - 1]);
       datos.push(id);
 
       daoO.setOpciones(sql, datos, (err, result)=>{
@@ -555,8 +542,6 @@ app.post("/crearPregunta", auth, validarOpciones, (request, response, next) =>{
       })
     });
 });
-
-
 
 
 app.post("/opcionesAdivinar", auth, (request, response, next) =>{

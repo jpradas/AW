@@ -169,7 +169,6 @@ class DAOusers{
         })
     }
 
-    //adivinaUser(email, id_pregunta,)
 }
 
 module.exports = {

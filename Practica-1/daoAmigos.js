@@ -52,7 +52,7 @@ class DAOamigos{
           callback(err); return;
         }
         connection.query(
-          "SELECT * FROM "+ config.database +".amigos as a JOIN "+ config.database +".users as u ON a.email_destino=u.email JOIN "+ config.database +".preguntasusers as p ON a.email_destino=p.user LEFT JOIN "+ config.database +".adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen AND a.email_destino=ad.user_destino WHERE a.email_origen=? AND p.id_pregunta=?",
+          "SELECT * FROM "+ config.database +".amigos as a JOIN "+ config.database +".users as u ON a.email_destino=u.email JOIN "+ config.database +".preguntasusers as p ON a.email_destino=p.user LEFT JOIN "+ config.database +".adivinar as ad ON ad.id_pregunta=p.id_pregunta AND ad.user_adivina=a.email_origen AND a.email_destino=ad.user_destino WHERE a.email_origen=? AND p.id_pregunta=? AND a.confirmado=1",
           [user, idPregunta],
           (err, rows)=>{
             connection.release();
