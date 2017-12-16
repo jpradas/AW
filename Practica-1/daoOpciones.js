@@ -41,6 +41,13 @@ class DAOOpciones{
         })
     }
 
+    /**
+    * Extrae opciones para tratar de adivinar la pregunta
+    * @param {Integer} idPregunta id de la pregunta de la cual extraer las opciones
+    * @param {Integer} limite numero de opciones a visualizar
+    * @param {Integer} idOpcion id de la opcion correcta
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     getOpcionesAdivinar(idPregunta, limite, idOpcion, callback) {
       let num = limite - 1;
         this.pool.getConnection((err, connection) =>{
@@ -82,6 +89,12 @@ class DAOOpciones{
         })
     }
 
+    /**
+    * Inserta una nueva opcion creada por el usuario
+    * @param {String} textoOpcion string con la nueva opcion
+    * @param {Integer} idPregunta id de la pregunta a la cual se añade la nueva opcion
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     crearOpcion(textoOpcion, idPregunta, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
@@ -104,6 +117,13 @@ class DAOOpciones{
         });
     }
 
+    /**
+    * Inserta la respuesta dada por el usuario a una pregunta
+    * @param {Integer} idPregunta id de la pregunta que se ha contestado
+    * @param {String} user email de usuario que ha contestado
+    * @param {Integer} idOpcion id de la opcion elegida
+    * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
+    */
     setRespuesta(idPregunta, user, idOpcion, callback){
       this.pool.getConnection((err, connection) => {
         if(err){

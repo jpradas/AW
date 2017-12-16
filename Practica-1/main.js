@@ -428,7 +428,17 @@ app.post("/contestarPregunta", auth, (request, response, next) =>{
   })
 })
 
-app.post("/contestacion", (request, response, next) =>{
+function vContestacion(request, response, next){
+  if(request.body.idOpcion){
+    next();
+  }
+  else{
+    setFlash(request, "No elegiste ninguna opcion", "danger");
+    response.redirect("preguntas.html");
+  }
+}
+
+app.post("/contestacion", vContestacion, (request, response, next) =>{
   if (request.body.idOpcion === "otra"){
     daoO.crearOpcion(request.body.otraResp, request.body.idPregunta, (err, result) =>{
       if (err){
@@ -469,10 +479,17 @@ app.post("/formPregunta", auth, (request, response) => {
 });
 
 app.post("/crearPregunta", auth, (request, response, next) =>{
-  console.log(request.body.pregunta);
-  console.log(request.body.opcion);
+  let sql = "INSERT INTO " + config.database + ".opciones VALUES"
+  let datos = [];
+  for (let i = 0; i < request.body.opcion.length -1 ; i++){
+      sql = sql.concat(" (NULL, ?, ?),");
+      datos.push(opciones[i]);
+      datos.push(result.insertId);
+  }
+  sql = sql.concat(" (NULL, ?, ?);");
+  datos.push(opciones[request.body.opcion.length -1]); //hacer un daocrearpregunta que devuelva el id y luego insertamos las opciones :)
+  datos.push(result.insertId);
   daoP.crearPregunta(request.body.pregunta, request.body.opcion, (err, id) => {
-    console.log("no");
     if (err){
       next(err);
     }

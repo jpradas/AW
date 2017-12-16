@@ -16,16 +16,7 @@ class DAOPreguntas{
     }
 
     /**
-     * Determina si un determinado usuario aparece en la BD con la contraseña
-     * pasada como parámetro.
-     *
-     * Es una operación asíncrona, de modo que se llamará a la función callback
-     * pasando, por un lado, el objeto Error (si se produce, o null en caso contrario)
-     * y, por otro lado, un booleano indicando el resultado de la operación
-     * (true => el usuario existe, false => el usuario no existe o la contraseña es incorrecta)
-     * En caso de error error, el segundo parámetro de la función callback será indefinido.
-     *
-     * @param {string} filename Identificador de la foto
+     * Devuelve preguntas aleatorias para visualizar
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
 
@@ -49,13 +40,18 @@ class DAOPreguntas{
         })
     }
 
-  //Saca los usuarios que han contestado a la pregunta, no usada de momento, no borrar
+    /**
+     * Saca los usuarios que han contestado a la pregunta
+     * @param {Integer} id Id de la pregunta
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     getPreguntaUserByID(id, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
                 callback(err); return;
             }
-            connection.query("SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=?;",
+            connection.query(
+                "SELECT * FROM preguntas JOIN preguntasusers ON preguntas.id=preguntasusers.id_pregunta WHERE preguntas.id=?;",
                 [id],
                 (err, result)=>{
                     connection.release();
@@ -69,6 +65,12 @@ class DAOPreguntas{
             );
         })
     }
+
+    /**
+     * Extrae la pregunta segun el id
+     * @param {Integer} id Id de la pregunta
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     getPregunta(id, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -89,7 +91,12 @@ class DAOPreguntas{
         })
     }
 
-      //Saca si el usuario ha contestado a la pregunta
+    /**
+     * Extrae si el usuario ha contestado a la pregunta
+     * @param {Integer} id Id de la pregunta
+     * @param {String} user email del usuario
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     getPreguntaContestadaByUser(id, user, callback) {
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -116,7 +123,7 @@ class DAOPreguntas{
         })
     }
 
-    crearPregunta(texto,opciones,callback){
+    crearPregunta(texto, opciones, sql, datos, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
               callback(err); return;
@@ -129,16 +136,6 @@ class DAOPreguntas{
                       callback(err);
                   }
                   else{
-                    let sql = "INSERT INTO " + config.database + ".opciones VALUES"
-                    let datos = [];
-                    for (let i = 0; i < opciones.length -1 ; i++){                        
-                        sql = sql.concat(" (NULL, ?, ?),");
-                        datos.push(opciones[i]);
-                        datos.push(result.insertId);
-                    }
-                    sql = sql.concat(" (NULL, ?, ?);");
-                    datos.push(opciones[opciones.length -1]);
-                    datos.push(result.insertId);
                     connection.query(sql,
                         datos,
                         (err, result)=>{
