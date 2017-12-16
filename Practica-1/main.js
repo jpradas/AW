@@ -218,7 +218,6 @@ app.get("/profile.html", auth, (request, response, next) =>{
         fotos = imgs;
       }
       let mensaje = isMessage(request);
-      console.log(mensaje.text);
       response.status(200);
       response.render("profile", { usuario: user, modificar: "si", message: mensaje, fotos: fotos});
     });
@@ -341,12 +340,22 @@ app.get("/modify_profile.html", (request, response, next) =>{
     if(err){
       next(err);return;
     }
+    let mensaje = isMessage(request);
     response.status(200);
-    response.render("modify_profile", { usuario: user });
+    response.render("modify_profile", { usuario: user, message: mensaje });
   });
 })
 
-app.post("/modify_profile.html", upload.single("imagen_perfil"), auth, (request, response, next)=>{
+function vCampos(request, response, next){
+  if(request.body.nombre === "" || request.body.sexo === ""){
+    setFlash(request, "Debe introducir información válida en los campos", "danger");
+    response.redirect("modify_profile.html");
+  }else{
+    next();
+  }
+}
+
+app.post("/modify_profile.html", upload.single("imagen_perfil"), vCampos, auth, (request, response, next)=>{
   let query; let array;
   if(request.file){
      query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;";
