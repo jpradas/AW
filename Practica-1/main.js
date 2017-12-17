@@ -147,7 +147,7 @@ function insertUser(request, response, next){
   request.checkBody("email","Dirección de correo no válida: ").isEmail();
   request.checkBody("nombre_completo", "Nombre de usuario vacío").notEmpty();
   request.checkBody("sexo", "Sexo vacío").notEmpty();
-  request.checkBody("password", "La contraseña no tiene entre 6 y 30 caracteres: ").isLength({ min: 6, max: 10 });
+  request.checkBody("password", "La contraseña no tiene entre 6 y 30 caracteres: ").isLength({ min: 6, max: 30 });
   request.checkBody("fecha_de_nacimiento", "Fecha de nacimiento no válida").isBefore();
   request.getValidationResult().then((result) => {
     if (result.isEmpty()) {
@@ -187,7 +187,7 @@ function insertUser(request, response, next){
     	});
     } else {
       setFlash(request, result.array(), "danger");
-      response.redirect("login.html");
+      response.redirect("new_user.html");
     }
   });
 }
