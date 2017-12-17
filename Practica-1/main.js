@@ -90,7 +90,7 @@ function userExists(request, response, next){
 		}
 		if(result){
 			next();
-		}else{//mostrar alerta de usuario no encontrado
+		}else{
       setFlash(request, "Usuario inexistente en base de datos", "danger");
       response.redirect("login.html");
 		}
@@ -104,7 +104,7 @@ function auth(request, response, next){
     next();
   }else{
     response.status(403);
-    setFlash(request, "Debes iniciar sesion para acceder a tu perfil", "danger");
+    setFlash(request, "Debes iniciar sesion para acceder", "danger");
     response.redirect("login.html");
   }
 }
@@ -148,14 +148,13 @@ function insertUser(request, response, next){
   request.checkBody("nombre_completo", "Nombre de usuario vacío").notEmpty();
   request.checkBody("sexo", "Sexo vacío").notEmpty();
   request.checkBody("password", "La contraseña no tiene entre 6 y 30 caracteres: ").isLength({ min: 6, max: 30 });
-  request.checkBody("fecha_de_nacimiento", "Fecha de nacimiento no válida").isBefore();
   request.getValidationResult().then((result) => {
     if (result.isEmpty()) {
       daou.isUserCorrect(request.body.email, request.body.password, (err, result)=>{
     		if(err){
     			next(err);return;
     		}
-    		if(result){//mostrar alerta de usuario existente
+    		if(result){
           setFlash(request, "Usuario existente en base de datos", "danger");
           response.redirect("login.html");
     		}else{
@@ -194,7 +193,6 @@ function insertUser(request, response, next){
 
 
 app.post("/new_user.html", upload.single("imagen_perfil"), insertUser, initSession, (request, response, next) =>{
-  setFlash(request, "Usuario creado correctamente", "info");
   response.redirect("profile.html");
 });
 
@@ -289,7 +287,6 @@ app.post("/solicitud.html", auth, (request, response, next)=>{
       next(err);return;
     }
     if(result === true){
-      //TO DO insertar mensaje flash de peticion enviada
       setFlash(request, "Peticion de amistad enviada", "info");
     }
     else{
@@ -300,21 +297,19 @@ app.post("/solicitud.html", auth, (request, response, next)=>{
 })
 
 app.post("/confirmar_amigo.html", (request, response, next) =>{
-  if(request.body.accion === "1"){ //aceptamos amigo
+  if(request.body.accion === "1"){
     daoa.aceptarSolicitud(request.session.email, request.body.email, (err, result)=>{
       if(err){
         next(err);return;
       }
       if(result === true){
         setFlash(request, "Amigo aceptado", "info");
-        //mensaje flash de aceptado y volvemos a cargar Amigos  TO DO que la pagina de amigos proyecte mensajes flash
       }else{
         setFlash(request, "Oops, algo raro ha ocurrido. Error al confirmar amigo", "danger");
-        //mensaje flash de cagada y cargamos amigos de nuevo
       }
       response.redirect("amigos.html");
     })
-  }else{ //rechazamos
+  }else{
     daoa.rechazarSolicitud(request.session.email, request.body.email, (err, result)=>{
       if(err){
         next(err);return;

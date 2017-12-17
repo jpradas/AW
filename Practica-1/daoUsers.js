@@ -52,6 +52,12 @@ class DAOusers{
         })
     }
 
+    /**
+     * Actualiza los puntos de un usuario
+     * @param {String} user usuario al que se le cambiaran los puntos
+     * @param {Integer} puntos nuevos puntos que tiene
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     actualizarPuntos(user, puntos, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
@@ -73,6 +79,11 @@ class DAOusers{
       })
     }
 
+    /**
+     * Devuelve un usuario de bbdd
+     * @param {String} user usuario que queremos buscar en BBDD
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     getUser(user, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -92,6 +103,11 @@ class DAOusers{
         })
     }
 
+    /**
+     * Añade un nuevo usuario en BBDD
+     * @param {Object} user objeto usuario que contiene todos los campos necesarios para insertar
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     setUser(user, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -111,6 +127,12 @@ class DAOusers{
         });
     }
 
+    /**
+     * Busca usuarios que coinciden con el patron pasado y que no son amigos del usuario
+     * @param {String} pattern patron por el que buscamos en BBDD
+     * @param {String} user usuario del que se buscará aquellos que no son sus amigos para mostrar
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     findUsersPattern(pattern, user, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
@@ -118,7 +140,7 @@ class DAOusers{
         }
        pattern = "%" + pattern + "%";
         connection.query(
-            "SELECT * FROM " + config.database + ".users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +".amigos WHERE email_origen=?) AND u.email not in (select email from facebluff.users where email=?);",
+            "SELECT * FROM " + config.database + ".users as u WHERE u.nombre_completo like ? AND u.email not in (select email_destino from "+ config.database +".amigos WHERE email_origen=?) AND u.email not in (select email from " + config.database + ".users where email=?);",
             [pattern, user, user],
           (err, rows)=>{
             connection.release();
@@ -131,6 +153,12 @@ class DAOusers{
       })
     }
 
+    /**
+     * Modifica los datos de un usuario
+     * @param {String} query query que debe realizar el dao
+     * @param {Array} array array con los datos para la consulta parametrica
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     modifyUser(query, array, callback){
       this.pool.getConnection((err, connection) =>{
         if(err){
@@ -150,6 +178,11 @@ class DAOusers{
       })
     }
 
+    /**
+     * Obtiene la imagen de perfil de un usuario
+     * @param {String} email usuario al que se le busca la foto de perfil 
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     obtenerImg(email, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){

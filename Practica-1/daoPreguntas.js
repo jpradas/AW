@@ -123,6 +123,12 @@ class DAOPreguntas{
         })
     }
 
+    /**
+     * Crea una nueva pregunta que inserta en BBDD
+     * @param {String} texto pregunta en formato string
+     * @param {Integer} opciones numero de opciones iniciales de la pregunta
+     * @param {function} callback Función que recibirá el objeto error y el resultado
+     */
     crearPregunta(texto, opciones, callback){
       this.pool.getConnection((err, connection) =>{
           if(err){
@@ -141,6 +147,13 @@ class DAOPreguntas{
         });
       }
 
+      /**
+       * Compara las respuestas dadas a una pregunta por dos usuarios. Devuelve true si han coincidido y false si no.
+       * @param {Integer} idPregunta Id de la pregunta
+       * @param {String} userComparar user que tambien ha contestado la pregunta
+       * @param {Integer} idPregunta Id de la opcion que ha escogido
+       * @param {function} callback Función que recibirá el objeto error y el resultado
+       */
       compararRespuestas(idPregunta, userComparar, idOpcion, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){
@@ -166,6 +179,14 @@ class DAOPreguntas{
           });
       }
 
+      /**
+       * Inserta en la tabla adivinar la respuesta de un usuario en nombre de otro tratando de adivinar su respuesta.
+       * @param {Integer} idPregunta Id de la pregunta
+       * @param {String} userAdivina user al que se adivina
+       * @param {String} userRespondio user que trata de adivinar
+       * @param {Integer} acierto numero que indica si ha acertado o no. 0 = fallo, 1 = acierto. 
+       * @param {function} callback Función que recibirá el objeto error y el resultado
+       */
       setAdivinar(idPregunta, userAdivina, userRespondio, acierto, callback){
         this.pool.getConnection((err, connection) =>{
             if(err){
