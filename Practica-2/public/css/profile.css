@@ -1,0 +1,252 @@
+@font-face{
+    font-family: "GloriaHallelujah";
+    src: url(../fonts/GloriaHallelujah.ttf) format("truetype");
+}
+
+html{
+    font-family: "GloriaHallelujah";
+    background-image: url(../img/Fondo.jpg);
+    background-repeat: repeat-x;
+}
+
+#logo{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 500px;
+    height: 100px;
+}
+
+.enlaces{
+    margin-left:auto;
+    margin-right:auto;
+    width: 1100px;
+    height: 40px;
+    margin-top: -15px;
+}
+
+.lista li{
+    display:inline;
+    list-style: none;
+}
+
+li a{
+    font-size: 30px;
+    font-weight: bold;
+    color:white;
+    text-decoration: none;
+    margin-left: 30px
+}
+
+#lilav{
+    width: 40px;
+    height: 40px;
+    margin-left: 250px;
+    margin-bottom: -10px;
+}
+
+#ptos{
+    margin-left: 10px;
+    color: white;
+}
+
+.superior{
+    display:flex;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 40px;
+    width: 600px;
+    height: 40px;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.info-perfil{
+    display: flex;
+    background-color: #8904B1;
+    border-radius: 15px;
+    border-style: dotted;
+    border-color: #ecc4ff;
+    margin-top: 40px;
+    margin-left:auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.datos{
+  margin-left: auto;
+  width: 70%;
+}
+
+.datos li{
+    display: flex;
+    margin-bottom: 15px;
+    list-style: none;
+    color: white;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.datos-modificar{
+  margin-left: auto;
+  width: 100%;
+}
+
+.datos-modificar li{
+  display: flex;
+  margin-bottom: 15px;
+  list-style: none;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.butt{
+  display:flex;
+  justify-content: center;
+}
+
+.file-img{
+  margin-left: 10px;
+}
+
+.izquierda{
+  display: flex;
+  width: 45%;
+  height: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  justify-content:flex-end;
+  font-size: 18px;
+}
+
+.izq{
+  display: flex;
+  width: 45%;
+  height: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  justify-content:flex-end;
+  font-size: 18px;
+}
+
+.der{
+  flex-grow: 2;
+  margin-right: 40px;
+}
+
+.der input{
+  width: 100%;
+  border-radius: 5px;
+}
+
+.leftav{
+    width: 220px;
+    height: auto;
+    margin-left: 20px;
+    align-self: center;
+}
+
+.boton{
+    font-family: "GloriaHallelujah";
+    background-color: #CC2EFA;
+    font-weight: bold;
+    color:white;
+    font-size: 20px;
+    padding-left: 25px;
+    padding-right: 25px;
+    border-style: none;
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.cuerpo{
+  display: flex;
+  color: white;
+  border-radius: 20px;
+  background-color: #8904B1;
+  justify-content: center;
+  width: 40%;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 90px;
+}
+
+
+.flash-danger{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 80px;
+  height: 50px;
+  background-color:  #F5A9A9;
+  background-image: url(../img/warning.png);
+  background-repeat: no-repeat;
+  background-position: 13% 65%;
+  border-left: 7px solid;
+  border-right: 7px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color:  #B40404;
+  border-radius: 10px;
+}
+
+.flash-danger span{
+  align-self: center;
+  color: #B40404;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.flash-info{
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+  height: 50px;
+  background-image: url(../img/ok.png);
+  background-repeat: no-repeat;
+  background-color: #F6CEF5;
+  background-position: 25% 65%;
+  border-left: 7px solid;
+  border-right: 7px solid;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color:  #8904B1;
+  border-radius: 10px;
+}
+
+.flash-info span{
+  align-self: center;
+  color: #8904B1;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.imagen{
+  width: 250px;
+  height: auto;
+  margin: 10px;
+  border-radius: 10px;
+
+}
+
+.fotos-perfil{
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  border-style: dotted;
+  border-color: #8904B1;
+  border-radius: 20px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: auto;
+}
