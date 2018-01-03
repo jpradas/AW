@@ -22,6 +22,9 @@ SET time_zone = "+00:00";
 -- Base de datos: `practica2`
 --
 
+CREATE DATABASE PR2;
+USE PR2;
+
 -- --------------------------------------------------------
 
 --
