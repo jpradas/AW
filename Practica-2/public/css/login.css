@@ -123,7 +123,7 @@ html{
   margin-left: auto;
   margin-right: auto;
   margin-top: 200px;
-  height: 400px;
+  height: auto;
   background-color: #3B3B3B;
   border-radius: 15px;
 }
@@ -139,6 +139,13 @@ html{
   border-bottom-color: white;
   border-bottom: 1px;
   border-bottom-style: solid;
+  border-radius: 5px;
+  transition:box-shadow 2s, transform 500ms, filter 500ms ease-in-out;
+}
+
+#lista-partidas li:hover{
+  transform: scale(1.05);
+  box-shadow: 3px 3px 10px rgba(0,0,0,0.6);
 }
 
 #crear-partida{
@@ -149,9 +156,67 @@ html{
   background: none;
   border: none;
   transition-property: transform;
-  transition-duration: 100;
+  transition: 200ms;
 }
 
 #crear-partida:hover{
   transform: scale(1.5);
+}
+
+.crear_partida{
+  width: 564px;
+  height: 600px;
+  background-image: url(/imagenes/cuaderno-03.jpg);
+  border-radius: 15px;
+  position:absolute;
+  left: 27%;
+  right: 25%;
+  top: 220px;
+  z-index: 2;
+}
+
+#label{
+  position:relative;
+  text-decoration: underline;
+  font-size: 70px;
+  left: 40px;
+  top: 15px;
+}
+
+#form-crear-partida{
+  list-style:none;
+  font-size: 50px;
+}
+
+.input-text{
+  background: none;
+  border: none;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+  width: 80%;
+  font-family: "Lamplighter";
+  font-size: 40px;
+}
+
+#aceptar-crear-partida{
+  margin-left: 180px;
+  margin-top: 100px;
+  background: none;
+  border: none;
+  font-family: "Lamplighter";
+  font-size: 50px;
+  text-decoration: underline;
+}
+
+#cancelar-crear-partida{
+  background: none;
+  border: none;
+  font-family: "Lamplighter";
+  font-size: 50px;
+  text-decoration: underline;
+}
+
+.blur{
+  filter: blur(5px);
 }

@@ -92,10 +92,33 @@ $(() =>{
       });
     }
 
+    $("#crear-partida").on("click", () =>{
+      //$("html").addClass("blur");
+      $(".crear_partida").slideDown(500);
+    });
+
+    $("#aceptar-crear-partida").on("click", () =>{
+      //TODO crear partida en bbdd - ya lo hago mañana xddd
+    })
+
+    $("#cancelar-crear-partida").on("click", () =>{
+      $(".crear_partida").slideUp(500);
+    })
+
     $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
       $(".info-perfil").slideUp(500);
       $(".cuerpo").fadeIn(500);
       $(".partidas").hide();
+      $(".crear_partida").hide();
     });
 
+    /*var item = $("#lista-partidas li");
+
+    // agrego la clase blur a todos los 'ítem' que NO sea al que le se le esta aplicando el evento 'hover'
+    item.hover(function() {
+    item.not($(this)).addClass('blur');
+    // al perder el foco, retiro la clase a todos los 'item'
+    }, function() {
+    item.removeClass('blur');
+  });*/
 });
