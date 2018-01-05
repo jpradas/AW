@@ -13,6 +13,8 @@
     "express": "^4.16.2",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "passport": "^0.4.0",
+    "passport-http": "^0.3.0"
   }
 }

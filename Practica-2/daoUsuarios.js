@@ -98,6 +98,25 @@ class DAOusuarios{
         });
     }
 
+    getId(email, callback){
+      this.pool.getConnection((err, connection) =>{
+          if(err){
+              callback(err); return;
+          }
+            connection.query(
+                "SELECT id FROM "+ config.database +".usuarios WHERE login=?",
+                [email],
+                (err, result) =>{
+                    connection.release();
+                    if(err){
+                      callback(err);return;
+                    }
+                    callback(null, result[0]);
+                }
+            );
+      });
+    }
+
 }
 
 module.exports = {

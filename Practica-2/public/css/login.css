@@ -30,7 +30,7 @@ html{
   margin-left: auto;
   margin-right: auto;
   margin-top: 200px;
-  height: 450px;
+  height: 400px;
   background-color: #3B3B3B;
   border-radius: 15px;
 }
@@ -59,24 +59,99 @@ html{
 .boton{
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-right: 10%;
 }
 
 .boton input{
   font-family: "Lamplighter";
-  background-color: #007BFF;
+  background-color: #E6E6E6;
   width: 100px;
   height: 50px;
   border-radius: 5px;
   border: none;
   font-size: 40px;
+  color: #3B3B3B;
+}
+
+#Aceptar:hover{
+  background-color: #007BFF;
   color: white;
 }
 
-#NU{
-  background-color: #E6E6E6;
-  color: #3B3B3B;
+#Nuevo{
   width: 130px;
   margin-left: 15px;
+}
+
+#Nuevo:hover{
+  background-color: #007BFF;
+  color: white;
+}
+
+#desconectar{
+  font-family: "Lamplighter";
+  border-radius: 5px;
+  border: none;
+  width: 130px;
+  height: 50px;
+  font-size: 40px;
+  background-color: #E6E6E6;
+  color: #3B3B3B;
+  align-self: center;
+}
+
+#desconectar:hover{
+  background-color: #C72B2C;
+  color: white;
+}
+
+#usuario{
+  font-size: 60px;
+  margin-right: 30px;
+}
+
+.info-perfil{
+  display:flex;
+  align-content: center;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.partidas{
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+  height: 400px;
+  background-color: #3B3B3B;
+  border-radius: 15px;
+}
+
+#lista-partidas{
+  list-style: none;
+  color: white;
+  width: 93%;
+}
+
+#lista-partidas li{
+  font-size: 50px;
+  border-bottom-color: white;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+}
+
+#crear-partida{
+  font-family: "Lamplighter";
+  font-size: 60px;
+  color: white;
+  margin-left: 20px;
+  background: none;
+  border: none;
+  transition-property: transform;
+  transition-duration: 100;
+}
+
+#crear-partida:hover{
+  transform: scale(1.5);
 }
