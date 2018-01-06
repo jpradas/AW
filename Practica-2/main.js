@@ -97,6 +97,35 @@ app.get("/getPartidas", (request, response) =>{
   })
 });
 
+app.get("/crearPartida", (request, response) =>{
+  daop.setPartida(request.query.partida, request.query.estado, (err, idPartida) =>{
+    if(err){
+      response.status(500);
+      response.end();return;
+    }
+    daou.getId(request.query.user, (err, idUser) =>{
+      if(err){
+        response.status(500);
+        response.end();return;
+      }
+      if(!isNaN(idUser)){
+        response.status(500);
+        response.end();return;
+      }else{
+        daop.setJugadorPartida(idUser, idPartida, (err, result) =>{
+          if(err){
+            response.status(500);
+            response.end();return;
+          }
+          response.status(201);
+          response.json({ resultado: result });
+        })
+      }
+    })
+  
+  })
+})
+
 let servidor = https.createServer(
   { key: clavePrivada, cert: certificado }, app);
 

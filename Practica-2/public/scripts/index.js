@@ -50,7 +50,6 @@ $(() =>{
         url: "/setUser",
         data: { user: name, password: pass },
         success: (data, textStatus, jqXHR) =>{
-          console.log(textStatus);
           if(data.resultado){
             alert("Se ha insertado correctamente el usuario");
             iniciarPerfil();
@@ -71,16 +70,14 @@ $(() =>{
     }
 
     function getPartidas(){
-      console.log(name);
       $.ajax({
         type: "GET",
         url: "/getPartidas",
         data: { user: name},
         success: (data, textStatus, jqXHR) =>{
-          console.log();
           let nuevoElem=null;
           data.partidas.forEach( partida => {
-            nuevoElem = $(`<li>Partida ${partida.id} - ${partida.nombre}</li>`);
+            nuevoElem = $(`<li>Id: ${partida.id} - Nombre: ${partida.nombre} - Estado: ${partida.estado}</li>`);
             $("#lista-partidas").append(nuevoElem);
           });
           $(".partidas").fadeIn(500);
@@ -99,17 +96,51 @@ $(() =>{
 
     $("#aceptar-crear-partida").on("click", () =>{
       //TODO crear partida en bbdd - ya lo hago mañana xddd
-    })
+      let nombre = $("#input-text").prop("value");
+      let estado = $("#input-text-desc").prop("value");
+
+      $.ajax({
+        type: "GET",
+        url: "/crearPartida",
+        data: { user: name, partida: nombre, estado: estado},
+        success: (data, textStatus, jqXHR) =>{
+          if(data.resultado){
+            $(".crear_partida").slideUp(500);
+            actualizarPartidas();
+          }else{
+            alert("No se ha podido crear la partida. Intente de nuevo");
+          }
+        },
+        error: (jqXHR, textStatus, errorThrown) =>{
+          alert("Se ha producido un error: " + errorThrown);
+        }
+
+      });
+    });
 
     $("#cancelar-crear-partida").on("click", () =>{
       $(".crear_partida").slideUp(500);
     })
+
+    function actualizarPartidas(){
+      $("#lista-partidas li").remove();
+      $(".partidas").hide();
+      getPartidas();
+    }
+
+    $("#buscar-partida").on("click", () =>{
+      $("#buscador").animate({
+            width: "toggle",
+            opacity: "toggle"
+        });
+    });
 
     $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
       $(".info-perfil").slideUp(500);
       $(".cuerpo").fadeIn(500);
       $(".partidas").hide();
       $(".crear_partida").hide();
+      $("#lista-partidas li").remove();
     });
 
     /*var item = $("#lista-partidas li");

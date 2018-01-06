@@ -33,17 +33,21 @@
   </div>
   <div class="partidas" style="display: none;">
     <ul id="lista-partidas">
-      <span id="etiqueta">Partidas</span>
-      <button id="crear-partida">+</button>
+      <div class="header-flex">
+        <span id="etiqueta">Partidas</span>
+        <button id="crear-partida">+</button>
+        <button id="buscar-partida"></button>
+        <input id="buscador" type="text" style="display: none;">
+      </div>
     </ul>
   </div>
   <div class="crear_partida" style="display: none;">
     <span id="label">Crear Partida</span>
     <ul id="form-crear-partida">
       <li>Nombre:</li>
-      <li><input class="input-text" type="text" name="nombre-partida"></li>
+      <li><input id="input-text" type="text" name="nombre-partida"></li>
       <li>Estado:</li>
-      <li><input class="input-text" type="text" name="Descripcion"></li>
+      <li><input id="input-text-desc" type="text" name="Descripcion"></li>
     </ul>
     <button id="aceptar-crear-partida">Aceptar</button>
     <button id="cancelar-crear-partida">Cancelar</button>

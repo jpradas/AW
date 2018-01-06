@@ -34,13 +34,51 @@ class DAOpartidas{
            }
            connection.query(
                "SELECT * FROM "+ config.database +".partidas AS p JOIN " + config.database + ".juega_en AS je ON p.id=je.idPartida WHERE je.idUsuario=?",
-               [idUser],
+               [idUser.id],
                (err, rows) =>{
                    connection.release();
                    if(err){
                      callback(err);return;
                    }
                    callback(null, rows);
+               }
+           );
+       });
+     }
+
+     setPartida(partida, estado, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "INSERT INTO "+ config.database +".partidas VALUES (NULL, ?, ?)",
+               [partida, estado],
+               (err, result) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   callback(null, result.insertId);
+               }
+           );
+       });
+     }
+
+     setJugadorPartida(idUser, idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "INSERT INTO "+ config.database +".juega_en VALUES (?, ?)",
+               [idUser.id, idPartida],
+               (err, result) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   callback(null, true);
                }
            );
        });

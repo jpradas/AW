@@ -169,7 +169,7 @@ html{
   background-image: url(/imagenes/cuaderno-03.jpg);
   border-radius: 15px;
   position:absolute;
-  left: 27%;
+  left: 26%;
   right: 25%;
   top: 220px;
   z-index: 2;
@@ -188,7 +188,18 @@ html{
   font-size: 50px;
 }
 
-.input-text{
+#input-text{
+  background: none;
+  border: none;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+  width: 80%;
+  font-family: "Lamplighter";
+  font-size: 40px;
+}
+
+#input-text-desc{
   background: none;
   border: none;
   border-bottom: 1px;
@@ -215,6 +226,42 @@ html{
   font-family: "Lamplighter";
   font-size: 50px;
   text-decoration: underline;
+}
+
+.header-flex{
+  display: flex;
+}
+
+#buscar-partida{
+  background: url(/imagenes/search-icon.png) no-repeat;
+  background-size: 40px 40px;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+  align-self: center;
+  margin-left: 10px;
+  transition-property: transform;
+  transition: 200ms;
+}
+
+#buscar-partida:hover{
+  transform: scale(1.5);
+}
+
+#buscador{
+  margin-left: 15px;
+  height: 35px;
+  width: 40%;
+  align-self: center;
+  background: none;
+  border: none;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: white;
+  color: white;
+  font-family: "Lamplighter";
+  font-size: 40px;
 }
 
 .blur{
