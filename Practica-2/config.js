@@ -17,7 +17,7 @@ module.exports = {
   password: "",
 
   // Nombre de la base de datos
-  database: "PR2",
+  database: "practica2",
 
   // Puerto desde el que escucha la aplicacion
   port: 5555

@@ -98,15 +98,21 @@ $(() =>{
       //TODO crear partida en bbdd - ya lo hago mañana xddd
       let nombre = $("#input-text").prop("value");
       let estado = $("#input-text-desc").prop("value");
+      let cad64 = btoa(name + ":" + pass);
 
       $.ajax({
         type: "GET",
         url: "/crearPartida",
+        beforeSend: (req) =>{
+          req.setRequestHeader("Authorization", "Basic " + cad64);
+        },
         data: { user: name, partida: nombre, estado: estado},
         success: (data, textStatus, jqXHR) =>{
           if(data.resultado){
             $(".crear_partida").slideUp(500);
             actualizarPartidas();
+            $("#input-text").val("");
+            $("#input-text-desc").val("");
           }else{
             alert("No se ha podido crear la partida. Intente de nuevo");
           }
@@ -128,18 +134,63 @@ $(() =>{
       getPartidas();
     }
 
-    $("#buscar-partida").on("click", () =>{
-      $("#buscador").animate({
+    $("#unirse-partida").on("click", () =>{
+      $(".unirse_partida").slideDown(500);
+/*
+      */
+      /*$("#buscador").animate({
             width: "toggle",
             opacity: "toggle"
-        });
+        });*/
     });
+
+    $("#cancelar-unirse-partida").on("click", () =>{
+      $(".unirse_partida").slideUp(500);
+    });
+
+    $("#aceptar-unirse-partida").on("click", () =>{
+      let id = $("#input-text-id-partida").prop("value");
+      if(id === ""){
+        alert("El id de partida a unirse no puede estar vacio");
+      }else{
+        let cad64 = btoa(name + ":" + pass);
+        $.ajax({
+          type: "GET",
+          url: "/unirsePartida",
+          beforeSend: (req) =>{
+            req.setRequestHeader("Authorization", "Basic " + cad64);
+          },
+          data: { user: name, idPartida: id},
+          success: (data, textStatus, jqXHR) =>{
+            if(data.resultado){
+              actualizarPartidas();
+              $("#input-text-id-partida").val("");
+              $(".unirse_partida").slideUp(500);
+            }else{
+              alert("No se ha podido unir a la partida. Vuelve a intentarlo");
+            }
+          },
+          error: (jqXHR, textStatus, errorThrown) =>{
+            if(jqXHR.status === 404){
+                alert("No existe la partida introducida");
+            }
+            else if(jqXHR.status === 400){
+              alert("La partida esta llena y ya no se puede unir nadie mas");
+            }else{
+              alert("Se ha producido un error: " + errorThrown);
+            }
+          }
+
+        });
+      }
+    })
 
     $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
       $(".info-perfil").slideUp(500);
       $(".cuerpo").fadeIn(500);
       $(".partidas").hide();
       $(".crear_partida").hide();
+      $(".unirse_partida").hide();
       $("#lista-partidas li").remove();
     });
 

@@ -264,6 +264,69 @@ html{
   font-size: 40px;
 }
 
+#unirse-partida{
+  background: url(/imagenes/joinPartida.png) no-repeat;
+  background-size: 46px 40px;
+  border: none;
+  width: 50px;
+  height: 50px;
+  margin-top: 10px;
+  align-self: center;
+  margin-left: 10px;
+  transition-property: transform;
+  transition: 200ms;
+}
+
+#unirse-partida:hover{
+  transform: scale(1.5);
+}
+
+.unirse_partida{
+  width: 564px;
+  height: 400px;
+  background-image: url(/imagenes/cuaderno-03.jpg);
+  border-radius: 15px;
+  position:absolute;
+  left: 29%;
+  right: 25%;
+  top: 220px;
+  z-index: 2;
+}
+
+#form-unirse-partida{
+  list-style:none;
+  font-size: 50px;
+}
+
+#aceptar-unirse-partida{
+  margin-left: 180px;
+  margin-top: -20px;
+  background: none;
+  border: none;
+  font-family: "Lamplighter";
+  font-size: 50px;
+  text-decoration: underline;
+}
+
+#cancelar-unirse-partida{
+  background: none;
+  border: none;
+  font-family: "Lamplighter";
+  font-size: 50px;
+  text-decoration: underline;
+}
+
+#input-text-id-partida{
+  background: none;
+  border: none;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: black;
+  width: 80%;
+  font-family: "Lamplighter";
+  font-size: 40px;
+}
+
 .blur{
   filter: blur(5px);
 }

@@ -58,6 +58,8 @@ app.post("/tasks", (request, response) => {
 app.delete("/tasks/:id", (request, response) => {
     let id = Number(request.params.id);
     id = id - 1;
+	console.log(id);
+	console.log(tasks[id]);
     if (!isNaN(id) && tasks[id] !== undefined) {
       tasks.splice(id, 1);
       // Código 200 = OK

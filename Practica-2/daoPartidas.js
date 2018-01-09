@@ -27,6 +27,30 @@ class DAOpartidas{
      * @param {string} password Contraseña a comprobar
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
+
+     existePartida(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "SELECT * FROM "+ config.database +".partidas WHERE id=?",
+               [idPartida],
+               (err, rows) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   if(rows.length === 0){
+                    callback(null, false);
+                  }else{
+                    callback(null, true);
+                  }
+               }
+           );
+       });
+     }
+
      getPartidas(idUser, callback){
        this.pool.getConnection((err, connection) =>{
            if(err){
@@ -79,6 +103,29 @@ class DAOpartidas{
                      callback(err);return;
                    }
                    callback(null, true);
+               }
+           );
+       });
+     }
+
+     hayHueco(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "SELECT COUNT(*) AS jugadores FROM "+ config.database +".juega_en WHERE idPartida=?",
+               [idPartida],
+               (err, rows) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   if(rows.jugadores > 4 ){
+                    callback(null, false);
+                  }else{
+                    callback(null, true);
+                  }
                }
            );
        });

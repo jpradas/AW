@@ -36,7 +36,8 @@
       <div class="header-flex">
         <span id="etiqueta">Partidas</span>
         <button id="crear-partida">+</button>
-        <button id="buscar-partida"></button>
+        <button id="unirse-partida"></button>
+        <button id="buscar-partida" style="display: none;"></button>
         <input id="buscador" type="text" style="display: none;">
       </div>
     </ul>
@@ -51,6 +52,15 @@
     </ul>
     <button id="aceptar-crear-partida">Aceptar</button>
     <button id="cancelar-crear-partida">Cancelar</button>
+  </div>
+  <div class="unirse_partida" style="display: none;">
+    <span id="label">Unirse Partida</span>
+    <ul id="form-unirse-partida">
+      <li>Id de la Partida:</li>
+      <li><input id="input-text-id-partida" type="text" name="id-partida"></li>
+    </ul>
+    <button id="aceptar-unirse-partida">Aceptar</button>
+    <button id="cancelar-unirse-partida">Cancelar</button>
   </div>
 </body>
 </html>

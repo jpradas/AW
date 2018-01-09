@@ -40,10 +40,22 @@ function loadTasks() {
     success: function (data, textStatus, jqXHR) {
       console.log(textStatus);
       console.log(data);
-      data.forEach(task => {
+	  /*
+	  data.forEach(task => {
         //Corregir el prepend por algo mejor, before no funciona
         $("div.tasks > ul").prepend(taskToDOMElement(task));
       });
+	  */
+	  let s=$("div.tasks > ul");
+      data.forEach(task => {
+        //Corregir el prepend por algo mejor, before no funciona
+        s.append(taskToDOMElement(task));
+		console.log(s);
+      });
+	  
+	  let n = $(".newTask");
+	  $(".newTask").remove();
+	  s.append(n);
     },
     // En caso de error, mostramos el error producido
     error: function (jqXHR, textStatus, errorThrown) {
