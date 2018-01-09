@@ -56,7 +56,11 @@ $(() =>{
           }
         },
         error: (jqXHR, textStatus, errorThrown) =>{
-          alert("Se ha producido un error: " + errorThrown);
+          if(jqXHR.status === 400){
+            alert(jqXHR.status + " - " + errorThrown + " : El usuario ya existe en base de datos");
+          }else{
+            alert("Se ha producido un error: " + errorThrown);
+          }
         }
 
       });
@@ -77,7 +81,7 @@ $(() =>{
         success: (data, textStatus, jqXHR) =>{
           let nuevoElem=null;
           data.partidas.forEach( partida => {
-            nuevoElem = $(`<li>Id: ${partida.id} - Nombre: ${partida.nombre} - Estado: ${partida.estado}</li>`);
+            nuevoElem = $(`<li data-id=${partida.id}>Id: ${partida.id} - Nombre: ${partida.nombre} - Estado: ${partida.estado}</li>`);
             $("#lista-partidas").append(nuevoElem);
           });
           $(".partidas").fadeIn(500);
@@ -146,6 +150,7 @@ $(() =>{
 
     $("#cancelar-unirse-partida").on("click", () =>{
       $(".unirse_partida").slideUp(500);
+      $("#input-text-id-partida").val("");
     });
 
     $("#aceptar-unirse-partida").on("click", () =>{
@@ -172,10 +177,10 @@ $(() =>{
           },
           error: (jqXHR, textStatus, errorThrown) =>{
             if(jqXHR.status === 404){
-                alert("No existe la partida introducida");
+                alert(jqXHR.status + " - " + errorThrown + ": No existe la partida introducida");
             }
             else if(jqXHR.status === 400){
-              alert("La partida esta llena y ya no se puede unir nadie mas");
+              alert(jqXHR.status + " - " + errorThrown + ": La partida esta llena y ya no se puede unir nadie mas");
             }else{
               alert("Se ha producido un error: " + errorThrown);
             }
@@ -183,6 +188,20 @@ $(() =>{
 
         });
       }
+    });
+
+    $("#buscar-partida").on("click", () =>{
+      $(".buscar_partida").slideDown(500);
+    });
+
+    $("#lista-partidas").on("click", "li", (event) =>{
+      let id = $(event.target).data().id;
+      console.log(id);
+    });
+
+    $("#cancelar-buscar-partida").on("click", () =>{
+      $(".buscar_partida").slideUp(500);
+      $("#buscar-text-id-partida").val("");
     })
 
     $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
