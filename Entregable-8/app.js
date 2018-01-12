@@ -51,19 +51,14 @@ app.post("/tasks", (request, response) => {
     };
     tasks.push(newTask);
     response.status(200);
-    console.log(tasks);
     response.json(newTask);
 });
 
 app.delete("/tasks/:id", (request, response) => {
     let id = Number(request.params.id);
-    console.log(tasks);
     task = tasks.filter(t => t.id === id);
-    console.log(task);
     if (!isNaN(id) && task !== undefined) {
       tasks = tasks.filter(t => t.id !== id);
-      console.log(tasks);
-      //tasks.splice(id, 1);
       // Código 200 = OK
       response.status(200);
     } else {

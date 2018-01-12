@@ -13,7 +13,7 @@ $(() => {
 
     // Cuando se pulse el botón de 'Añadir', se llamará a la función
     // onAddButtonClick
-    $("button.add").on("click", onAddButtonClick);
+    $("div.tasks").on("click", "button.add", onAddButtonClick);
 });
 
 /*
@@ -38,12 +38,6 @@ function loadTasks() {
     // En caso de éxito, colocamos el texto con el resultado
     // en el documento HTML
     success: function (data, textStatus, jqXHR) {
-	  /*
-	  data.forEach(task => {
-        //Corregir el prepend por algo mejor, before no funciona
-        $("div.tasks > ul").prepend(taskToDOMElement(task));
-      });
-	  */
 	  let s=$("div.tasks > ul");
       data.forEach(task => {
         //Corregir el prepend por algo mejor, before no funciona
@@ -71,7 +65,6 @@ function onRemoveButtonClick(event) {
     // pulsado.
     let liPadre = selected.parent();
     let id = liPadre.data("id");
-    console.log(id);
     // Implementar el resto del método aquí.
     // ...
     $.ajax({
@@ -81,9 +74,6 @@ function onRemoveButtonClick(event) {
       // En caso de éxito, colocamos el texto con el resultado
       // en el documento HTML
       success: function (data, textStatus, jqXHR) {
-        //Funciona pero como tengo prepend id - 1 no coge el que queremos
-        //let tareas = $("div.tasks > ul").children().eq(id - 1);
-        //tareas.hide();
         liPadre.hide();
       },
       // En caso de error, mostramos el error producido
@@ -96,7 +86,6 @@ function onRemoveButtonClick(event) {
 function onAddButtonClick(event) {
   // Obtenemos el valor contenido en el cuadro de texto
   var valor = $("#taskText").val();
-  console.log(valor);
   // Realizamos la petición al servidor
   $.ajax({
   type: "POST",
@@ -106,7 +95,6 @@ function onAddButtonClick(event) {
   // En caso de éxito, colocamos el texto con el resultado
   // en el documento HTML
   success: function (data, textStatus, jqXHR) {
-    console.log(textStatus);
     $("div.tasks > ul").prepend(taskToDOMElement(data));
   },
   // En caso de error, mostramos el error producido
