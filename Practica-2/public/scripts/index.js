@@ -1,12 +1,14 @@
 "use scrict"
 
-/*require.config({
+require.config({
   // Directorio en el que se encuentran los scripts
   baseUrl: "scripts",
-  partidas: "/scripts/partidas"
-});*/
+  //partidas: "/scripts/partidas"
+});
 
-$(() =>{
+define(["partidas"], (p) =>{
+
+  $(() =>{
     let name=null; let pass=null;
 
     $("#Aceptar").on("click", () =>{
@@ -70,28 +72,10 @@ $(() =>{
       $(".cuerpo").hide();
       $("#usuario").text(name);
       $(".info-perfil").slideDown(500);
-      getPartidas();
+      p.getPartidas(name);
     }
 
-    function getPartidas(){
-      $.ajax({
-        type: "GET",
-        url: "/getPartidas",
-        data: { user: name},
-        success: (data, textStatus, jqXHR) =>{
-          let nuevoElem=null;
-          data.partidas.forEach( partida => {
-            nuevoElem = $(`<li data-id=${partida.id}>Id: ${partida.id} - Nombre: ${partida.nombre} - Estado: ${partida.estado}</li>`);
-            $("#lista-partidas").append(nuevoElem);
-          });
-          $(".partidas").fadeIn(500);
-        },
-        error: (jqXHR, textStatus, errorThrown) =>{
-          alert("Se ha producido un error: " + errorThrown);
-        }
 
-      });
-    }
 
     $("#crear-partida").on("click", () =>{
       //$("html").addClass("blur");
@@ -135,91 +119,93 @@ $(() =>{
     function actualizarPartidas(){
       $("#lista-partidas li").remove();
       $(".partidas").hide();
-      getPartidas();
+      p.getPartidas(name);
     }
 
     $("#unirse-partida").on("click", () =>{
       $(".unirse_partida").slideDown(500);
-/*
+      /*
       */
       /*$("#buscador").animate({
-            width: "toggle",
-            opacity: "toggle"
-        });*/
-    });
+      width: "toggle",
+      opacity: "toggle"
+    });*/
+  });
 
-    $("#cancelar-unirse-partida").on("click", () =>{
-      $(".unirse_partida").slideUp(500);
-      $("#input-text-id-partida").val("");
-    });
+  $("#cancelar-unirse-partida").on("click", () =>{
+    $(".unirse_partida").slideUp(500);
+    $("#input-text-id-partida").val("");
+  });
 
-    $("#aceptar-unirse-partida").on("click", () =>{
-      let id = $("#input-text-id-partida").prop("value");
-      if(id === ""){
-        alert("El id de partida a unirse no puede estar vacio");
-      }else{
-        let cad64 = btoa(name + ":" + pass);
-        $.ajax({
-          type: "GET",
-          url: "/unirsePartida",
-          beforeSend: (req) =>{
-            req.setRequestHeader("Authorization", "Basic " + cad64);
-          },
-          data: { user: name, idPartida: id},
-          success: (data, textStatus, jqXHR) =>{
-            if(data.resultado){
-              actualizarPartidas();
-              $("#input-text-id-partida").val("");
-              $(".unirse_partida").slideUp(500);
-            }else{
-              alert("No se ha podido unir a la partida. Vuelve a intentarlo");
-            }
-          },
-          error: (jqXHR, textStatus, errorThrown) =>{
-            if(jqXHR.status === 404){
-                alert(jqXHR.status + " - " + errorThrown + ": No existe la partida introducida");
-            }
-            else if(jqXHR.status === 400){
-              alert(jqXHR.status + " - " + errorThrown + ": La partida esta llena y ya no se puede unir nadie mas");
-            }else{
-              alert("Se ha producido un error: " + errorThrown);
-            }
+  $("#aceptar-unirse-partida").on("click", () =>{
+    let id = $("#input-text-id-partida").prop("value");
+    if(id === ""){
+      alert("El id de partida a unirse no puede estar vacio");
+    }else{
+      let cad64 = btoa(name + ":" + pass);
+      $.ajax({
+        type: "GET",
+        url: "/unirsePartida",
+        beforeSend: (req) =>{
+          req.setRequestHeader("Authorization", "Basic " + cad64);
+        },
+        data: { user: name, idPartida: id},
+        success: (data, textStatus, jqXHR) =>{
+          if(data.resultado){
+            actualizarPartidas();
+            $("#input-text-id-partida").val("");
+            $(".unirse_partida").slideUp(500);
+          }else{
+            alert("No se ha podido unir a la partida. Vuelve a intentarlo");
           }
+        },
+        error: (jqXHR, textStatus, errorThrown) =>{
+          if(jqXHR.status === 404){
+            alert(jqXHR.status + " - " + errorThrown + ": No existe la partida introducida");
+          }
+          else if(jqXHR.status === 400){
+            alert(jqXHR.status + " - " + errorThrown + ": La partida esta llena y ya no se puede unir nadie mas");
+          }else{
+            alert("Se ha producido un error: " + errorThrown);
+          }
+        }
 
-        });
-      }
-    });
+      });
+    }
+  });
 
-    $("#buscar-partida").on("click", () =>{
-      $(".buscar_partida").slideDown(500);
-    });
+  $("#buscar-partida").on("click", () =>{
+    $(".buscar_partida").slideDown(500);
+  });
 
-    $("#lista-partidas").on("click", "li", (event) =>{
-      let id = $(event.target).data().id;
-      console.log(id);
-    });
+  $("#lista-partidas").on("click", "li", (event) =>{
+    let id = $(event.target).data().id;
+    console.log(id);
+  });
 
-    $("#cancelar-buscar-partida").on("click", () =>{
-      $(".buscar_partida").slideUp(500);
-      $("#buscar-text-id-partida").val("");
-    })
+  $("#cancelar-buscar-partida").on("click", () =>{
+    $(".buscar_partida").slideUp(500);
+    $("#buscar-text-id-partida").val("");
+  })
 
-    $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
-      $(".info-perfil").slideUp(500);
-      $(".cuerpo").fadeIn(500);
-      $(".partidas").hide();
-      $(".crear_partida").hide();
-      $(".unirse_partida").hide();
-      $("#lista-partidas li").remove();
-    });
+  $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
+    $(".info-perfil").slideUp(500);
+    $(".cuerpo").fadeIn(500);
+    $(".partidas").hide();
+    $(".crear_partida").hide();
+    $(".unirse_partida").hide();
+    $("#lista-partidas li").remove();
+  });
 
-    /*var item = $("#lista-partidas li");
+  /*var item = $("#lista-partidas li");
 
-    // agrego la clase blur a todos los 'ítem' que NO sea al que le se le esta aplicando el evento 'hover'
-    item.hover(function() {
-    item.not($(this)).addClass('blur');
-    // al perder el foco, retiro la clase a todos los 'item'
+  // agrego la clase blur a todos los 'ítem' que NO sea al que le se le esta aplicando el evento 'hover'
+  item.hover(function() {
+  item.not($(this)).addClass('blur');
+  // al perder el foco, retiro la clase a todos los 'item'
     }, function() {
     item.removeClass('blur');
-  });*/
+    });*/
+  });
+
 });
