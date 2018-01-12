@@ -38,8 +38,6 @@ function loadTasks() {
     // En caso de éxito, colocamos el texto con el resultado
     // en el documento HTML
     success: function (data, textStatus, jqXHR) {
-      console.log(textStatus);
-      console.log(data);
 	  /*
 	  data.forEach(task => {
         //Corregir el prepend por algo mejor, before no funciona
@@ -50,9 +48,8 @@ function loadTasks() {
       data.forEach(task => {
         //Corregir el prepend por algo mejor, before no funciona
         s.append(taskToDOMElement(task));
-		console.log(s);
       });
-	  
+
 	  let n = $(".newTask");
 	  $(".newTask").remove();
 	  s.append(n);
@@ -84,9 +81,10 @@ function onRemoveButtonClick(event) {
       // En caso de éxito, colocamos el texto con el resultado
       // en el documento HTML
       success: function (data, textStatus, jqXHR) {
-        //Funciona pero como tengo prepend id -1 no coge el que queremos
-        let tareas = $("div.tasks > ul").children().eq(id - 1);
-        tareas.hide();
+        //Funciona pero como tengo prepend id - 1 no coge el que queremos
+        //let tareas = $("div.tasks > ul").children().eq(id - 1);
+        //tareas.hide();
+        liPadre.hide();
       },
       // En caso de error, mostramos el error producido
       error: function (jqXHR, textStatus, errorThrown) {
