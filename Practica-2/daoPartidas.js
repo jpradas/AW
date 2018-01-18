@@ -89,6 +89,25 @@ class DAOpartidas{
        });
      }
 
+     getPartida(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "SELECT * FROM "+ config.database +".partidas WHERE id=?",
+               [idPartida],
+               (err, result) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   callback(null, result[0]);
+               }
+           );
+       });
+     }
+
      setJugadorPartida(idUser, idPartida, callback){
        this.pool.getConnection((err, connection) =>{
            if(err){
@@ -129,6 +148,25 @@ class DAOpartidas{
                }
            );
        });
+     }
+
+     getJugadores(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+         if(err){
+           callback(err);return;
+         }
+         connection.query(
+           "SELECT * FROM " + config.database + ".juega_en AS j JOIN " + config.database + ".usuarios as u ON j.idUsuario=u.id WHERE j.idPartida=?",
+           [idPartida],
+           (err, rows) =>{
+             connection.release();
+             if(err){
+               callback(err);return;
+             }
+             callback(null, rows);
+           }
+         )
+       })
      }
 
 }

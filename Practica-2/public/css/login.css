@@ -51,7 +51,8 @@ html{
   border-radius: 5px;
 }
 
-#etiqueta{
+.etiqueta{
+  color: white;
   text-decoration: underline;
   font-size: 70px;
 }
@@ -140,6 +141,12 @@ html{
   border-bottom: 1px;
   border-bottom-style: solid;
   border-radius: 5px;
+  transition-property: transform;
+  transition: 200ms;
+}
+
+#lista-partidas li:hover{
+  transform: scale(1.01);
 }
 
 .game{
@@ -177,7 +184,7 @@ html{
   z-index: 2;
 }
 
-#label{
+.label{
   position:relative;
   text-decoration: underline;
   font-size: 70px;
@@ -247,7 +254,7 @@ html{
 }
 
 #buscar-partida:hover{
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 
 #buscador{
@@ -279,7 +286,7 @@ html{
 }
 
 #unirse-partida:hover{
-  transform: scale(1.5);
+  transform: scale(1.2);
 }
 
 .unirse_partida{
@@ -372,6 +379,22 @@ html{
   font-family: "Lamplighter";
   font-size: 50px;
   text-decoration: underline;
+}
+
+.partida{
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 200px;
+  height: auto;
+  background-color: #3B3B3B;
+  border-radius: 15px;
+}
+
+#jugadores li{
+  list-style: none;
+  color: white;
+  font-size: 50px;
 }
 
 .blur{

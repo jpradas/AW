@@ -18,7 +18,7 @@
   </div>
   <div class="cuerpo">
     <ul class="logForm">
-      <li id="etiqueta">Identificación</li>
+      <li class="etiqueta">Identificación</li>
       <li>Nombre del usuario:</li>
       <li class="is"><input id="name" type="text" name="usuario"></li>
       <li>Contraseña:</li>
@@ -32,7 +32,7 @@
   <div class="partidas" style="display: none;">
     <ul id="lista-partidas">
       <div class="header-flex">
-        <span id="etiqueta">Partidas</span>
+        <span class="etiqueta">Partidas</span>
         <button id="crear-partida">+</button>
         <button id="unirse-partida"></button>
         <button id="buscar-partida"></button>
@@ -41,7 +41,7 @@
     </ul>
   </div>
   <div class="crear_partida" style="display: none;">
-    <span id="label">Crear Partida</span>
+    <span class="label">Crear Partida</span>
     <ul id="form-crear-partida">
       <li>Nombre:</li>
       <li><input id="input-text" type="text" name="nombre-partida"></li>
@@ -52,7 +52,7 @@
     <button id="cancelar-crear-partida">Cancelar</button>
   </div>
   <div class="unirse_partida" style="display: none;">
-    <span id="label">Unirse Partida</span>
+    <span class="label">Unirse Partida</span>
     <ul id="form-unirse-partida">
       <li>Id de la Partida:</li>
       <li><input id="input-text-id-partida" type="text" name="id-partida"></li>
@@ -61,13 +61,18 @@
     <button id="cancelar-unirse-partida">Cancelar</button>
   </div>
   <div class="buscar_partida" style="display: none;">
-    <span id="label">Buscar Partida</span>
+    <span class="label">Buscar Partida</span>
     <ul id="form-buscar-partida">
       <li>Id de la Partida:</li>
       <li><input id="buscar-text-id-partida" type="text" name="id-partida-buscar"></li>
     </ul>
     <button id="aceptar-buscar-partida">Aceptar</button>
     <button id="cancelar-buscar-partida">Cancelar</button>
+  </div>
+  <div class="partida" style="display: none;">
+    <ul id="jugadores">
+      <span class="etiqueta"></span>
+    </ul>
   </div>
 </body>
 </html>

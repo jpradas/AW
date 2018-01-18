@@ -183,6 +183,33 @@ app.get("/unirsePartida", passport.authenticate('basic', {session: false}), (req
   });
 });
 
+app.get("/buscarPartida", passport.authenticate('basic', {session: false}), (request, response) =>{
+  daop.existePartida(request.query.idPartida, (err, result) =>{
+    if(err){
+      response.status(500);
+      response.end();return;
+    }
+    if(!result){
+      response.status(404);
+      response.end();return;
+    }else{
+      daop.getPartida(request.query.idPartida, (err, partida) =>{
+        if(err){
+          response.status(500);
+          response.end();return;
+        }
+        daop.getJugadores(request.query.idPartida, (err, jugadores) =>{
+          if(err){
+            response.status(500);
+            response.end();return;
+          }
+          response.json({ partida: partida, jugadores: jugadores });
+        });
+      })
+    }
+  });
+});
+
 let servidor = https.createServer(
   { key: clavePrivada, cert: certificado }, app);
 
