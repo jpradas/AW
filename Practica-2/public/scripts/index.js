@@ -47,9 +47,10 @@ define(["partidas"], (p) =>{
       }
 
       $.ajax({
-        type: "GET",
+        type: "POST",
         url: "/setUser", //Deberiamos cambiar a PUT o POST
-        data: { user: name, password: pass },
+        data: JSON.stringify({ user: name, password: pass }),
+        contentType: "application/json",
         success: (data, textStatus, jqXHR) =>{
           if(data.resultado){
             alert("Se ha insertado correctamente el usuario");
@@ -81,7 +82,9 @@ define(["partidas"], (p) =>{
     $(".partidas").hide();
     $(".crear_partida").hide();
     $(".unirse_partida").hide();
+    $(".partida").hide();
     $("#lista-partidas li").remove();
+    $("#jugadores li").remove();
   });
 
   /*var item = $("#lista-partidas li");

@@ -70,11 +70,12 @@ class DAOpartidas{
        });
      }
 
-     setPartida(partida, estado, callback){
+     setPartida(partida, callback){
        this.pool.getConnection((err, connection) =>{
            if(err){
                callback(err); return;
            }
+           let estado = "";
            connection.query(
                "INSERT INTO "+ config.database +".partidas VALUES (NULL, ?, ?)",
                [partida, estado],

@@ -397,6 +397,26 @@ html{
   font-size: 50px;
 }
 
+#actualizarPartida{
+  background: none;
+  color: white;
+  border: none;
+  font-family: "Lamplighter";
+  font-size: 50px;
+  transition-property: transform;
+  transition: 200ms;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+#actualizarPartida:hover{
+  transform: scale(1.2);
+}
+
+.cabecera-flex{
+  display: flex;
+}
+
 .blur{
   filter: blur(5px);
 }

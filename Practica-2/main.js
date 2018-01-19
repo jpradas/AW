@@ -30,6 +30,7 @@ const daop = new daoPartidas.DAOpartidas(pool);
 
 app.use(express.static(ficherosEstaticos));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(passport.initialize());
 
 passport.use(new passportHTTP.BasicStrategy({ realm: "Pagina protegida por contraseña" }, (user, pass, callback) =>{
@@ -62,15 +63,15 @@ app.get("/checkUser", (request, response) =>{
   });
 });
 
-app.get("/setUser", (request, response) =>{
-  daou.isUserCorrect(request.query.user, request.query.password, (err, result) =>{
+app.post("/setUser", (request, response) =>{
+  daou.isUserCorrect(request.body.user, request.body.password, (err, result) =>{
     if(err){
       response.status(500); //Server Internal Error
       response.end();
       return;
     }
     if(!result){
-      daou.setUser(request.query.user, request.query.password, (err, result) =>{
+      daou.setUser(request.body.user, request.body.password, (err, result) =>{
         if(err){
           response.status(500); //Internal Server Error
           response.end();
@@ -110,13 +111,13 @@ app.get("/getPartidas", (request, response) =>{
   })
 });
 
-app.get("/crearPartida", passport.authenticate('basic', {session: false}), (request, response) =>{
-  daop.setPartida(request.query.partida, request.query.estado, (err, idPartida) =>{
+app.post("/crearPartida", passport.authenticate('basic', {session: false}), (request, response) =>{
+  daop.setPartida(request.body.partida, (err, idPartida) =>{
     if(err){
       response.status(500);
       response.end();return;
     }
-    daou.getId(request.query.user, (err, idUser) =>{
+    daou.getId(request.body.user, (err, idUser) =>{
       if(err){
         response.status(500);
         response.end();return;
@@ -139,8 +140,8 @@ app.get("/crearPartida", passport.authenticate('basic', {session: false}), (requ
   })
 });
 
-app.get("/unirsePartida", passport.authenticate('basic', {session: false}), (request, response) =>{
-  daou.getId(request.query.user, (err, idUser) =>{
+app.put("/unirsePartida", passport.authenticate('basic', {session: false}), (request, response) =>{
+  daou.getId(request.body.user, (err, idUser) =>{
     if(err){
       response.status(500);
       response.end();return;
@@ -149,7 +150,8 @@ app.get("/unirsePartida", passport.authenticate('basic', {session: false}), (req
       response.status(500);
       response.end();return;
     }else{
-      daop.existePartida(request.query.idPartida, (err, result) =>{
+      daop.existePartida(request.body.idPartida, (err, result) =>{
+
         if(err){
           response.status(500);
           response.end();return;
@@ -158,7 +160,7 @@ app.get("/unirsePartida", passport.authenticate('basic', {session: false}), (req
           response.status(404);
           response.end();return;
         }else{
-          daop.hayHueco(request.query.idPartida, (err, result) =>{
+          daop.hayHueco(request.body.idPartida, (err, result) =>{
             if(err){
               response.status(500);
               response.end();return;
@@ -167,7 +169,7 @@ app.get("/unirsePartida", passport.authenticate('basic', {session: false}), (req
               response.status(400);
               response.end();return;
             }else{//faltaria comprobar que no estoy ya dentro de la partida
-              daop.setJugadorPartida(idUser, request.query.idPartida, (err, result) =>{
+              daop.setJugadorPartida(idUser, request.body.idPartida, (err, result) =>{
                 if(err){
                   response.status(500);
                   response.end();return;
