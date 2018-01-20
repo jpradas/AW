@@ -397,7 +397,7 @@ html{
   font-size: 50px;
 }
 
-#actualizarPartida{
+#actualizarPartida, #volverAtras{
   background: none;
   color: white;
   border: none;
@@ -409,7 +409,7 @@ html{
   margin-right: 20px;
 }
 
-#actualizarPartida:hover{
+#actualizarPartida:hover,  #volverAtras:hover{
   transform: scale(1.2);
 }
 

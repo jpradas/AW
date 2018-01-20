@@ -151,7 +151,6 @@ app.put("/unirsePartida", passport.authenticate('basic', {session: false}), (req
       response.end();return;
     }else{
       daop.existePartida(request.body.idPartida, (err, result) =>{
-
         if(err){
           response.status(500);
           response.end();return;

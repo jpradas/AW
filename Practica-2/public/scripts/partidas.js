@@ -36,7 +36,7 @@ define([], () =>{
   function actualizarPartidas(){
     $("#lista-partidas li").remove();
     $(".partidas").hide();
-    getPartidas(user);
+    getPartidas();
   }
 
   $("#aceptar-crear-partida").on("click", () =>{
@@ -70,7 +70,7 @@ define([], () =>{
         }
 
       });
-    }   
+    }
   });
 
   $("#cancelar-crear-partida").on("click", () =>{
@@ -95,7 +95,7 @@ $("#aceptar-unirse-partida").on("click", () =>{
     alert("el id introducido no es válido. Debe ser un número.");
   }
   else{
-    
+
     let cad64 = btoa(user + ":" + contraseña);
     $.ajax({
       type: "PUT",
@@ -152,14 +152,14 @@ $("#aceptar-buscar-partida").on("click", () =>{
     alert("el id introducido no es válido. Debe ser un número.");
   }
   else{
-    $(".header-flex").append(`<button data-id=${id} id="actualizarPartida">Actualizar</button>`);
+    $("#actualizarPartida").data("id", id);
     actualizarPartida(id);
   }
 });
 
 function actualizarPartida(id){
   let cad64 = btoa(user + ":" + contraseña);
-  
+
   $.ajax({
     type: "GET",
     url: "/buscarPartida",
@@ -188,7 +188,12 @@ function actualizarPartida(id){
   });
 }
 
-$(".cabecera-flex").on("click", "button", (event) =>{
+$("#volverAtras").on("click", (event) =>{
+  $(".partida").hide();
+  $(".partidas").show();
+});
+
+$("#actualizarPartida").on("click", (event) =>{
   actualizarPartida($(event.target).data().id);
 });
 
