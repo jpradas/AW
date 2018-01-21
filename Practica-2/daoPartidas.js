@@ -205,7 +205,6 @@ class DAOpartidas{
            "UPDATE " + config.database + ".partidas SET estado=? WHERE id=?",
            [estado, idPartida],
            (err, rows) =>{
-             console.log(rows);
              connection.release();
              if(err){
                callback(err);return;
@@ -215,7 +214,7 @@ class DAOpartidas{
          )
        })
      }
-
+     //Con get partida puede que no haga falta, lo dejo por si acaso
      getEstadoPartida(idPartida, callback){
        this.pool.getConnection((err, connection) =>{
          if(err){
@@ -229,7 +228,13 @@ class DAOpartidas{
              if(err){
                callback(err);return;
              }
-             callback(null, rows[0].estado);
+             if (rows[0] === undefined){
+               callback(null, null);
+             }
+             else{
+               callback(null, rows[0].estado);
+             }
+
            }
          )
        })
@@ -244,11 +249,12 @@ class DAOpartidas{
            "UPDATE " + config.database + ".partidas SET estado=? WHERE id=?",
            [estado, idPartida],
            (err, rows) =>{
+             console.log(rows);
              connection.release();
              if(err){
                callback(err);return;
              }
-             callback(null, rows[0].estado);
+             callback(null, null);
            }
          )
        })

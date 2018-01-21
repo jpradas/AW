@@ -75,7 +75,7 @@ html{
   color: #3B3B3B;
 }
 
-#Aceptar:hover{
+#Aceptar:hover, #jugarCartas:hover{
   background-color: #007BFF;
   color: white;
 }
@@ -102,10 +102,33 @@ html{
   align-self: center;
 }
 
-#desconectar:hover{
+div.boton{
+  justify-content: space-around;
+}
+
+#tusCartas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.mano {
+  padding-bottom: 20px;
+}
+
+#jugarCartas{
+  width: 230px;
+}
+
+#mentiroso{
+  width: 120px;
+}
+
+#desconectar:hover, #mentiroso:hover{
   background-color: #C72B2C;
   color: white;
 }
+
 
 #usuario{
   font-size: 60px;
@@ -412,6 +435,15 @@ html{
 #actualizarPartida:hover,  #volverAtras:hover{
   transform: scale(1.2);
 }
+
+#mesa{
+  width: 564px;
+  height: 600px;
+  background-image: url(/imagenes/tapete.png);
+  border-radius: 15px;
+}
+
+
 
 .cabecera-flex{
   display: flex;

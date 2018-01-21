@@ -149,9 +149,8 @@ $("#buscar-partida").on("click", () =>{
 //TODO Hacer parte 2
 $("#lista-partidas").on("click", "li", (event) =>{
   let id = $(event.target).data().id;
-
   $("#actualizarPartida").data("id", id);
-  actualizarPartida(id);
+  estadoPartida(id);
 });
 
 $("#cancelar-buscar-partida").on("click", () =>{
@@ -170,7 +169,7 @@ $("#aceptar-buscar-partida").on("click", () =>{
   }
   else{
     $("#actualizarPartida").data("id", id);
-    actualizarPartida(id);
+    estadoPartida(id);
   }
 });
 
@@ -211,12 +210,13 @@ $("#volverAtras").on("click", (event) =>{
 });
 
 $("#actualizarPartida").on("click", (event) =>{
-  actualizarPartida($(event.target).data().id);
+  //actualizarPartida($(event.target).data().id);
+  estadoPartida($(event.target).data().id);
 });
 
 function iniciarPartida(id){
   let cad64 = btoa(user + ":" + contraseña);
-  console.log(cad64);
+
   $.ajax({
     type: "POST",
     url: "/iniciarPartida",
@@ -226,18 +226,21 @@ function iniciarPartida(id){
     contentType: "application/json",
     data: JSON.stringify({ user: user, idPartida: id }),
     success: (data, textStatus, jqXHR) =>{
-      data.estado;
-      /*
+
+
         $(".partidas").hide();
         $(".partida").fadeIn(500);
         $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
+        $(".buscar_partida").slideUp(500);
+        //data.estado;
+        /*
         $("#jugadores li").remove();
         data.jugadores.forEach(jugador =>{
           $("#jugadores").append(`<li> ${jugador.login} </li>`);
         });
-        $(".buscar_partida").slideUp(500);
         $("#buscar-text-id-partida").val("");
         */
+
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -260,7 +263,30 @@ function estadoPartida(id){
     },
     data: {idPartida: id},
     success: (data, textStatus, jqXHR) =>{
-
+      //Partida no iniciada
+      if (data.partida.estado === null){
+        actualizarPartida(id);
+      }
+      else {
+        $(".partidas").hide();
+        $(".partida").fadeIn(500);
+        $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
+        $("#tusCartas img").remove();
+        let estado = JSON.parse(data.partida.estado);
+        let cartas = obtenerCartasJugador(estado);
+        cartas.forEach(carta =>{
+          $("#tusCartas").append(`<img src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
+        });
+        estado.valorCartasMesa.forEach(carta =>{
+          $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
+        })
+        $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
+        $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
+        $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
+        $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
+        //$(".buscar_partida").slideUp(500);
+        //data.estado.turnoJugador
+      }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -294,6 +320,16 @@ function actualizarEstado(id, estado){
       }
     }
   });
+}
+
+function obtenerCartasJugador(estado){
+  switch (user) {
+    case estado.jugador1: return estado.cartasJugador1;
+    case estado.jugador2: return estado.cartasJugador2;
+    case estado.jugador3: return estado.cartasJugador3;
+    case estado.jugador4: return estado.cartasJugador4;
+    default: alert("Error en el usuario al obtener el estado");
+  }
 }
 
   return {

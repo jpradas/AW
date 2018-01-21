@@ -74,13 +74,30 @@
             <button id="volverAtras">Volver Atras</button>
             <button id="actualizarPartida">Actualizar</button>
         </div>
-        <div id="mesa">
-
-        </div>
-        <div id="tusCartas">
-
-        </div>
     </ul>
+    <div class="mesa">
+        <div class="etiqueta">Cartas en la mesa</div>
+        <div id="mesa">
+          <span class="tablero"></span>
+          <span class="jugadores">
+            <table>
+              <tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>
+
+            </table>
+          </span>
+        </div>
+        <div style="font-size: 60px; color:white;">X ha colocado Y</div>
+    </div>
+
+
+    <div class="mano">
+        <span class="etiqueta">Cartas en la mano</span>
+        <div id="tusCartas"></div>
+        <div class="boton">
+          <input type="button" id="jugarCartas" value="Jugar cartas seleccionadas">
+          <input type="button" id="mentiroso" value="Mentiroso">
+        </div>
+    </div>
   </div>
 </body>
 </html>

@@ -188,7 +188,6 @@ app.put("/unirsePartida", passport.authenticate('basic', {session: false}), (req
                     }
                     response.status(201);
                     jugadores = jugadores + 1;
-                    console.log(jugadores);
                     response.json({ resultado: result, jugadores: jugadores });
                   });
                 }
@@ -236,7 +235,7 @@ app.post("/iniciarPartida",  passport.authenticate('basic', {session: false}), (
     }
     let estado = {jugador1:jugadores[0].login, jugador2:jugadores[1].login, jugador3:jugadores[2].login,
        jugador4:jugadores[3].login, cartasJugador1:[], cartasJugador2:[], cartasJugador3:[],
-       cartasJugador4:[], ordenJugadores:[1,2,3,4], turnoJugador:"", cartasMesa: 0, valorCartasMesa: []};
+       cartasJugador4:[], ordenJugadores:[1,2,3,4], turnoJugador:"", numCartasUltimoJugador: 0, valorCartasMesa: ["J", "J", "J"]};
 
     repartirCartasyJugadores(estado);
 
@@ -253,14 +252,13 @@ app.post("/iniciarPartida",  passport.authenticate('basic', {session: false}), (
 });
 
 app.get("/estadoPartida",  passport.authenticate('basic', {session: false}), (request, response) =>{
-  daop.getEstadoPartida(request.query.idPartida, (err, estado) => {
+  daop.getPartida(request.query.idPartida, (err, partida) => {
     if(err){
-      response.status(500);
+      response.status(404);
       response.end();return;
     }
     else {
-      console.log(estado);
-      response.json({estado : estado});
+      response.json({partida : partida});
     }
   });
 });
