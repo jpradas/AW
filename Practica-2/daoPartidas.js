@@ -109,6 +109,34 @@ class DAOpartidas{
        });
      }
 
+     estaDentroPartida(idUser, idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+           if(err){
+               callback(err); return;
+           }
+           connection.query(
+               "SELECT * FROM "+ config.database +".juega_en WHERE idUsuario=? AND idPartida=?",
+               [idUser.id, idPartida],
+               (err, result) =>{
+                   connection.release();
+                   if(err){
+                     callback(err);return;
+                   }
+                   else {
+                     if (result[0] === undefined){
+                       callback(null, false);
+                     }
+                     else{
+                       callback(null, true);
+                     }
+                   }
+
+               }
+           );
+       });
+     }
+
+
      setJugadorPartida(idUser, idPartida, callback){
        this.pool.getConnection((err, connection) =>{
            if(err){
@@ -141,11 +169,9 @@ class DAOpartidas{
                    if(err){
                      callback(err);return;
                    }
-                   if(rows.jugadores > 4 ){
-                    callback(null, false);
-                  }else{
-                    callback(null, true);
-                  }
+                   else{
+                    callback(null, rows[0].jugadores);
+                   }
                }
            );
        });
@@ -165,6 +191,64 @@ class DAOpartidas{
                callback(err);return;
              }
              callback(null, rows);
+           }
+         )
+       })
+     }
+
+     setEstadoPartida(idPartida, estado, callback){
+       this.pool.getConnection((err, connection) =>{
+         if(err){
+           callback(err);return;
+         }
+         connection.query(
+           "UPDATE " + config.database + ".partidas SET estado=? WHERE id=?",
+           [estado, idPartida],
+           (err, rows) =>{
+             console.log(rows);
+             connection.release();
+             if(err){
+               callback(err);return;
+             }
+             callback(null, null);
+           }
+         )
+       })
+     }
+
+     getEstadoPartida(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+         if(err){
+           callback(err);return;
+         }
+         connection.query(
+           "SELECT * FROM " + config.database + ".partidas WHERE id=?",
+           [idPartida],
+           (err, rows) =>{
+             connection.release();
+             if(err){
+               callback(err);return;
+             }
+             callback(null, rows[0].estado);
+           }
+         )
+       })
+     }
+
+     actualizarEstado(idPartida, estado, callback){
+       this.pool.getConnection((err, connection) =>{
+         if(err){
+           callback(err);return;
+         }
+         connection.query(
+           "UPDATE " + config.database + ".partidas SET estado=? WHERE id=?",
+           [estado, idPartida],
+           (err, rows) =>{
+             connection.release();
+             if(err){
+               callback(err);return;
+             }
+             callback(null, rows[0].estado);
            }
          )
        })

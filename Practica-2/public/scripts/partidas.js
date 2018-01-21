@@ -12,7 +12,7 @@ define([], () =>{
     $.ajax({
       type: "GET",
       url: "/getPartidas",
-      data: { user: user},
+      data: {user: user},
       success: (data, textStatus, jqXHR) =>{
         let nuevoElem=null;
         data.partidas.forEach( partida => {
@@ -86,6 +86,7 @@ $("#cancelar-unirse-partida").on("click", () =>{
   $("#input-text-id-partida").val("");
 });
 
+
 $("#aceptar-unirse-partida").on("click", () =>{
   let id = $("#input-text-id-partida").prop("value");
   if(id === ""){
@@ -95,7 +96,6 @@ $("#aceptar-unirse-partida").on("click", () =>{
     alert("el id introducido no es válido. Debe ser un número.");
   }
   else{
-
     let cad64 = btoa(user + ":" + contraseña);
     $.ajax({
       type: "PUT",
@@ -106,10 +106,19 @@ $("#aceptar-unirse-partida").on("click", () =>{
       contentType: "application/json",
       data: JSON.stringify({ user: user, idPartida: id }),
       success: (data, textStatus, jqXHR) =>{
+        console.log();
+        console.log(data.jugadores);
         if(data.resultado){
-          actualizarPartidas();
           $("#input-text-id-partida").val("");
           $(".unirse_partida").slideUp(500);
+          if (data.jugadores === 4){
+            //Comienza la partida
+            iniciarPartida(id);
+          }
+          else {
+            actualizarPartidas();
+          }
+
         }else{
           alert("No se ha podido unir a la partida. Vuelve a intentarlo");
         }
@@ -120,7 +129,11 @@ $("#aceptar-unirse-partida").on("click", () =>{
         }
         else if(jqXHR.status === 400){
           alert(jqXHR.status + " - " + errorThrown + ": La partida esta llena y ya no se puede unir nadie mas");
-        }else{
+        }
+        else if(jqXHR.status === 405){
+          alert(jqXHR.status + " - " + errorThrown + ": Ya estas dentro de la partida");
+        }
+        else{
           alert("Se ha producido un error: " + errorThrown);
         }
       }
@@ -133,8 +146,12 @@ $("#buscar-partida").on("click", () =>{
   $(".buscar_partida").slideDown(500);
 });
 
+//TODO Hacer parte 2
 $("#lista-partidas").on("click", "li", (event) =>{
   let id = $(event.target).data().id;
+
+  $("#actualizarPartida").data("id", id);
+  actualizarPartida(id);
 });
 
 $("#cancelar-buscar-partida").on("click", () =>{
@@ -190,12 +207,94 @@ function actualizarPartida(id){
 
 $("#volverAtras").on("click", (event) =>{
   $(".partida").hide();
-  $(".partidas").show();
+  actualizarPartidas();
 });
 
 $("#actualizarPartida").on("click", (event) =>{
   actualizarPartida($(event.target).data().id);
 });
+
+function iniciarPartida(id){
+  let cad64 = btoa(user + ":" + contraseña);
+  console.log(cad64);
+  $.ajax({
+    type: "POST",
+    url: "/iniciarPartida",
+    beforeSend: (req) =>{
+      req.setRequestHeader("Authorization", "Basic " + cad64);
+    },
+    contentType: "application/json",
+    data: JSON.stringify({ user: user, idPartida: id }),
+    success: (data, textStatus, jqXHR) =>{
+      data.estado;
+      /*
+        $(".partidas").hide();
+        $(".partida").fadeIn(500);
+        $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
+        $("#jugadores li").remove();
+        data.jugadores.forEach(jugador =>{
+          $("#jugadores").append(`<li> ${jugador.login} </li>`);
+        });
+        $(".buscar_partida").slideUp(500);
+        $("#buscar-text-id-partida").val("");
+        */
+    },
+    error: (jqXHR, textStatus, errorThrown) =>{
+      if(jqXHR.status === 404){
+        alert(jqXHR.status + " - " + errorThrown + ": Fallo al iniciar la partida");
+      }else{
+        alert("Se ha producido un error: " + errorThrown);
+      }
+    }
+  })
+}
+
+function estadoPartida(id){
+  let cad64 = btoa(user + ":" + contraseña);
+
+  $.ajax({
+    type: "GET",
+    url: "/estadoPartida",
+    beforeSend: (req) =>{
+      req.setRequestHeader("Authorization", "Basic " + cad64);
+    },
+    data: {idPartida: id},
+    success: (data, textStatus, jqXHR) =>{
+
+    },
+    error: (jqXHR, textStatus, errorThrown) =>{
+      if(jqXHR.status === 404){
+        alert(jqXHR.status + " - " + errorThrown + ": Fallo en el estado de la partida");
+      }else{
+        alert("Se ha producido un error: " + errorThrown);
+      }
+    }
+  });
+}
+
+function actualizarEstado(id, estado){
+  let cad64 = btoa(user + ":" + contraseña);
+
+  $.ajax({
+    type: "PUT",
+    url: "/realizarAccion",
+    beforeSend: (req) =>{
+      req.setRequestHeader("Authorization", "Basic " + cad64);
+    },
+    contentType: "application/json",
+    data: JSON.stringify({ idPartida: id, estado: estado }),
+    success: (data, textStatus, jqXHR) =>{
+
+    },
+    error: (jqXHR, textStatus, errorThrown) =>{
+      if(jqXHR.status === 404){
+        alert(jqXHR.status + " - " + errorThrown + ": Fallo al actualizar la partida");
+      }else{
+        alert("Se ha producido un error: " + errorThrown);
+      }
+    }
+  });
+}
 
   return {
     getPartidas: getPartidas,
