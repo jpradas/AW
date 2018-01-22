@@ -463,6 +463,7 @@ div.mano span.etiqueta{
   width: 98px;
   margin-left: 5px;
   align-self: center;
+  border-radius: 5px;  
 }
 
 .tablero{
