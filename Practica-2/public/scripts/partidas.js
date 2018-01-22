@@ -18,6 +18,7 @@ define([], () =>{
         data.partidas.forEach( partida => {
           nuevoElem = $(`<li data-id=${partida.id}>Id: ${partida.id} - Nombre: ${partida.nombre} </li>`);
           $("#lista-partidas").append(nuevoElem);
+
         });
         $(".partidas").fadeIn(500);
       },
@@ -106,11 +107,10 @@ $("#aceptar-unirse-partida").on("click", () =>{
       contentType: "application/json",
       data: JSON.stringify({ user: user, idPartida: id }),
       success: (data, textStatus, jqXHR) =>{
-        console.log();
-        console.log(data.jugadores);
         if(data.resultado){
           $("#input-text-id-partida").val("");
           $(".unirse_partida").slideUp(500);
+
           if (data.jugadores === 4){
             //Comienza la partida
             iniciarPartida(id);
@@ -146,7 +146,6 @@ $("#buscar-partida").on("click", () =>{
   $(".buscar_partida").slideDown(500);
 });
 
-//TODO Hacer parte 2
 $("#lista-partidas").on("click", "li", (event) =>{
   let id = $(event.target).data().id;
   $("#actualizarPartida").data("id", id);
@@ -227,11 +226,9 @@ function iniciarPartida(id){
     data: JSON.stringify({ user: user, idPartida: id }),
     success: (data, textStatus, jqXHR) =>{
 
+        //$(".buscar_partida").slideUp(500);
 
-        $(".partidas").hide();
-        $(".partida").fadeIn(500);
-        $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
-        $(".buscar_partida").slideUp(500);
+        mostrarPartida(data.id, data.nombre, data.estado);
         //data.estado;
         /*
         $("#jugadores li").remove();
@@ -268,22 +265,11 @@ function estadoPartida(id){
         actualizarPartida(id);
       }
       else {
-        $(".partidas").hide();
-        $(".partida").fadeIn(500);
-        $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
+
         $("#tusCartas img").remove();
         let estado = JSON.parse(data.partida.estado);
-        let cartas = obtenerCartasJugador(estado);
-        cartas.forEach(carta =>{
-          $("#tusCartas").append(`<img src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
-        });
-        estado.valorCartasMesa.forEach(carta =>{
-          $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
-        })
-        $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
-        $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
-        $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
-        $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
+        mostrarPartida(data.partida.id, data.partida.nombre, estado);
+
         //$(".buscar_partida").slideUp(500);
         //data.estado.turnoJugador
       }
@@ -310,7 +296,13 @@ function actualizarEstado(id, estado){
     contentType: "application/json",
     data: JSON.stringify({ idPartida: id, estado: estado }),
     success: (data, textStatus, jqXHR) =>{
+      if (data.terminado === undefined){
 
+      }
+      //Partida terminada
+      else {
+
+      }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -328,8 +320,31 @@ function obtenerCartasJugador(estado){
     case estado.jugador2: return estado.cartasJugador2;
     case estado.jugador3: return estado.cartasJugador3;
     case estado.jugador4: return estado.cartasJugador4;
-    default: alert("Error en el usuario al obtener el estado");
+    default: alert("Error en el usuario " + user + " al obtener el estado");
   }
+}
+
+function mostrarPartida(id, nombre, estado){
+  $(".partidas").hide();
+  $(".partida").fadeIn(500);
+  $(".mesa table tr").remove();
+  $("#jugadores span").text(`Partida ${id} - ${nombre}`);
+
+  let cartas = obtenerCartasJugador(estado);
+  cartas.forEach(carta =>{
+    $("#tusCartas").append(`<img src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
+  });
+
+  //Hay que hacerlo bien, no esta correcto
+  estado.valorCartasMesa.forEach(carta =>{
+    $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
+  })
+
+  $(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
+  $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
+  $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
+  $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
+  $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
 }
 
   return {

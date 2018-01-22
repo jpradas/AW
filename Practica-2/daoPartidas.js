@@ -260,6 +260,31 @@ class DAOpartidas{
        })
      }
 
+
+      haTerminadoPartida(idPartida, callback){
+       this.pool.getConnection((err, connection) =>{
+         if(err){
+           callback(err);return;
+         }
+         connection.query(
+           "SELECT * FROM " + config.database + ".partidas WHERE id=?",
+           [idPartida],
+           (err, rows) =>{
+             connection.release();
+             if(err){
+               callback(err);return;
+             }
+             if (rows[0].estado === "Terminado"){
+               callback(null, true);
+             }
+             else{
+               callback(null, false);
+             }
+           }
+         )
+       })
+     }
+
 }
 
 module.exports = {

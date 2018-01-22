@@ -233,21 +233,25 @@ app.post("/iniciarPartida",  passport.authenticate('basic', {session: false}), (
       response.status(404);
       response.end();return;
     }
-    let estado = {jugador1:jugadores[0].login, jugador2:jugadores[1].login, jugador3:jugadores[2].login,
-       jugador4:jugadores[3].login, cartasJugador1:[], cartasJugador2:[], cartasJugador3:[],
-       cartasJugador4:[], ordenJugadores:[1,2,3,4], turnoJugador:"", numCartasUltimoJugador: 0, valorCartasMesa: ["J", "J", "J"]};
+    else{
+      daop.getPartida(request.body.idPartida, (err, partida) =>{
+        let estado = {jugador1:jugadores[0].login, jugador2:jugadores[1].login, jugador3:jugadores[2].login,
+           jugador4:jugadores[3].login, cartasJugador1:[], cartasJugador2:[], cartasJugador3:[],
+           cartasJugador4:[], ordenJugadores:[1,2,3,4], turnoJugador:"", numCartasUltimoJugador: 0, valorCartasMesa: ["J", "J", "J"]};
 
-    repartirCartasyJugadores(estado);
+        repartirCartasyJugadores(estado);
 
-    daop.setEstadoPartida(request.body.idPartida, JSON.stringify(estado),  (err, result) =>{
-      if(err){
-        response.status(404);
-        response.end();return;
-      }
-      else{
-        response.json({estado : estado});
-      }
-    });
+        daop.setEstadoPartida(request.body.idPartida, JSON.stringify(estado),  (err, result) =>{
+          if(err){
+            response.status(404);
+            response.end();return;
+          }
+          else{
+            response.json({estado : estado, id : request.body.idPartida, nombre: partida.nombre });
+          }
+        });
+      });
+    }
   });
 });
 
@@ -265,15 +269,40 @@ app.get("/estadoPartida",  passport.authenticate('basic', {session: false}), (re
 
 app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (request, response) =>{
   //Cambiar el estado
-
-  daop.actualizarEstado(request.body.idPartida, JSON.stringify(estado),  (err, result) =>{
+  daop.existePartida(request.body.idPartida, (err, result) =>{
     if(err){
       response.status(404);
       response.end();return;
     }
-    else{
-      response.json({estado : estado});
-    }
+    //Se marca con "Terminado" el estado (borrando todo el resto del estado) una vez se acabe la partida
+    //Puede que la operacion de error, comprobar al ejecutar
+    daop.haTerminadoPartida(request.body.idPartida, (err, terminado) => {
+      if(err){
+        response.status(404);
+        response.end();return;
+      }
+      else if(!terminado){
+        daop.getPartida(request.body.idPartida, (err, partida) => {
+          if(err){
+            response.status(404);
+            response.end();return;
+          }
+          daop.actualizarEstado(request.body.idPartida, JSON.stringify(partida.estado),  (err, result) =>{
+            if(err){
+              response.status(404);
+              response.end();return;
+            }
+            else{
+              response.json({estado : estado});
+            }
+          });
+
+        });
+      }
+      else{
+        response.json({terminado : terminado});
+      }
+    });
   })
 });
 
