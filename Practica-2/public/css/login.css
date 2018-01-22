@@ -437,16 +437,62 @@ div.boton{
 }
 
 #mesa{
-  width: 564px;
-  height: 600px;
-  background-image: url(/imagenes/tapete.png);
+  height: 700px;
+  background-image: url(/imagenes/tapete-poker.png);
+  background-repeat:no-repeat;
+  background-size: 1269px 700px;
+  margin-left: 20px;
+  margin-right: 20px;
   border-radius: 15px;
 }
 
+div.mesa div.etiqueta{
+  margin-left: 30px;
+}
 
+div.mano span.etiqueta{
+  margin-left: 30px;
+}
 
 .cabecera-flex{
   display: flex;
+}
+
+.trasera{
+  height: 153px;
+  width: 98px;
+  margin-left: 5px;
+  align-self: center;
+}
+
+.tablero{
+  display: flex;
+  justify-content: center;
+  height: 600px;
+  width: auto;
+}
+
+#movimiento{
+  margin-top: 20px;
+  display: flex;
+  color: white;
+  font-size: 60px;
+  justify-content: center;
+}
+
+.jugadores{
+  display: flex;
+  color: white;
+  font-size: 60px;
+  justify-content: center;
+}
+
+.mesa table{
+  display: flex;
+}
+
+.mesa tr{
+  margin-left: 60px;
 }
 
 .blur{

@@ -261,12 +261,13 @@ function estadoPartida(id){
     data: {idPartida: id},
     success: (data, textStatus, jqXHR) =>{
       //Partida no iniciada
-      if (data.partida.estado === null){
+      if (data.partida.estado === ""){
+        console.log("no empezada");
         actualizarPartida(id);
       }
       else {
-
         $("#tusCartas img").remove();
+        console.log(data.partida.estado);
         let estado = JSON.parse(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, estado);
 
@@ -340,7 +341,7 @@ function obtenerCartasJugador(estado){
       $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
     })
 
-    $(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
+    //$(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
     $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
     $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
     $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
