@@ -324,28 +324,36 @@ function obtenerCartasJugador(estado){
   }
 }
 
-function mostrarPartida(id, nombre, estado){
-  $(".partidas").hide();
-  $(".partida").fadeIn(500);
-  $(".mesa table tr").remove();
-  $("#jugadores span").text(`Partida ${id} - ${nombre}`);
+  function mostrarPartida(id, nombre, estado){
+    $(".partidas").hide();
+    $(".partida").fadeIn(500);
+    $(".mesa table tr").remove();
+    $("#jugadores span").text(`Partida ${id} - ${nombre}`);
 
-  let cartas = obtenerCartasJugador(estado);
-  cartas.forEach(carta =>{
-    $("#tusCartas").append(`<img src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
+    let cartas = obtenerCartasJugador(estado);
+    cartas.forEach(carta =>{
+      $("#tusCartas").append(`<img data-valor=${carta.Valor} data-palo=${carta.Palo} src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
+    });
+
+    //Hay que hacerlo bien, no esta correcto
+    estado.valorCartasMesa.forEach(carta =>{
+      $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
+    })
+
+    $(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
+    $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
+    $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
+    $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
+    $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
+  }
+
+  $("#tusCartas").on("click", "img", (event) =>{
+    let palo = $(event.target).data().palo;
+    let valor = $(event.target).data().valor;
+    console.log(palo);
+    console.log(valor);
   });
 
-  //Hay que hacerlo bien, no esta correcto
-  estado.valorCartasMesa.forEach(carta =>{
-    $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
-  })
-
-  $(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
-  $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
-  $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
-  $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
-  $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
-}
 
   return {
     getPartidas: getPartidas,

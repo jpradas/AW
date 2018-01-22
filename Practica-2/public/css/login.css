@@ -432,7 +432,7 @@ div.boton{
   margin-right: 20px;
 }
 
-#actualizarPartida:hover,  #volverAtras:hover{
+#actualizarPartida:hover,  #volverAtras:hover, img.carta:hover{
   transform: scale(1.2);
 }
 
