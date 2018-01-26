@@ -83,8 +83,8 @@
             <table></table>
           </div>
         </div>
-        <div id="movimiento">
-          <span>X ha colocado Y</span>
+        <div class="info">
+          <span>X dice que ha colocado Y</span>
         </div>
     </div>
 
@@ -96,7 +96,35 @@
           <input type="button" id="jugarCartas" value="Jugar cartas seleccionadas">
           <input type="button" id="mentiroso" value="Mentiroso">
         </div>
+        <div class="info" style="display: none;">No es tu turno</div>
+
+        <div class="decirCartas" style="display: none;">
+          <span class="texto">Selecciona el valor que los demas veran</span>
+
+            <select name="valorCartas">
+              <option value="A">A</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="J">J</option>
+              <option value="Q">Q</option>
+              <option value="K">K</option>
+            </select>
+
+          <button id="hacerJugada">Jugar</button>
+          <button id="cancelarJugada">Cancelar</button>
+        </div>
+
     </div>
   </div>
+
+
+
 </body>
 </html>

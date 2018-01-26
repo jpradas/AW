@@ -59,12 +59,12 @@ html{
 
 .boton{
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   margin-top: 30px;
   margin-right: 10%;
 }
 
-.boton input{
+.boton input, select{
   font-family: "Lamplighter";
   background-color: #E6E6E6;
   width: 100px;
@@ -102,14 +102,12 @@ html{
   align-self: center;
 }
 
-div.boton{
-  justify-content: space-around;
-}
-
 #tusCartas {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  margin-left: 2%;
+  margin-right: 2%;
 }
 
 .mano {
@@ -195,18 +193,6 @@ div.boton{
   transform: scale(1.5);
 }
 
-.crear_partida{
-  width: 564px;
-  height: 600px;
-  background-image: url(/imagenes/cuaderno-03.jpg);
-  border-radius: 15px;
-  position:absolute;
-  left: 26%;
-  right: 25%;
-  top: 220px;
-  z-index: 2;
-}
-
 .label{
   position:relative;
   text-decoration: underline;
@@ -215,7 +201,7 @@ div.boton{
   top: 15px;
 }
 
-#form-crear-partida{
+#form-crear-partida, #form-unirse-partida, #form-buscar-partida{
   list-style:none;
   font-size: 50px;
 }
@@ -242,9 +228,8 @@ div.boton{
   font-size: 40px;
 }
 
-#aceptar-crear-partida{
-  margin-left: 180px;
-  margin-top: 100px;
+#cancelar-crear-partida, #aceptar-crear-partida, #cancelar-unirse-partida, #cancelar-buscar-partida,
+#cancelarJugada{
   background: none;
   border: none;
   font-family: "Lamplighter";
@@ -252,19 +237,16 @@ div.boton{
   text-decoration: underline;
 }
 
-#cancelar-crear-partida{
-  background: none;
-  border: none;
-  font-family: "Lamplighter";
-  font-size: 50px;
-  text-decoration: underline;
+#aceptar-crear-partida{
+  margin-left: 180px;
 }
+
 
 .header-flex{
   display: flex;
 }
 
-#buscar-partida{
+#buscar-partida, #unirse-partida{
   background: url(/imagenes/search-icon.png) no-repeat;
   background-size: 40px 40px;
   border: none;
@@ -298,21 +280,14 @@ div.boton{
 #unirse-partida{
   background: url(/imagenes/joinPartida.png) no-repeat;
   background-size: 42px 37px;
-  border: none;
-  width: 50px;
-  height: 50px;
-  margin-top: 10px;
-  align-self: center;
   margin-left: 10px;
-  transition-property: transform;
-  transition: 200ms;
 }
 
 #unirse-partida:hover{
   transform: scale(1.2);
 }
 
-.unirse_partida{
+.unirse_partida, .buscar_partida, .crear_partida{
   width: 564px;
   height: 400px;
   background-image: url(/imagenes/cuaderno-03.jpg);
@@ -324,12 +299,7 @@ div.boton{
   z-index: 2;
 }
 
-#form-unirse-partida{
-  list-style:none;
-  font-size: 50px;
-}
-
-#aceptar-unirse-partida{
+#aceptar-unirse-partida, #aceptar-buscar-partida, #hacerJugada{
   margin-left: 180px;
   margin-top: -20px;
   background: none;
@@ -339,13 +309,9 @@ div.boton{
   text-decoration: underline;
 }
 
-#cancelar-unirse-partida{
-  background: none;
-  border: none;
-  font-family: "Lamplighter";
-  font-size: 50px;
-  text-decoration: underline;
-}
+ #hacerJugada, select{
+   margin-left: 70px;
+ }
 
 #input-text-id-partida{
   background: none;
@@ -359,20 +325,11 @@ div.boton{
 }
 
 .buscar_partida{
-  width: 564px;
-  height: 400px;
-  background-image: url(/imagenes/cuaderno-03.jpg);
-  border-radius: 15px;
-  position:absolute;
   left: 31%;
-  right: 25%;
-  top: 220px;
-  z-index: 2;
 }
 
-#form-buscar-partida{
-  list-style:none;
-  font-size: 50px;
+.crear_partida{
+  left: 26%;
 }
 
 #buscar-text-id-partida{
@@ -384,24 +341,6 @@ div.boton{
   width: 80%;
   font-family: "Lamplighter";
   font-size: 40px;
-}
-
-#aceptar-buscar-partida{
-  margin-left: 180px;
-  margin-top: -20px;
-  background: none;
-  border: none;
-  font-family: "Lamplighter";
-  font-size: 50px;
-  text-decoration: underline;
-}
-
-#cancelar-buscar-partida{
-  background: none;
-  border: none;
-  font-family: "Lamplighter";
-  font-size: 50px;
-  text-decoration: underline;
 }
 
 .partida{
@@ -459,11 +398,18 @@ div.mano span.etiqueta{
 }
 
 .trasera{
-  height: 153px;
-  width: 98px;
-  margin-left: 5px;
+  font-size: 60px;
   align-self: center;
-  border-radius: 5px;  
+  color: white;
+  text-align: center;
+  background-size: 70px 100px;
+  height: 80px;
+  width: 60px;
+  padding-right: 10px;
+  border-radius: 10px;
+  margin-left: 5px;
+  padding-top: 20px;
+  margin-top: 5px;
 }
 
 .tablero{
@@ -473,7 +419,7 @@ div.mano span.etiqueta{
   width: auto;
 }
 
-#movimiento{
+.info{
   margin-top: 20px;
   display: flex;
   color: white;
@@ -486,6 +432,15 @@ div.mano span.etiqueta{
   color: white;
   font-size: 60px;
   justify-content: center;
+}
+
+.decirCartas{
+  background-image: url(/imagenes/cuaderno-03.jpg);
+  border-radius: 15px;
+}
+
+.texto{
+  font-size: 70px;
 }
 
 .mesa table{

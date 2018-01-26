@@ -78,6 +78,11 @@ define([], () =>{
     $(".crear_partida").slideUp(500);
   })
 
+  $("#cancelarJugada").on("click", () =>{
+    $(".decirCartas").hide();
+    $(".boton").fadeIn(500);
+  })
+
   $("#unirse-partida").on("click", () =>{
     $(".unirse_partida").slideDown(500);
   });
@@ -168,7 +173,8 @@ $("#aceptar-buscar-partida").on("click", () =>{
   }
   else{
     $("#actualizarPartida").data("id", id);
-    estadoPartida(id);
+    //estadoPartida(id);
+    actualizarPartida(id);
   }
 });
 
@@ -184,6 +190,8 @@ function actualizarPartida(id){
     data: {idPartida: id},
     success: (data, textStatus, jqXHR) =>{
         $(".partidas").hide();
+        $(".mano").hide();
+        $(".mesa").hide();
         $(".partida").fadeIn(500);
         $("#jugadores span").text(`Partida ${data.partida.id} - ${data.partida.nombre}`);
         $("#jugadores li").remove();
@@ -267,6 +275,7 @@ function estadoPartida(id){
       }
       else {
         $("#tusCartas img").remove();
+        $(".tablero div").remove();
         console.log(data.partida.estado);
         let estado = JSON.parse(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, estado);
@@ -285,7 +294,7 @@ function estadoPartida(id){
   });
 }
 
-function actualizarEstado(id, estado){
+function realizarAccion(id, accion){
   let cad64 = btoa(user + ":" + contraseña);
 
   $.ajax({
@@ -295,8 +304,9 @@ function actualizarEstado(id, estado){
       req.setRequestHeader("Authorization", "Basic " + cad64);
     },
     contentType: "application/json",
-    data: JSON.stringify({ idPartida: id, estado: estado }),
+    data: JSON.stringify({ idPartida: id, accion: accion}),
     success: (data, textStatus, jqXHR) =>{
+      //Pasar el turno, poner cartas en la mesa y refrescar visuales
       if (data.terminado === undefined){
 
       }
@@ -327,6 +337,8 @@ function obtenerCartasJugador(estado){
 
   function mostrarPartida(id, nombre, estado){
     $(".partidas").hide();
+    $(".mano").show();
+    $(".mesa").show();
     $(".partida").fadeIn(500);
     $(".mesa table tr").remove();
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
@@ -336,9 +348,8 @@ function obtenerCartasJugador(estado){
       $("#tusCartas").append(`<img data-valor=${carta.Valor} data-palo=${carta.Palo} src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
     });
 
-    //Hay que hacerlo bien, no esta correcto
     estado.valorCartasMesa.forEach(carta =>{
-      $(".tablero").append(`<img src="imagenes/traseraCarta.jpg" class="trasera">`);
+      $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
 
     //$(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
@@ -351,8 +362,30 @@ function obtenerCartasJugador(estado){
   $("#tusCartas").on("click", "img", (event) =>{
     let palo = $(event.target).data().palo;
     let valor = $(event.target).data().valor;
-    console.log(palo);
-    console.log(valor);
+    console.log($(event.target).prop("style").border);
+
+    if ($(event.target).prop("style").border === "solid red"){
+      $(event.target).css("border", "none");
+      let indice = cartasSeleccionadas.indexOf($(event.target).data());
+    }
+    else{
+      $(event.target).css("border", "solid red");
+    }
+
+
+  });
+
+  $("#jugarCartas").on("click", () =>{
+    $(".boton").hide();
+    $(".decirCartas").fadeIn(500);
+    let cartas = [];
+    $("#tusCartas img").each((index, carta) => {
+      if ($(carta).prop("style").border === "solid red"){
+        cartas.push($(carta).data());
+      }
+    });
+    console.log(cartas);
+    //realizarAccion(id, cartas)
   });
 
 

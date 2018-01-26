@@ -76,9 +76,11 @@ define(["partidas"], (p) =>{
       p.getPartidas();
     }
 
-  $("#desconectar").on("click", ()=>{ //TODO hace falta destruir la lista de partidas que hemos añadido a la lista en html
+  $("#desconectar").on("click", ()=>{
     $(".info-perfil").slideUp(500);
     $(".cuerpo").fadeIn(500);
+    $(".boton").show();
+    $(".decirCartas").hide();
     $(".partidas").hide();
     $(".crear_partida").hide();
     $(".unirse_partida").hide();
