@@ -4,8 +4,13 @@
 }
 
 html{
-    font-family: "Lamplighter";
-    background-image: url(/imagenes/fondoPagina.png);
+  font-family: "Lamplighter";
+  background-image: url(/imagenes/fondoPagina.png);
+  background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+	background-size: cover;
+	-moz-background-size: cover;
 }
 
 .encabezado{
