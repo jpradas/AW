@@ -237,7 +237,8 @@ app.post("/iniciarPartida",  passport.authenticate('basic', {session: false}), (
       daop.getPartida(request.body.idPartida, (err, partida) =>{
         let estado = {jugador1:jugadores[0].login, jugador2:jugadores[1].login, jugador3:jugadores[2].login,
            jugador4:jugadores[3].login, cartasJugador1:[], cartasJugador2:[], cartasJugador3:[],
-           cartasJugador4:[], ordenJugadores:[1,2,3,4], turnoJugador:"", numCartasUltimoJugador: 0, valorCartasMesa: ["J", "J", "J"]};
+           cartasJugador4:[], ordenJugadores:[jugadores[0].login,jugadores[1].login,jugadores[2].login,jugadores[3].login],
+           turnoJugador:"", mentiroso: false, valorCartasMesa: [], cartasMesaReal: []};
 
         repartirCartasyJugadores(estado);
 
@@ -268,43 +269,92 @@ app.get("/estadoPartida",  passport.authenticate('basic', {session: false}), (re
 });
 
 app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (request, response) =>{
-  //Cambiar el estado
-  daop.existePartida(request.body.idPartida, (err, result) =>{
-    if(err){
-      response.status(404);
-      response.end();return;
-    }
-    //Se marca con "Terminado" el estado (borrando todo el resto del estado) una vez se acabe la partida
-    //Puede que la operacion de error, comprobar al ejecutar
-    daop.haTerminadoPartida(request.body.idPartida, (err, terminado) => {
+  //Comprobar que hay cartas seleccionadas en la accion, por si se cuela del jquery anterior
+  //Accion siempre tendra 1 como minimo, por el valor que se ha dado
+  let accion = request.body.accion;
+  if (accion.length > 1){
+    daop.existePartida(request.body.idPartida, (err, result) =>{
       if(err){
         response.status(404);
         response.end();return;
       }
-      else if(!terminado){
-        daop.getPartida(request.body.idPartida, (err, partida) => {
-          if(err){
-            response.status(404);
-            response.end();return;
-          }
-          daop.actualizarEstado(request.body.idPartida, JSON.stringify(partida.estado),  (err, result) =>{
+      //Se marca con "Terminado" el estado (borrando todo el resto del estado) una vez se acabe la partida
+      //Puede que la operacion de error, De momento funciona
+      daop.haTerminadoPartida(request.body.idPartida, (err, terminado) => {
+        console.log(terminado);
+        if(err){
+          response.status(404);
+          response.end();return;
+        }
+        else if(!terminado){
+          daop.getPartida(request.body.idPartida, (err, partida) => {
             if(err){
               response.status(404);
               response.end();return;
             }
-            else{
-              response.json({estado : estado});
-            }
-          });
+            let jugador = request.body.jugador;
+            let valorIndicado = accion.pop();
+            let estado = JSON.parse(partida.estado);
+            if (estado.turnoJugador === jugador){
 
-        });
-      }
-      else{
-        response.json({terminado : terminado});
-      }
-    });
-  })
+              partida.estado = actualizarEstado(estado, accion, valorIndicado);
+              daop.actualizarEstado(request.body.idPartida, JSON.stringify(partida.estado),  (err, result) =>{
+                if(err){
+                  response.status(404);
+                  response.end();return;
+                }
+                else{
+                  response.json({partida : partida});
+                }
+              });
+              }
+              else{
+                response.json({error : "No puedes realizar una accion, no es tu turno"});
+              }
+            });
+
+        }
+        else{
+          response.json({terminado : terminado});
+        }
+      });
+    })
+  }
 });
+
+function actualizarEstado(estado, accion, valorIndicado){
+  //Quitar las cartas del jugador que ha realizado la Accion
+  console.log(estado.cartasJugador4);
+  console.log(accion[0]);
+  console.log(estado.cartasJugador4.indexOf(accion[0]));
+  switch (estado.turnoJugador) {
+    case estado.jugador1: accion.forEach(carta => {estado.cartasJugador1.splice(estado.cartasJugador1.indexOf(carta),1)}); break;
+    case estado.jugador2: accion.forEach(carta => {estado.cartasJugador2.splice(estado.cartasJugador2.indexOf(carta),1)}); break;
+    case estado.jugador3: accion.forEach(carta => {estado.cartasJugador3.splice(estado.cartasJugador3.indexOf(carta),1)}); break;
+    case estado.jugador4: accion.forEach(carta => {estado.cartasJugador4.splice(estado.cartasJugador4.indexOf(carta),1)}); break;
+    default: console.log("Error al quitar cartas del turno");
+  }
+  console.log(estado);
+  //Cambiar turno
+  let indice = estado.ordenJugadores.indexOf(estado.turnoJugador) + 1;
+  if (indice === 4){
+    indice = 0;
+  }
+  estado.turnoJugador = estado.ordenJugadores[indice];
+  //Reiniciamos el estado de mentiroso
+  estado.mentiroso = false;
+  //Poner cartas con el valor indicado en la mesa
+  for (let i = 0; i < accion.length; i++){
+    estado.valorCartasMesa.push(valorIndicado);
+    estado.cartasMesaReal.push(accion[i]);
+    //Si alguna carta selecciona no tiene el valor indicado, es mentiroso
+    if (accion[i].valor !== valorIndicado){
+      estado.mentiroso = true;
+    }
+  }
+
+  return estado;
+}
 
 function repartirCartasyJugadores(estado){
   let mazo = [];
@@ -314,7 +364,7 @@ function repartirCartasyJugadores(estado){
   let j = 0;
   for(i = 0; i < palos.length; i++){
 		for(j = 0; j < valores.length; j++){
-			let carta = {Valor: valores[j], Palo: palos[i]};
+			let carta = {palo: palos[i], valor: valores[j]};
 			mazo.push(carta);
 		}
 	}

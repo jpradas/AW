@@ -249,7 +249,6 @@ class DAOpartidas{
            "UPDATE " + config.database + ".partidas SET estado=? WHERE id=?",
            [estado, idPartida],
            (err, rows) =>{
-             console.log(rows);
              connection.release();
              if(err){
                callback(err);return;

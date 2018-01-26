@@ -173,7 +173,6 @@ $("#aceptar-buscar-partida").on("click", () =>{
   }
   else{
     $("#actualizarPartida").data("id", id);
-    //estadoPartida(id);
     actualizarPartida(id);
   }
 });
@@ -217,7 +216,6 @@ $("#volverAtras").on("click", (event) =>{
 });
 
 $("#actualizarPartida").on("click", (event) =>{
-  //actualizarPartida($(event.target).data().id);
   estadoPartida($(event.target).data().id);
 });
 
@@ -233,19 +231,8 @@ function iniciarPartida(id){
     contentType: "application/json",
     data: JSON.stringify({ user: user, idPartida: id }),
     success: (data, textStatus, jqXHR) =>{
-
-        //$(".buscar_partida").slideUp(500);
-
+        $("#jugadores li").hide();
         mostrarPartida(data.id, data.nombre, data.estado);
-        //data.estado;
-        /*
-        $("#jugadores li").remove();
-        data.jugadores.forEach(jugador =>{
-          $("#jugadores").append(`<li> ${jugador.login} </li>`);
-        });
-        $("#buscar-text-id-partida").val("");
-        */
-
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -270,10 +257,10 @@ function estadoPartida(id){
     success: (data, textStatus, jqXHR) =>{
       //Partida no iniciada
       if (data.partida.estado === ""){
-        console.log("no empezada");
         actualizarPartida(id);
       }
       else {
+        $("#jugadores li").hide();
         $("#tusCartas img").remove();
         $(".tablero div").remove();
         console.log(data.partida.estado);
@@ -304,25 +291,35 @@ function realizarAccion(id, accion){
       req.setRequestHeader("Authorization", "Basic " + cad64);
     },
     contentType: "application/json",
-    data: JSON.stringify({ idPartida: id, accion: accion}),
+    data: JSON.stringify({ idPartida: id, accion: accion, jugador: user}),
     success: (data, textStatus, jqXHR) =>{
       //Pasar el turno, poner cartas en la mesa y refrescar visuales
-      if (data.terminado === undefined){
-
+      if (data.error !== undefined){
+        alert(data.error);
+      }
+      //La accion se ha hecho correctamente
+      else if (data.terminado === undefined){
+        $("#tusCartas img").remove();
+        $(".tablero div").remove();
+        console.log(data.partida.estado);
+        //let estado = JSON.parse(data.partida.estado);
+        mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
       }
       //Partida terminada
       else {
-
+        alert("La partida ha acabado");
       }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
-        alert(jqXHR.status + " - " + errorThrown + ": Fallo al actualizar la partida");
+        alert(jqXHR.status + " - " + errorThrown + ": Fallo al realizar la accion");
       }else{
         alert("Se ha producido un error: " + errorThrown);
       }
     }
   });
+
+
 }
 
 function obtenerCartasJugador(estado){
@@ -345,7 +342,7 @@ function obtenerCartasJugador(estado){
 
     let cartas = obtenerCartasJugador(estado);
     cartas.forEach(carta =>{
-      $("#tusCartas").append(`<img data-valor=${carta.Valor} data-palo=${carta.Palo} src="imagenes/${carta.Valor}_${carta.Palo}.png" class="carta">`)
+      $("#tusCartas").append(`<img data-valor=${carta.valor.toString()} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
     });
 
     estado.valorCartasMesa.forEach(carta =>{
@@ -360,13 +357,12 @@ function obtenerCartasJugador(estado){
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
-    let palo = $(event.target).data().palo;
-    let valor = $(event.target).data().valor;
-    console.log($(event.target).prop("style").border);
+    console.log($(event.target).attr("data-valor"));
+    console.log($(event.target).attr("data-palo"));
 
     if ($(event.target).prop("style").border === "solid red"){
       $(event.target).css("border", "none");
-      let indice = cartasSeleccionadas.indexOf($(event.target).data());
+      //let indice = cartasSeleccionadas.indexOf($(event.target).data());
     }
     else{
       $(event.target).css("border", "solid red");
@@ -376,16 +372,42 @@ function obtenerCartasJugador(estado){
   });
 
   $("#jugarCartas").on("click", () =>{
-    $(".boton").hide();
-    $(".decirCartas").fadeIn(500);
     let cartas = [];
     $("#tusCartas img").each((index, carta) => {
       if ($(carta).prop("style").border === "solid red"){
-        cartas.push($(carta).data());
+        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
+        cartas.push(c);
+        //cartas.push($(carta).data());
       }
     });
     console.log(cartas);
-    //realizarAccion(id, cartas)
+    if (cartas.length > 0){
+      $(".boton").hide();
+      $(".decirCartas").fadeIn(500);
+    }
+    else{
+      alert("No has seleccionado ninguna carta");
+    }
+
+  });
+
+  $("#hacerJugada").on("click", () =>{
+    let cartas = [];
+    $("#tusCartas img").each((index, carta) => {
+      if ($(carta).prop("style").border === "solid red"){
+        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
+        cartas.push(c);
+        //cartas.push($(carta).data());
+      }
+    });
+    if (cartas.length > 0){
+      cartas.push($("select option:selected").text());
+      console.log(cartas);
+      realizarAccion($("#actualizarPartida").data("id"), cartas);
+    }
+    else{
+      alert("No has seleccionado ninguna carta");
+    }
   });
 
 

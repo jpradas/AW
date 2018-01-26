@@ -310,7 +310,7 @@ html{
 }
 
  #hacerJugada, select{
-   margin-left: 70px;
+   margin-left: 60px;
  }
 
 #input-text-id-partida{
@@ -379,7 +379,7 @@ html{
   height: 700px;
   background-image: url(/imagenes/tapete-poker.png);
   background-repeat:no-repeat;
-  background-size: 1269px 700px;
+  background-size: 100% 100%;
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 15px;
@@ -437,10 +437,14 @@ div.mano span.etiqueta{
 .decirCartas{
   background-image: url(/imagenes/cuaderno-03.jpg);
   border-radius: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: 15px;
 }
 
 .texto{
   font-size: 70px;
+  padding-left: 10px;
 }
 
 .mesa table{
