@@ -261,9 +261,7 @@ function estadoPartida(id){
       }
       else {
         $("#jugadores li").hide();
-        $("#tusCartas img").remove();
-        $(".tablero div").remove();
-        $(".decirCartas").hide();
+
         console.log(data.partida.estado);
         let estado = JSON.parse(data.partida.estado);
         if (estado.cartasMesaReal.length > 0){
@@ -309,10 +307,8 @@ function realizarAccion(id, accion){
         alert(data.error);
       }
       //La accion se ha hecho correctamente
-      else if (data.terminado === undefined){
-        $("#tusCartas img").remove();
-        $(".tablero div").remove();
-        $(".decirCartas").hide();
+      else if (data.partida.estado.terminado === undefined){
+
         console.log(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
         $(".mano .info").eq(0).hide();
@@ -320,8 +316,9 @@ function realizarAccion(id, accion){
       }
       //Partida terminada
       else {
+        $(".mano").hide();
+        $(".partida").append(`<div class="info">Ha ganado ${data.partida.estado.ganador}, gracias por jugar</div>`);
         alert("La partida ha acabado");
-        //TODO Mostrar mensaje de victoria o derrota
       }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
@@ -332,8 +329,6 @@ function realizarAccion(id, accion){
       }
     }
   });
-
-
 }
 
 function obtenerCartasJugador(estado){
@@ -347,21 +342,27 @@ function obtenerCartasJugador(estado){
 }
 
   function mostrarPartida(id, nombre, estado){
+
+    $("#tusCartas img").remove();
+    $(".tablero div").remove();
+    $(".decirCartas").hide();
     $(".partidas").hide();
     $(".mesa").show();
     $(".partida").fadeIn(500);
-    $(".mesa table tr").remove();
+    $(".jugadores div").remove();
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
     $(".mano .info").eq(1).hide();
 
+    $("#mentiroso").data("mentiroso", estado.mentiroso);
+    $("#mentiroso").data("cartasMesa", estado.cartasMesaReal);
     let cartas = obtenerCartasJugador(estado);
     cartas.forEach(carta =>{
-      $("#tusCartas").append(`<img data-valor=${carta.valor.toString()} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
+      $("#tusCartas").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
     });
-
     if (estado.turnoJugador === user){
       //Creo que oculta a los 2
-      $(".mano .info").eq(0).hide();
+      $(".mano .boton").show();
+      $(".mano .info").hide();
     }
     //Mostrar que no es su turno
     else {
@@ -373,11 +374,10 @@ function obtenerCartasJugador(estado){
       $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
 
-    //$(".mesa table").append("<tr> <th>Nombre</th>  <th>Nº Cartas</th> </tr>");
-    $(".mesa table").append(`<tr><td>${estado.jugador1}</td> <td>${estado.cartasJugador1.length}</td> </tr>`);
-    $(".mesa table").append(`<tr><td>${estado.jugador2}</td> <td>${estado.cartasJugador2.length}</td> </tr>`);
-    $(".mesa table").append(`<tr><td>${estado.jugador3}</td> <td>${estado.cartasJugador3.length}</td> </tr>`);
-    $(".mesa table").append(`<tr><td>${estado.jugador4}</td> <td>${estado.cartasJugador4.length}</td> </tr>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span>${estado.cartasJugador1.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span>${estado.cartasJugador2.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span>${estado.cartasJugador3.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span>${estado.cartasJugador4.length}</span> </div>`);
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
@@ -388,28 +388,25 @@ function obtenerCartasJugador(estado){
     else{
       $(event.target).css("border", "solid red");
     }
-
-
   });
 
   $("#jugarCartas").on("click", () =>{
-    let cartas = [];
-    $("#tusCartas img").each((index, carta) => {
-      if ($(carta).prop("style").border === "solid red"){
-        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
-        cartas.push(c);
-      }
-    });
-    console.log(cartas);
-    if (cartas.length > 0){
-      $(".boton").hide();
-      $(".decirCartas").fadeIn(500);
-    }
-    else{
-      alert("No has seleccionado ninguna carta");
-    }
-
+    $(".boton").hide();
+    $(".decirCartas").fadeIn(500);
   });
+
+  $("#mentiroso").on("click", (event) => {
+    let mentiroso = $(event.target).data().mentiroso;
+    let cartasMesa = $(event.target).data().cartasMesa;
+    cartasMesa.forEach(carta =>{
+      $(".tablero").last().remove();
+    });
+    cartasMesa.forEach(carta =>{
+      $(".tablero").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
+    })
+    console.log(mentiroso);
+    realizarAccion($("#actualizarPartida").data("id"), mentiroso);
+  })
 
   $("#hacerJugada").on("click", () =>{
     let cartas = [];
@@ -419,15 +416,76 @@ function obtenerCartasJugador(estado){
         cartas.push(c);
       }
     });
-
     if (cartas.length > 0){
-      cartas.push($("select option:selected").text());
-      realizarAccion($("#actualizarPartida").data("id"), cartas);
+      if (cartas.length < 4){
+        cartas.push($("select option:selected").text());
+        realizarAccion($("#actualizarPartida").data("id"), cartas);
+      }
+      else {
+        alert("Has seleccionado " + cartas.length + " cartas, no puedes seleccionar mas de 3");
+      }
     }
     else{
       alert("No has seleccionado ninguna carta");
     }
   });
+
+  $("#descartar").on("click", () =>{
+    let cartas = [];
+    let indices = [];
+    $("#tusCartas img").each((index, carta) => {
+      if ($(carta).prop("style").border === "solid red"){
+        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
+        cartas.push(c);
+        indices.push(index);
+      }
+    });
+    if (cartas.length === 4){
+      if (cartas[0].valor === cartas[1].valor && cartas[1].valor === cartas[2].valor && cartas[2].valor === cartas[3].valor){
+        //peticion ajax para quitar cartas
+        quitarRepetidas($("#actualizarPartida").data("id"), cartas);
+      }
+      else{
+        alert("Las cartas seleccionadas no tienen el mismo valor");
+      }
+    }
+    else {
+      alert("No has seleccionado 4 cartas");
+    }
+  })
+
+  function quitarRepetidas(id, cartas){
+    let cad64 = btoa(user + ":" + contraseña);
+
+    $.ajax({
+      type: "PUT",
+      url: "/quitarRepetidas",
+      beforeSend: (req) =>{
+        req.setRequestHeader("Authorization", "Basic " + cad64);
+      },
+      contentType: "application/json",
+      data: JSON.stringify({ idPartida: id, cartas: cartas, jugador: user}),
+      success: (data, textStatus, jqXHR) =>{
+        if (data.error === undefined){
+          /*
+          indices.forEach(i => {
+            $("#tusCartas img").eq(i).remove();
+          });
+          */
+          mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
+        }else{
+          alert(data.error);
+        }
+      },
+      error: (jqXHR, textStatus, errorThrown) =>{
+        if(jqXHR.status === 404){
+          alert(jqXHR.status + " - " + errorThrown + ": Fallo al quitar las cartas");
+        }else{
+          alert("Se ha producido un error: " + errorThrown);
+        }
+      }
+    });
+  }
 
 
   return {

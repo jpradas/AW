@@ -78,26 +78,21 @@
     <div class="mesa">
         <div class="etiqueta">Cartas en la mesa</div>
         <div id="mesa">
+          <div class="jugadores"></div>
           <div class="tablero"></div>
-          <div class="jugadores">
-            <table></table>
-          </div>
         </div>
         <div class="info"></div>
     </div>
-
-
     <div class="mano">
         <span class="etiqueta">Cartas en la mano</span>
         <div id="tusCartas"></div>
         <div class="boton">
           <input type="button" id="jugarCartas" value="Jugar cartas seleccionadas">
           <input type="button" id="mentiroso" value="Mentiroso">
+          <input type="button" id="descartar" value="Descartar 4 cartas de igual valor">
         </div>
         <div class="info" style="display: none;">No es tu turno</div>
         <div class="info" style="display: none;">Turno realizado correctamente</div>
-        <div class="info" style="display: none;">Has ganado, felicidades</div>
-        <div class="info" style="display: none;">Has perdido, suerte la proxima</div>
         <div class="decirCartas" style="display: none;">
           <span class="texto">Selecciona el valor que los demas veran</span>
 
@@ -120,7 +115,6 @@
           <button id="hacerJugada">Jugar</button>
           <button id="cancelarJugada">Cancelar</button>
         </div>
-
     </div>
   </div>
 

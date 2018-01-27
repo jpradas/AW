@@ -123,11 +123,15 @@ html{
   width: 230px;
 }
 
+#descartar{
+  width: 280px;
+}
+
 #mentiroso{
   width: 120px;
 }
 
-#desconectar:hover, #mentiroso:hover{
+#desconectar:hover, #mentiroso:hover, #descartar:hover{
   background-color: #C72B2C;
   color: white;
 }
@@ -434,9 +438,12 @@ div.mano span.etiqueta{
 
 .jugadores{
   display: flex;
+  justify-content: space-around;
+}
+
+.jugador{
   color: white;
   font-size: 60px;
-  justify-content: center;
 }
 
 .decirCartas{
