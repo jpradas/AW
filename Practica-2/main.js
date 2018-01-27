@@ -281,7 +281,6 @@ app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (r
       //Se marca con "Terminado" el estado (borrando todo el resto del estado) una vez se acabe la partida
       //Puede que la operacion de error, De momento funciona
       daop.haTerminadoPartida(request.body.idPartida, (err, terminado) => {
-        console.log(terminado);
         if(err){
           response.status(404);
           response.end();return;
@@ -322,18 +321,33 @@ app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (r
   }
 });
 
+function quitarCartas(accion, cartasJugador){
+  let hecho = false;
+  for (let i = 0; i < accion.length; i++){
+    for (let j = 0; j < cartasJugador.length && !hecho; j++){
+      if (accion[i].palo === cartasJugador[j].palo && accion[i].valor === cartasJugador[j].valor){
+        cartasJugador.splice(j,1);
+        console.log("Quitado con indice " + j);
+        console.log(accion[i]);
+        hecho = true;
+      }
+    }
+    hecho = false;
+  }
+}
+
+
 function actualizarEstado(estado, accion, valorIndicado){
   //Quitar las cartas del jugador que ha realizado la Accion
-  console.log(estado.cartasJugador4);
-  console.log(accion[0]);
-  console.log(estado.cartasJugador4.indexOf(accion[0]));
+
   switch (estado.turnoJugador) {
-    case estado.jugador1: accion.forEach(carta => {estado.cartasJugador1.splice(estado.cartasJugador1.indexOf(carta),1)}); break;
-    case estado.jugador2: accion.forEach(carta => {estado.cartasJugador2.splice(estado.cartasJugador2.indexOf(carta),1)}); break;
-    case estado.jugador3: accion.forEach(carta => {estado.cartasJugador3.splice(estado.cartasJugador3.indexOf(carta),1)}); break;
-    case estado.jugador4: accion.forEach(carta => {estado.cartasJugador4.splice(estado.cartasJugador4.indexOf(carta),1)}); break;
+    case estado.jugador1: quitarCartas(accion, estado.cartasJugador1); break;
+    case estado.jugador2: quitarCartas(accion, estado.cartasJugador2); break;
+    case estado.jugador3: quitarCartas(accion, estado.cartasJugador3); break;
+    case estado.jugador4: quitarCartas(accion, estado.cartasJugador4); break;
     default: console.log("Error al quitar cartas del turno");
   }
+
   console.log(estado);
   //Cambiar turno
   let indice = estado.ordenJugadores.indexOf(estado.turnoJugador) + 1;

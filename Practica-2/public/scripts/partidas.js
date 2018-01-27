@@ -263,10 +263,22 @@ function estadoPartida(id){
         $("#jugadores li").hide();
         $("#tusCartas img").remove();
         $(".tablero div").remove();
+        $(".decirCartas").hide();
         console.log(data.partida.estado);
         let estado = JSON.parse(data.partida.estado);
+        if (estado.cartasMesaReal.length > 0){
+          let num = estado.cartasMesaReal.length;
+          let indice = estado.valorCartasMesa.length;
+          let carta = estado.valorCartasMesa[indice - 1];
+          indice = estado.ordenJugadores.indexOf(estado.turnoJugador) - 1;
+          if (indice === -1){
+            indice = 3;
+          }
+          let jugadorAnterior = estado.ordenJugadores[indice];
+          $(".mesa .info").remove();
+          $(".mesa .info").append(`<span>${jugadorAnterior} dice que ha colocado ${num} "${carta}" en la mesa </span>`)
+        }
         mostrarPartida(data.partida.id, data.partida.nombre, estado);
-
         //$(".buscar_partida").slideUp(500);
         //data.estado.turnoJugador
       }
@@ -293,7 +305,6 @@ function realizarAccion(id, accion){
     contentType: "application/json",
     data: JSON.stringify({ idPartida: id, accion: accion, jugador: user}),
     success: (data, textStatus, jqXHR) =>{
-      //Pasar el turno, poner cartas en la mesa y refrescar visuales
       if (data.error !== undefined){
         alert(data.error);
       }
@@ -301,13 +312,16 @@ function realizarAccion(id, accion){
       else if (data.terminado === undefined){
         $("#tusCartas img").remove();
         $(".tablero div").remove();
+        $(".decirCartas").hide();
         console.log(data.partida.estado);
-        //let estado = JSON.parse(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
+        $(".mano .info").eq(0).hide();
+        $(".mano .info").eq(1).show();
       }
       //Partida terminada
       else {
         alert("La partida ha acabado");
+        //TODO Mostrar mensaje de victoria o derrota
       }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
@@ -334,17 +348,27 @@ function obtenerCartasJugador(estado){
 
   function mostrarPartida(id, nombre, estado){
     $(".partidas").hide();
-    $(".mano").show();
     $(".mesa").show();
     $(".partida").fadeIn(500);
     $(".mesa table tr").remove();
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
+    $(".mano .info").eq(1).hide();
 
     let cartas = obtenerCartasJugador(estado);
     cartas.forEach(carta =>{
       $("#tusCartas").append(`<img data-valor=${carta.valor.toString()} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
     });
 
+    if (estado.turnoJugador === user){
+      //Creo que oculta a los 2
+      $(".mano .info").eq(0).hide();
+    }
+    //Mostrar que no es su turno
+    else {
+      $(".mano .boton").hide();
+      $(".mano .info").eq(0).show();
+    }
+    $(".mano").show();
     estado.valorCartasMesa.forEach(carta =>{
       $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
@@ -357,9 +381,6 @@ function obtenerCartasJugador(estado){
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
-    console.log($(event.target).attr("data-valor"));
-    console.log($(event.target).attr("data-palo"));
-
     if ($(event.target).prop("style").border === "solid red"){
       $(event.target).css("border", "none");
       //let indice = cartasSeleccionadas.indexOf($(event.target).data());
@@ -377,7 +398,6 @@ function obtenerCartasJugador(estado){
       if ($(carta).prop("style").border === "solid red"){
         let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
         cartas.push(c);
-        //cartas.push($(carta).data());
       }
     });
     console.log(cartas);
@@ -397,12 +417,11 @@ function obtenerCartasJugador(estado){
       if ($(carta).prop("style").border === "solid red"){
         let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
         cartas.push(c);
-        //cartas.push($(carta).data());
       }
     });
+
     if (cartas.length > 0){
       cartas.push($("select option:selected").text());
-      console.log(cartas);
       realizarAccion($("#actualizarPartida").data("id"), cartas);
     }
     else{
