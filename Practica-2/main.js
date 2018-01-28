@@ -295,7 +295,6 @@ app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (r
           if (turno === "mentiroso"){
             //partida.estado =
             partida.estado = mentiroso(estado, accion);
-            console.log(partida.estado);
           }
           else{
             let valorIndicado = accion.pop();
@@ -354,9 +353,6 @@ function mentiroso(estado, mentiroso){
   }
   //Si la partida ha acabado, devolvemos el estado directamente, sino hacemos lo de siempre
   if (!fin){
-    console.log(jugadorMentiroso);
-    console.log(estado.cartasMesaReal);
-    console.log(estado);
     switch (jugadorMentiroso) {
       case estado.jugador1: estado.cartasJugador1.push.apply(estado.cartasJugador1, estado.cartasMesaReal); break;
       case estado.jugador2: estado.cartasJugador2.push.apply(estado.cartasJugador2, estado.cartasMesaReal); break;
