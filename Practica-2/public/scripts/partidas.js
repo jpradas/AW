@@ -199,6 +199,7 @@ function actualizarPartida(id){
         });
         $(".buscar_partida").slideUp(500);
         $("#buscar-text-id-partida").val("");
+        $("#mensajeFinal").remove();
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -216,7 +217,6 @@ $("#volverAtras").on("click", (event) =>{
 });
 
 $("#actualizarPartida").on("click", (event) =>{
-
   estadoPartida($(event.target).data().id);
 });
 
@@ -232,8 +232,8 @@ function iniciarPartida(id){
     contentType: "application/json",
     data: JSON.stringify({ user: user, idPartida: id }),
     success: (data, textStatus, jqXHR) =>{
-        $("#jugadores li").hide();
-        $("#actualizarPartida").data("id", data.id);
+
+
         mostrarPartida(data.id, data.nombre, data.estado);
     },
     error: (jqXHR, textStatus, errorThrown) =>{
@@ -266,7 +266,7 @@ function estadoPartida(id){
 
         if (estado.terminado === undefined){
           console.log(estado);
-          $("#jugadores li").hide();
+
           if (estado.cartasMesaReal.length > 0){
             let num = estado.cartasMesaReal.length;
             let indice = estado.valorCartasMesa.length;
@@ -317,8 +317,10 @@ function realizarAccion(id, accion){
       else if (data.partida.estado.terminado === undefined){
         console.log(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
-        $(".mano .info").eq(0).hide();
-        $(".mano .info").eq(1).show();
+        //$(".mano .info").eq(0).hide();
+        $(".mano .info").remove();
+        $(".mano").append(`<div class="info">Turno realizado correctamente, turno de ${data.partida.estado.turnoJugador}</div>`);
+        //$(".mano .info").eq(1).show();
       }
       //Partida terminada
       else {
@@ -356,24 +358,29 @@ function obtenerCartasJugador(estado){
     $(".partida").fadeIn(500);
     $(".jugadores div").remove();
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
-    $(".mano .info").eq(1).hide();
+    //$(".mano .info").eq(0).hide();
+    $(".mano .info").remove();
     $(".tablero .carta").remove();
     $(".partida #mensajeFinal").remove();
     $("#mentiroso").data("mentiroso", estado.mentiroso);
     $("#mentiroso").data("cartasMesa", estado.cartasMesaReal);
+    $("#jugadores li").remove();
+    $("#actualizarPartida").data("id", id);
+
     let cartas = obtenerCartasJugador(estado);
     cartas.forEach(carta =>{
-      $("#tusCartas").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
+      $("#tusCartas").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} data-click=0 src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
     });
     if (estado.turnoJugador === user){
       //Creo que oculta a los 2
       $(".mano .boton").show();
-      $(".mano .info").hide();
+      //$(".mano .info").hide();
     }
     //Mostrar que no es su turno
     else {
       $(".mano .boton").hide();
-      $(".mano .info").eq(0).show();
+      $(".mano ").append(`<div class="info">No es tu turno, turno de ${estado.turnoJugador}</div>`);
+      //$(".mano .info").eq(0).show();
     }
     $(".mano").show();
 
@@ -388,12 +395,22 @@ function obtenerCartasJugador(estado){
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
+    if ($(event.target).data("click") === 1){
+      $(event.target).css("border", "none");
+      $(event.target).data("click", 0);
+    }
+    else{
+      $(event.target).css("border", "solid red");
+      $(event.target).data("click", 1);
+    }
+    /*
     if ($(event.target).prop("style").border === "solid red"){
       $(event.target).css("border", "none");
     }
     else{
       $(event.target).css("border", "solid red");
     }
+    */
   });
 
   function mostrarPartidaTerminada(id, nombre, estado){
@@ -401,8 +418,10 @@ function obtenerCartasJugador(estado){
     $(".mesa").hide();
     $(".mano").hide();
     $(".partida #mensajeFinal").remove();
+    $("#jugadores li").remove();
+    $("#actualizarPartida").data("id", id);
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
-    $(".partida").append(`<div id="mensajeFinal" class="info">Ha ganado ${estado.ganador}, gracias por jugar</div>`);
+    $(".partida").append(`<div id="mensajeFinal">Ha ganado ${estado.ganador}, gracias por jugar</div>`);
     $(".partida").show();
   }
 
@@ -414,24 +433,33 @@ function obtenerCartasJugador(estado){
   $("#mentiroso").on("click", (event) => {
     let mentiroso = $(event.target).data().mentiroso;
     let cartasMesa = $(event.target).data().cartasMesa;
-    cartasMesa.forEach(carta =>{
-      $(".trasera").last().remove();
-    });
-    cartasMesa.forEach(carta =>{
-      $(".tablero").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
-    })
-    //Poner 5 seg de retardo para ver la mesa
-    setTimeout(realizarAccion($("#actualizarPartida").data("id"), mentiroso), 5000);
+    if (cartasMesa.length > 0){
+      cartasMesa.forEach(carta =>{
+        $(".trasera").last().remove();
+      });
+      cartasMesa.forEach(carta =>{
+        $(".tablero").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
+      })
+      //Poner 5 seg de retardo para ver la mesa
+      setTimeout(realizarAccion($("#actualizarPartida").data("id"), mentiroso), 5000);
+    }
   })
 
   $("#hacerJugada").on("click", () =>{
     let cartas = [];
     $("#tusCartas img").each((index, carta) => {
+      if ($(carta).data("click") === 1){
+        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
+        cartas.push(c);
+      }
+      /*
       if ($(carta).prop("style").border === "solid red"){
         let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
         cartas.push(c);
       }
+      */
     });
+
     if (cartas.length > 0){
       if (cartas.length < 4){
         cartas.push($("select option:selected").text());
@@ -448,13 +476,17 @@ function obtenerCartasJugador(estado){
 
   $("#descartar").on("click", () =>{
     let cartas = [];
-    let indices = [];
     $("#tusCartas img").each((index, carta) => {
+      if ($(carta).data("click") === 1){
+        let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
+        cartas.push(c);
+      }
+      /*
       if ($(carta).prop("style").border === "solid red"){
         let c = {palo: $(carta).attr("data-palo"),valor: $(carta).attr("data-valor")}
         cartas.push(c);
-        indices.push(index);
       }
+      */
     });
     if (cartas.length === 4){
       if (cartas[0].valor === cartas[1].valor && cartas[1].valor === cartas[2].valor && cartas[2].valor === cartas[3].valor){

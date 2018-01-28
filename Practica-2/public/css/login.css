@@ -395,6 +395,10 @@ html{
 }
 
 #mensajeFinal{
+  margin-top: 20px;
+  display: flex;
+  color: white;
+  justify-content: center;
   font-size: 100px;
   text-decoration: underline;
 }
