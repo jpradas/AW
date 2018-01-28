@@ -34,7 +34,7 @@ const sessionStore = new MySQLStore({
   host: "localhost",
   user: "root",
   password: "",
-  database: "facebluff"
+  database: config.database
 });
 
 const middlewareSession = session({
