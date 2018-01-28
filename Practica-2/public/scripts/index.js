@@ -18,7 +18,8 @@ define(["partidas"], (p) =>{
         alert("El email y/o contraseña no pueden estar vacios");
         return;
       }
-
+      name = name.toLowerCase();
+      console.log(name);
       $.ajax({
         type: "GET",
         url: "/checkUser",
@@ -45,7 +46,8 @@ define(["partidas"], (p) =>{
         alert("El email y/o contraseña no pueden estar vacios");
         return;
       }
-
+      name = name.toLowerCase();
+      console.log(name);
       $.ajax({
         type: "POST",
         url: "/setUser", //Deberiamos cambiar a PUT o POST
@@ -70,9 +72,9 @@ define(["partidas"], (p) =>{
 
     function iniciarPerfil(){
       $(".cuerpo").hide();
-      $("#usuario").text(name);
+      $("#usuario").text(name.toLowerCase());
       $(".info-perfil").slideDown(500);
-      p.actualizarPerfil(name, pass);
+      p.actualizarPerfil(name.toLowerCase(), pass);
       p.getPartidas();
     }
 

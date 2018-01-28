@@ -388,10 +388,10 @@ function obtenerCartasJugador(estado){
       $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
 
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span>${estado.cartasJugador1.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span>${estado.cartasJugador2.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span>${estado.cartasJugador3.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span>${estado.cartasJugador4.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span class="margen">${estado.cartasJugador1.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span class="margen">${estado.cartasJugador2.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span class="margen">${estado.cartasJugador3.length}</span> </div>`);
+    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span class="margen">${estado.cartasJugador4.length}</span> </div>`);
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
@@ -521,7 +521,6 @@ function obtenerCartasJugador(estado){
       }
     });
   }
-
 
   return {
     getPartidas: getPartidas,

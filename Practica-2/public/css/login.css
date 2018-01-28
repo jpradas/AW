@@ -403,6 +403,10 @@ html{
   text-decoration: underline;
 }
 
+.margen{
+  margin-left: 20px;
+}
+
 div.mesa div.etiqueta{
   margin-left: 30px;
 }
