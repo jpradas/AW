@@ -380,7 +380,7 @@ html{
   margin-right: 20px;
 }
 
-#actualizarPartida:hover,  #volverAtras:hover, img.carta:hover{
+#actualizarPartida:hover,  #volverAtras:hover, #tusCartas img.carta:hover{
   transform: scale(1.2);
 }
 
@@ -392,6 +392,11 @@ html{
   margin-left: 20px;
   margin-right: 20px;
   border-radius: 15px;
+}
+
+#mensajeFinal{
+  font-size: 100px;
+  text-decoration: underline;
 }
 
 div.mesa div.etiqueta{
@@ -426,6 +431,17 @@ div.mano span.etiqueta{
   justify-content: center;
   height: 600px;
   width: auto;
+  flex-wrap: wrap;
+}
+
+.tablero .carta{
+  align-self: center;
+  height: 80px;
+  width: 60px;
+  border-radius: 5px;
+  margin-left: 5px;
+  padding-top: 20px;
+  margin-top: 5px;
 }
 
 .info{

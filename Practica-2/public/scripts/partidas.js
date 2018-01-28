@@ -216,6 +216,7 @@ $("#volverAtras").on("click", (event) =>{
 });
 
 $("#actualizarPartida").on("click", (event) =>{
+
   estadoPartida($(event.target).data().id);
 });
 
@@ -232,6 +233,7 @@ function iniciarPartida(id){
     data: JSON.stringify({ user: user, idPartida: id }),
     success: (data, textStatus, jqXHR) =>{
         $("#jugadores li").hide();
+        $("#actualizarPartida").data("id", data.id);
         mostrarPartida(data.id, data.nombre, data.estado);
     },
     error: (jqXHR, textStatus, errorThrown) =>{
@@ -260,26 +262,31 @@ function estadoPartida(id){
         actualizarPartida(id);
       }
       else {
-        $("#jugadores li").hide();
-
-        console.log(data.partida.estado);
         let estado = JSON.parse(data.partida.estado);
-        if (estado.cartasMesaReal.length > 0){
-          let num = estado.cartasMesaReal.length;
-          let indice = estado.valorCartasMesa.length;
-          let carta = estado.valorCartasMesa[indice - 1];
-          indice = estado.ordenJugadores.indexOf(estado.turnoJugador) - 1;
-          if (indice === -1){
-            indice = 3;
+
+        if (estado.terminado === undefined){
+          console.log(estado);
+          $("#jugadores li").hide();
+          if (estado.cartasMesaReal.length > 0){
+            let num = estado.cartasMesaReal.length;
+            let indice = estado.valorCartasMesa.length;
+            let carta = estado.valorCartasMesa[indice - 1];
+            indice = estado.ordenJugadores.indexOf(estado.turnoJugador) - 1;
+            if (indice === -1){
+              indice = 3;
+            }
+            let jugadorAnterior = estado.ordenJugadores[indice];
+            $(".mesa .info").remove();
+            $(".mesa .info").append(`<span>${jugadorAnterior} dice que ha colocado ${num} "${carta}" en la mesa </span>`)
           }
-          let jugadorAnterior = estado.ordenJugadores[indice];
-          $(".mesa .info").remove();
-          $(".mesa .info").append(`<span>${jugadorAnterior} dice que ha colocado ${num} "${carta}" en la mesa </span>`)
+          mostrarPartida(data.partida.id, data.partida.nombre, estado);
         }
-        mostrarPartida(data.partida.id, data.partida.nombre, estado);
-        //$(".buscar_partida").slideUp(500);
-        //data.estado.turnoJugador
+        //La partida ha terminado
+        else{
+          mostrarPartidaTerminada(data.partida.id, data.partida.nombre, estado);
+        }
       }
+
     },
     error: (jqXHR, textStatus, errorThrown) =>{
       if(jqXHR.status === 404){
@@ -308,7 +315,6 @@ function realizarAccion(id, accion){
       }
       //La accion se ha hecho correctamente
       else if (data.partida.estado.terminado === undefined){
-
         console.log(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
         $(".mano .info").eq(0).hide();
@@ -316,9 +322,8 @@ function realizarAccion(id, accion){
       }
       //Partida terminada
       else {
-        $(".mano").hide();
-        $(".partida").append(`<div class="info">Ha ganado ${data.partida.estado.ganador}, gracias por jugar</div>`);
-        alert("La partida ha acabado");
+        mostrarPartidaTerminada(data.partida.id, data.partida.nombre, data.partida.estado);
+        alert("La partida ha acabado, tenemos un ganador");
       }
     },
     error: (jqXHR, textStatus, errorThrown) =>{
@@ -344,7 +349,7 @@ function obtenerCartasJugador(estado){
   function mostrarPartida(id, nombre, estado){
 
     $("#tusCartas img").remove();
-    $(".tablero div").remove();
+    $(".trasera").remove();
     $(".decirCartas").hide();
     $(".partidas").hide();
     $(".mesa").show();
@@ -352,7 +357,8 @@ function obtenerCartasJugador(estado){
     $(".jugadores div").remove();
     $("#jugadores span").text(`Partida ${id} - ${nombre}`);
     $(".mano .info").eq(1).hide();
-
+    $(".tablero .carta").remove();
+    $(".partida #mensajeFinal").remove();
     $("#mentiroso").data("mentiroso", estado.mentiroso);
     $("#mentiroso").data("cartasMesa", estado.cartasMesaReal);
     let cartas = obtenerCartasJugador(estado);
@@ -370,6 +376,7 @@ function obtenerCartasJugador(estado){
       $(".mano .info").eq(0).show();
     }
     $(".mano").show();
+
     estado.valorCartasMesa.forEach(carta =>{
       $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
@@ -383,12 +390,21 @@ function obtenerCartasJugador(estado){
   $("#tusCartas").on("click", "img", (event) =>{
     if ($(event.target).prop("style").border === "solid red"){
       $(event.target).css("border", "none");
-      //let indice = cartasSeleccionadas.indexOf($(event.target).data());
     }
     else{
       $(event.target).css("border", "solid red");
     }
   });
+
+  function mostrarPartidaTerminada(id, nombre, estado){
+    $(".partidas").hide();
+    $(".mesa").hide();
+    $(".mano").hide();
+    $(".partida #mensajeFinal").remove();
+    $("#jugadores span").text(`Partida ${id} - ${nombre}`);
+    $(".partida").append(`<div id="mensajeFinal" class="info">Ha ganado ${estado.ganador}, gracias por jugar</div>`);
+    $(".partida").show();
+  }
 
   $("#jugarCartas").on("click", () =>{
     $(".boton").hide();
@@ -399,13 +415,13 @@ function obtenerCartasJugador(estado){
     let mentiroso = $(event.target).data().mentiroso;
     let cartasMesa = $(event.target).data().cartasMesa;
     cartasMesa.forEach(carta =>{
-      $(".tablero").last().remove();
+      $(".trasera").last().remove();
     });
     cartasMesa.forEach(carta =>{
       $(".tablero").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
     })
-    console.log(mentiroso);
-    realizarAccion($("#actualizarPartida").data("id"), mentiroso);
+    //Poner 5 seg de retardo para ver la mesa
+    setTimeout(realizarAccion($("#actualizarPartida").data("id"), mentiroso), 5000);
   })
 
   $("#hacerJugada").on("click", () =>{
@@ -467,11 +483,6 @@ function obtenerCartasJugador(estado){
       data: JSON.stringify({ idPartida: id, cartas: cartas, jugador: user}),
       success: (data, textStatus, jqXHR) =>{
         if (data.error === undefined){
-          /*
-          indices.forEach(i => {
-            $("#tusCartas img").eq(i).remove();
-          });
-          */
           mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
         }else{
           alert(data.error);
