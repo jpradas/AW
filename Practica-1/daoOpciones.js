@@ -47,13 +47,23 @@ class DAOOpciones{
     * @param {Array} datos datos a insertar en la query parametrizada
     * @param {Function} callback Funcion callback referida cuando termina la ejecución de la query
     */
-    setOpciones(query, datos, callback){
+    setOpciones(opcion, id, callback){
       this.pool.getConnection((err, connection)=>{
         if(err){
           callback(err);return;
         }
+        let sql = "INSERT INTO " + config.database + ".opciones VALUES"
+        let datos = [];
+        for (let i = 0; i < opcion.length - 1 ; i++){
+            sql = sql.concat(" (NULL, ?, ?),");
+            datos.push(opcion[i]);
+            datos.push(id);
+        }
+        sql = sql.concat(" (NULL, ?, ?);");
+        datos.push(opcion[opcion.length - 1]);
+        datos.push(id);
         connection.query(
-          query,
+          sql,
           datos,
           (err, result)=>{
             connection.release();

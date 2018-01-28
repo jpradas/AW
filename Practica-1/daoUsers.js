@@ -159,10 +159,18 @@ class DAOusers{
      * @param {Array} array array con los datos para la consulta parametrica
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
-    modifyUser(query, array, callback){
+    modifyUser(file, nombre, edad, sexo, email, callback){
       this.pool.getConnection((err, connection) =>{
         if(err){
           callback(err);return;
+        }
+        let query; let array;
+        if(file){
+           query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;";
+           array = [nombre, edad, sexo, file.buffer, email];
+        }else{
+           query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=? WHERE email=?;";
+           array = [nombre, edad, sexo, email];
         }
         connection.query(
           query,
@@ -180,7 +188,7 @@ class DAOusers{
 
     /**
      * Obtiene la imagen de perfil de un usuario
-     * @param {String} email usuario al que se le busca la foto de perfil 
+     * @param {String} email usuario al que se le busca la foto de perfil
      * @param {function} callback Función que recibirá el objeto error y el resultado
      */
     obtenerImg(email, callback){

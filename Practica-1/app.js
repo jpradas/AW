@@ -351,15 +351,7 @@ function vCampos(request, response, next){
 }
 
 app.post("/modify_profile.html", upload.single("imagen_perfil"), vCampos, auth, (request, response, next)=>{
-  let query; let array;
-  if(request.file){
-     query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=?, imagen=? WHERE email=?;";
-     array = [request.body.nombre, request.body.edad, request.body.sexo, request.file.buffer, request.session.email];
-  }else{
-     query = "UPDATE " + config.database + ".users SET nombre_completo=?, edad=?, sexo=? WHERE email=?;";
-     array = [request.body.nombre, request.body.edad, request.body.sexo, request.session.email];
-  }
-  daou.modifyUser(query, array, (err, result)=>{
+  daou.modifyUser(request.file, request.body.nombre, request.body.edad, request.body.sexo, request.session.email, (err, result)=>{
     if(err){
       next(err);return;
     }
@@ -526,24 +518,13 @@ app.post("/crearPregunta", auth, validarOpciones, (request, response, next) =>{
       if (err){
         next(err);return;
       }
-      let sql = "INSERT INTO " + config.database + ".opciones VALUES"
-      let datos = [];
-      for (let i = 0; i < request.body.opcion.length - 1 ; i++){
-          sql = sql.concat(" (NULL, ?, ?),");
-          datos.push(request.body.opcion[i]);
-          datos.push(id);
-      }
-      sql = sql.concat(" (NULL, ?, ?);");
-      datos.push(request.body.opcion[request.body.opcion.length - 1]);
-      datos.push(id);
-
-      daoO.setOpciones(sql, datos, (err, result)=>{
+      daoO.setOpciones(request.body.opcion, id, (err, result)=>{
         if(err){
           next(err);return;
         }
         setFlash(request, "Pregunta creada con exito", "info");
         response.redirect("preguntas.html")
-      })
+      });
     });
 });
 
