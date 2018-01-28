@@ -374,8 +374,6 @@ function quitarCartas(cartas, cartasJugador){
     for (let j = 0; j < cartasJugador.length && !hecho; j++){
       if (cartas[i].palo === cartasJugador[j].palo && cartas[i].valor === cartasJugador[j].valor){
         cartasJugador.splice(j,1);
-        console.log("Quitado con indice " + j);
-        console.log(cartas[i]);
         hecho = true;
       }
     }
@@ -395,7 +393,7 @@ function actualizarEstado(estado, accion, valorIndicado){
       case estado.jugador2: sinCartas = quitarCartas(accion, estado.cartasJugador2); break;
       case estado.jugador3: sinCartas = quitarCartas(accion, estado.cartasJugador3); break;
       case estado.jugador4: sinCartas = quitarCartas(accion, estado.cartasJugador4); break;
-      default: console.log("Error al quitar cartas del turno");
+      default: log("Error al quitar cartas del turno");
     }
     if (sinCartas){
       estado.ganador = estado.turnoJugador;

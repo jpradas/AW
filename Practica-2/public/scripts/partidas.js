@@ -265,7 +265,6 @@ function estadoPartida(id){
         let estado = JSON.parse(data.partida.estado);
 
         if (estado.terminado === undefined){
-          console.log(estado);
 
           if (estado.cartasMesaReal.length > 0){
             let num = estado.cartasMesaReal.length;
@@ -315,7 +314,6 @@ function realizarAccion(id, accion){
       }
       //La accion se ha hecho correctamente
       else if (data.partida.estado.terminado === undefined){
-        console.log(data.partida.estado);
         mostrarPartida(data.partida.id, data.partida.nombre, data.partida.estado);
         $(".mano .info").remove();
         $(".mano").append(`<div class="info">Turno realizado correctamente, turno de ${data.partida.estado.turnoJugador}</div>`);
@@ -420,7 +418,6 @@ function obtenerCartasJugador(estado){
   $("#jugarCartas").on("click", () =>{
 
     if ($("#jugarCartas").data("ultimoValor") !== 0){
-      console.log($("#jugarCartas").data("ultimoValor"));
       realizarJugada($("#jugarCartas").data("ultimoValor"));
     }
     else {

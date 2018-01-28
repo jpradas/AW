@@ -19,7 +19,6 @@ define(["partidas"], (p) =>{
         return;
       }
       name = name.toLowerCase();
-      console.log(name);
       $.ajax({
         type: "GET",
         url: "/checkUser",
@@ -47,7 +46,6 @@ define(["partidas"], (p) =>{
         return;
       }
       name = name.toLowerCase();
-      console.log(name);
       $.ajax({
         type: "POST",
         url: "/setUser", //Deberiamos cambiar a PUT o POST
