@@ -238,7 +238,7 @@ app.post("/iniciarPartida",  passport.authenticate('basic', {session: false}), (
         let estado = {jugador1:jugadores[0].login, jugador2:jugadores[1].login, jugador3:jugadores[2].login,
            jugador4:jugadores[3].login, cartasJugador1:[], cartasJugador2:[], cartasJugador3:[],
            cartasJugador4:[], ordenJugadores:[jugadores[0].login,jugadores[1].login,jugadores[2].login,jugadores[3].login],
-           turnoJugador:"", mentiroso: false, valorCartasMesa: [], cartasMesaReal: [], ultimasCartas: [], ganador: ""};
+           turnoJugador:"", mentiroso: false, valorCartasMesa: [], cartasMesaReal: [], ganador: ""};
 
         repartirCartasyJugadores(estado);
 
@@ -263,10 +263,31 @@ app.get("/estadoPartida",  passport.authenticate('basic', {session: false}), (re
       response.end();return;
     }
     else {
+      partida.estado = JSON.parse(partida.estado);
+      partida.estado = encapsularEstado(partida.estado, request.query.user);
       response.json({partida : partida});
     }
   });
 });
+
+function encapsularEstado(estado, user) {
+  if (estado.jugador1 !== user){
+    estado.cartasJugador1 = estado.cartasJugador1.length;
+  }
+  if (estado.jugador2 !== user){
+    estado.cartasJugador2 = estado.cartasJugador2.length;
+  }
+  if (estado.jugador3 !== user){
+    estado.cartasJugador3 = estado.cartasJugador3.length;
+  }
+  if (estado.jugador4 !== user){
+    estado.cartasJugador4 = estado.cartasJugador4.length;
+  }
+  estado.cartasMesaReal = "";
+  return estado;
+}
+
+
 
 app.put("/realizarAccion",  passport.authenticate('basic', {session: false}), (request, response) =>{
   //Comprobar que hay cartas seleccionadas en la accion, por si se cuela del jquery anterior
@@ -362,7 +383,6 @@ function mentiroso(estado, mentiroso){
     }
     estado.cartasMesaReal = [];
     estado.valorCartasMesa = [];
-    estado.ultimasCartas = [];
     estado.mentiroso = false;
   }
   return estado;
@@ -385,7 +405,6 @@ function quitarCartas(cartas, cartasJugador){
 function actualizarEstado(estado, accion, valorIndicado){
   //Si nadie ha ganado
   if (estado.ganador === ""){
-    estado.ultimasCartas = [];
     let sinCartas = false;
     //Quitar las cartas del jugador que ha realizado la Accion
     switch (estado.turnoJugador) {
@@ -393,7 +412,7 @@ function actualizarEstado(estado, accion, valorIndicado){
       case estado.jugador2: sinCartas = quitarCartas(accion, estado.cartasJugador2); break;
       case estado.jugador3: sinCartas = quitarCartas(accion, estado.cartasJugador3); break;
       case estado.jugador4: sinCartas = quitarCartas(accion, estado.cartasJugador4); break;
-      default: log("Error al quitar cartas del turno");
+      default: console.log("Error al quitar cartas del turno");
     }
     if (sinCartas){
       estado.ganador = estado.turnoJugador;
@@ -410,7 +429,6 @@ function actualizarEstado(estado, accion, valorIndicado){
     for (let i = 0; i < accion.length; i++){
       estado.valorCartasMesa.push(valorIndicado);
       estado.cartasMesaReal.push(accion[i]);
-      estado.ultimasCartas.push(accion[i]);
       //Si alguna carta selecciona no tiene el valor indicado, es mentiroso
       if (accion[i].valor !== valorIndicado){
         estado.mentiroso = true;

@@ -255,19 +255,18 @@ function estadoPartida(id){
     beforeSend: (req) =>{
       req.setRequestHeader("Authorization", "Basic " + cad64);
     },
-    data: {idPartida: id},
+    data: {idPartida: id, user: user},
     success: (data, textStatus, jqXHR) =>{
       //Partida no iniciada
       if (data.partida.estado === ""){
         actualizarPartida(id);
       }
       else {
-        let estado = JSON.parse(data.partida.estado);
-
+        let estado = data.partida.estado;
         if (estado.terminado === undefined){
 
-          if (estado.cartasMesaReal.length > 0){
-            let num = estado.cartasMesaReal.length;
+          if (estado.valorCartasMesa.length > 0){
+            let num = estado.valorCartasMesa.length;
             let indice = estado.valorCartasMesa.length;
             let carta = estado.valorCartasMesa[indice - 1];
             indice = estado.ordenJugadores.indexOf(estado.turnoJugador) - 1;
@@ -358,7 +357,7 @@ function obtenerCartasJugador(estado){
     $(".tablero .carta").remove();
     $(".partida #mensajeFinal").remove();
     $("#mentiroso").data("mentiroso", estado.mentiroso);
-    $("#mentiroso").data("cartasMesa", estado.cartasMesaReal);
+    $("#mentiroso").data("cartasMesa", estado.valorCartasMesa);
     $("#jugadores li").remove();
     $("#actualizarPartida").data("id", id);
     if (estado.valorCartasMesa.length > 0){
@@ -370,7 +369,7 @@ function obtenerCartasJugador(estado){
 
     let cartas = obtenerCartasJugador(estado);
     cartas.forEach(carta =>{
-      $("#tusCartas").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} data-click=0 src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`)
+      $("#tusCartas").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} data-click=0 src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
     });
     if (estado.turnoJugador === user){
       $(".mano .boton").show();
@@ -386,10 +385,38 @@ function obtenerCartasJugador(estado){
       $(".tablero").append(`<div class="trasera" style="background-image: url(imagenes/traseraCarta.jpg)">${carta}</div>`);
     })
 
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span class="margen">${estado.cartasJugador1.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span class="margen">${estado.cartasJugador2.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span class="margen">${estado.cartasJugador3.length}</span> </div>`);
-    $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span class="margen">${estado.cartasJugador4.length}</span> </div>`);
+    mostrarTablaJugadores(estado);
+  }
+
+  function mostrarTablaJugadores(estado){
+    if (isNaN(estado.cartasJugador1)){
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span class="margen">${estado.cartasJugador1.length}</span> </div>`);
+    }
+    else{
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador1}</span> <span class="margen">${estado.cartasJugador1}</span> </div>`);
+    }
+
+    if (isNaN(estado.cartasJugador2)){
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span class="margen">${estado.cartasJugador2.length}</span> </div>`);
+    }
+    else{
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador2}</span> <span class="margen">${estado.cartasJugador2}</span> </div>`);
+    }
+
+    if (isNaN(estado.cartasJugador3)){
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span class="margen">${estado.cartasJugador3.length}</span> </div>`);
+    }
+    else{
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador3}</span> <span class="margen">${estado.cartasJugador3}</span> </div>`);
+    }
+
+    if (isNaN(estado.cartasJugador4)){
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span class="margen">${estado.cartasJugador4.length}</span> </div>`);
+    }
+    else{
+      $(".jugadores").append(`<div class="jugador"> <span>${estado.jugador4}</span> <span class="margen">${estado.cartasJugador4}</span> </div>`);
+    }
+
   }
 
   $("#tusCartas").on("click", "img", (event) =>{
@@ -431,14 +458,8 @@ function obtenerCartasJugador(estado){
     let mentiroso = $("#mentiroso").data().mentiroso;
     let cartasMesa = $("#mentiroso").data().cartasMesa;
     if (cartasMesa.length > 0){
-      cartasMesa.forEach(carta =>{
-        $(".trasera").last().remove();
-      });
-      cartasMesa.forEach(carta =>{
-        $(".tablero").append(`<img data-valor=${carta.valor} data-palo=${carta.palo} src="imagenes/${carta.valor}_${carta.palo}.png" class="carta">`);
-      })
       //Poner 5 seg de retardo para ver la mesa
-      setTimeout(realizarAccion($("#actualizarPartida").data("id"), mentiroso), 5000);
+      realizarAccion($("#actualizarPartida").data("id"), mentiroso);
     }
   })
 
